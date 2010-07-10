@@ -341,7 +341,7 @@ class CreateCoreDatabase < ActiveRecord::Migration
       drop_table :analytical_instances
       drop_table :analytical_offerings
       drop_table :auth_users
-      drop_table :collection
+      drop_table :collections
       drop_table :collections_rest_metadatas    
       drop_table :collections_stream_metadatas
       drop_table :comments
