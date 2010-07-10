@@ -18,7 +18,7 @@ class Environment
   def self.read_from_config(runtime_environment, class_var=nil)
     
     settings = {}
-    File.open("../config/#{runtime_environment}.txt", "r").read.split("\n").collect{|x| settings[x.split(":")[0]] = x.split(":")[1] }
+    File.open("../config/#{runtime_environment}.txt", "r").read.split("\n").collect{|x| settings[x.split(":")[0]] = x.split(":")[1].nil? ? nil : x.split(":")[1].strip  }
     if !class_var.nil?
       class_variable_set(class_var, Mysql.real_connect(settings["hostname"], settings["user"], settings["password"], settings["database"]))
       @@db = eval(class_var.to_s)

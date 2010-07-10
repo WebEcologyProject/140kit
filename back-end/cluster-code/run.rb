@@ -6,7 +6,7 @@ require 'mysql'
 require 'hpricot'
 require 'json'
 require 'eventmachine'
-require 'em-http'
+require 'em-http' #sudo gem install em-http-request
 require 'ntp'
 include NET
 
@@ -16,7 +16,7 @@ include NET
 #                    CONSTANT_LAND                      #
 
 #Operational Shit
-ROOT_FOLDER = "~/TwitterGrep/back-end/"
+ROOT_FOLDER = "#{File.dirname(__FILE__)}/../"
 TIME_OFFSET = NTP.get_ntp_response()["Receive Timestamp"] - Time.now.to_f
 API_RATE_LIMIT_URL = "http://twitter.com/account/rate_limit_status.json"
 #Streaming Instances

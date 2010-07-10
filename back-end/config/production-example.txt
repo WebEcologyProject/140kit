@@ -1,4 +1,6 @@
-hostname:HOSTNAME
+# Be sure not to put a space after the : 
+
+hostname:HOSTNAME #127.0.0.1 for localhost
 database:DATABASE
 user:USERNAME
 password:PASSWORD
