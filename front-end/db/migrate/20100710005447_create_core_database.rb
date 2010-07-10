@@ -31,32 +31,32 @@ class CreateCoreDatabase < ActiveRecord::Migration
       end
 
       create_table :auth_users do |t|
-        t.string :user_name, :default =>""
-        t.string :password, :default =>""
+        t.string :user_name
+        t.string :password
         t.boolean :flagged, :default =>false
-        t.string :instance_id, :default =>""
-        t.string :hostname, :default =>""
-        t.string :instance_name, :default =>""
+        t.string :instance_id
+        t.string :hostname
+        t.string :instance_name
       end
 
       create_table :collections do |t|
         t.integer :id
         t.integer :researcher_id
         t.datetime :created_at, :default => '2010-01-01 01:01:01'
-        t.string :name, :default =>""
+        t.string :name
         t.datetime :updated_at, :default => '2010-01-01 01:01:01'
         t.integer :scrape_id
         t.boolean :finished, :default =>false
         t.boolean :analyzed, :default =>false
         t.boolean :notified, :default =>false
-        t.string :folder_name, :default =>""
-        t.string :instance_id, :default =>""
+        t.string :folder_name
+        t.string :instance_id
         t.boolean :flagged, :default =>false
         t.boolean :single_dataset, :default =>false
         t.boolean :scraped_collection, :default =>false
         t.integer :tweets_count
         t.integer :users_count
-        t.string :scrape_method, :default =>""
+        t.string :scrape_method
         t.boolean :mothballed, :default =>false
       end
       add_index(:collections, [:researcher_id, :scrape_id, :folder_name], :unique => true, :name => "unique_collection")
@@ -134,22 +134,22 @@ class CreateCoreDatabase < ActiveRecord::Migration
       add_index(:graph_points, [:graph_id, :collection_id])
 
       create_table :images do |t|
-        t.string :parent_id, :default =>""
-        t.string :content_type, :default =>""
-        t.string :filename, :default =>""
-        t.string :thumbnail, :default =>""
+        t.string :parent_id
+        t.string :content_type
+        t.string :filename
+        t.string :thumbnail
         t.integer :size
         t.integer :width
         t.integer :height
-        t.string :headline, :default =>""
-        t.string :researcher_id, :default =>""
+        t.string :headline
+        t.string :researcher_id
       end
 
       create_table :news do |t|
         t.datetime :created_at, :default => '2010-01-01 01:01:01'
         t.datetime :updated_at, :default => '2010-01-01 01:01:01'
         t.integer :researcher_id
-        t.string :headline, :default =>""
+        t.string :headline
         t.text :post
         t.boolean :page_item, :default =>false
         t.string :slug
@@ -167,18 +167,18 @@ class CreateCoreDatabase < ActiveRecord::Migration
       create_table :researchers do |t|
         t.string :user_name
         t.string :email
-        t.string :reset_code, :default =>""
+        t.string :reset_code
         t.string :role, :default => "User"
         t.datetime :join_date, :default => '2010-01-01 01:01:01'
         t.datetime :last_login, :default => '2010-01-01 01:01:01'
         t.datetime :last_access, :default => '2010-01-01 01:01:01'
         t.text :info
-        t.string :website_url, :default =>""
+        t.string :website_url
         t.string :location, :default => "United States"
-        t.string :salt, :default =>""
-        t.string :remember_token, :default =>""
+        t.string :salt
+        t.string :remember_token
         t.datetime :remember_token_expires_at, :default => '2010-01-01 01:01:01'
-        t.string :crypted_password, :default =>""
+        t.string :crypted_password
         t.boolean :share_email, :default =>false
       end
       add_index(:researchers, :user_name, :unique => true)
@@ -214,16 +214,16 @@ class CreateCoreDatabase < ActiveRecord::Migration
         t.datetime :updated_at, :default => '2010-01-01 01:01:01'
         t.boolean :finished, :default =>false
         t.boolean :scrape_finished, :default =>false
-        t.string :folder_name, :default =>""
-        t.string :instance_id, :default =>""
+        t.string :folder_name
+        t.string :instance_id
         t.boolean :flagged, :default =>false
-        t.string :scrape_type, :default =>""
+        t.string :scrape_type
         t.boolean :branching, :default =>false
         t.datetime :last_branch_check, :default => '2010-01-01 01:01:01'
         t.string :humanized_length
         t.datetime :run_ends, :default => '2010-01-01 01:01:01'
         t.integer :primary_collection_id
-        t.string :ref_data, :default =>""
+        t.string :ref_data
       end
       add_index(:scrapes, :finished)
       add_index(:scrapes, :scrape_finished)
