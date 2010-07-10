@@ -1,0 +1,24 @@
+<h1>Listing whitelistings</h1>
+
+<table>
+  <tr>
+    <th>Hostname</th>
+    <th>Ip</th>
+    <th>Whitelisted</th>
+  </tr>
+
+<% @whitelistings.each do |whitelisting| %>
+  <tr>
+    <td><%=h whitelisting.hostname %></td>
+    <td><%=h whitelisting.ip %></td>
+    <td><%=h whitelisting.whitelisted %></td>
+    <td><%= link_to 'Show', whitelisting %></td>
+    <td><%= link_to 'Edit', edit_whitelisting_path(whitelisting) %></td>
+    <td><%= link_to 'Destroy', whitelisting, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New whitelisting', new_whitelisting_path %>

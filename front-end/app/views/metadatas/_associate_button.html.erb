@@ -1,0 +1,25 @@
+<%
+id_prefix ||= ""
+element_id = id_prefix.blank? ? "#{metadata.class.to_s.underscore}_#{metadata.id}_associate_button" : "#{id_prefix}_#{metadata.class.to_s.underscore}_#{metadata.id}_associate_button"
+-%>
+<div id="<%= element_id %>">
+<% if metadata.collections.exists?(collection.id) -%>
+<% if id_prefix == "removeable" -%>
+  <%= link_to_remote("Remove",
+          :url => metadatas_dissociate_url(metadata.id, metadata.class.to_s, collection.id),
+          :loading => "Element.update('addable_#{metadata.class.to_s.underscore}_#{metadata.id}_associate_button', '<img src=\"/images/loading.gif\">'); Effect.BlindUp('removeable_#{metadata.class.to_s.underscore}_#{metadata.id}')",
+          :complete => "Element.highlight('removeableMetadatas')") %>
+<% elsif !collection.finished -%>
+  You've got this. 
+  <%= link_to_remote("Remove it?",
+          :url => metadatas_dissociate_url(metadata.id, metadata.class.to_s, collection.id),
+          :loading => "Element.update('#{element_id}', '<img src=\"/images/loading.gif\">'); Effect.BlindUp('removeable_#{metadata.class.to_s.underscore}_#{metadata.id}')",
+          :complete => "Element.highlight('removeableMetadatas')") %>
+<% end -%>
+<% else -%>
+  <%= link_to_remote("Add",
+          :url => metadatas_associate_url(metadata.id, metadata.class.to_s, collection.id),
+          :loading => "Element.update('#{element_id}', '<img src=\"/images/loading.gif\">')",
+          :complete => "Element.highlight('removeable_#{metadata.class.to_s.underscore}_#{metadata.id}')") %>
+<% end -%>
+</div>

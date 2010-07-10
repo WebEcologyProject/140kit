@@ -1,0 +1,18 @@
+<div id="news_<%= news.id %>" class="newsPost">
+  <h2><%=h news.headline %></h2>
+  <div>
+    <% if news.raw_html %>
+    <%= news.post %>
+    <% else %>
+      <p><%= RedCloth.new(news.post).to_html %></p>
+    <% end %>
+  </div>
+  Posted by <%= link_to news.researcher.user_name, researcher_page_url(news.researcher.user_name)  %>
+<% if logged_in? && current_researcher.admin? -%>
+   | <%= link_to "Edit", edit_news_url(news) %> | 
+  <%= link_to_remote("Delete",
+          :url => news_url(news),
+          :method => :delete,
+          :loading => "Effect.BlindUp('news_#{news.id}')") %>
+<% end -%>
+</div>

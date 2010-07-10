@@ -1,0 +1,34 @@
+<h1>New Ticket</h1>
+<% if logged_in? %>
+  <% form_for(@comment) do |f| -%>
+    <%= f.error_messages %>
+      <%= f.hidden_field :researcher_id, :value => current_researcher.id %>
+    <p>
+      In 140 characters or less, what's the probs?<br />
+      <%= f.text_field :title %>
+    </p>
+    <p>
+      Describe your issue:<br />
+      <%= f.text_area :comment %>
+    </p>
+    <p>
+      <%= f.submit 'Submit' %>
+    </p>
+  <% end -%>
+<% else %>
+  You're not logged in right now. If you CAN login, that would be awesome, so we can track this problem down and let you know how it went. If that's the very reason that you're here, well, then, you should submit your problem and we'll do our best, but you'll probably want to include your email or username on the site so we can find you and figure out how to fix the issue. Thanks!
+  <% form_for(@comment) do |f| -%>
+    <%= f.error_messages %>
+    <p>
+      In 140 characters or less, what's the probs?<br />
+      <%= f.text_field :title %>
+    </p>
+    <p>
+      <%= f.label :comment %><br />
+      <%= f.text_area :comment %>
+    </p>
+    <p>
+      <%= f.submit 'Submit' %>
+    </p>
+  <% end -%>
+<% end %>

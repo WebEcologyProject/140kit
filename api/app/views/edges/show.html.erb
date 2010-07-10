@@ -1,0 +1,43 @@
+<p>
+  <b>Start edge:</b>
+  <%=h @edge.start_edge %>
+</p>
+
+<p>
+  <b>End edge:</b>
+  <%=h @edge.end_edge %>
+</p>
+
+<p>
+  <b>Graph:</b>
+  <%=h @edge.graph_id %>
+</p>
+
+<p>
+  <b>Scrape:</b>
+  <%=h @edge.scrape_id %>
+</p>
+
+<p>
+  <b>Time:</b>
+  <%=h @edge.time %>
+</p>
+
+<p>
+  <b>Lock:</b>
+  <%=h @edge.lock %>
+</p>
+
+<p>
+  <b>Edge:</b>
+  <%=h @edge.edge_id %>
+</p>
+
+<p>
+  <b>Flagg:</b>
+  <%=h @edge.flagg %>
+</p>
+
+
+<%= link_to 'Edit', edit_edge_path(@edge) %> |
+<%= link_to 'Back', edges_path %>

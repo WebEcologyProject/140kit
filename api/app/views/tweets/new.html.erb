@@ -1,0 +1,95 @@
+<h1>New tweet</h1>
+
+<% form_for(@tweet) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :twitter_id %><br />
+    <%= f.text_field :twitter_id %>
+  </p>
+  <p>
+    <%= f.label :published %><br />
+    <%= f.datetime_select :published %>
+  </p>
+  <p>
+    <%= f.label :content %><br />
+    <%= f.text_field :content %>
+  </p>
+  <p>
+    <%= f.label :source %><br />
+    <%= f.text_field :source %>
+  </p>
+  <p>
+    <%= f.label :language %><br />
+    <%= f.text_field :language %>
+  </p>
+  <p>
+    <%= f.label :user_id %><br />
+    <%= f.text_field :user_id %>
+  </p>
+  <p>
+    <%= f.label :scrape_id %><br />
+    <%= f.text_field :scrape_id %>
+  </p>
+  <p>
+    <%= f.label :screen_name %><br />
+    <%= f.text_field :screen_name %>
+  </p>
+  <p>
+    <%= f.label :location %><br />
+    <%= f.text_field :location %>
+  </p>
+  <p>
+    <%= f.label :link %><br />
+    <%= f.text_field :link %>
+  </p>
+  <p>
+    <%= f.label :in_reply_to_status_id %><br />
+    <%= f.text_field :in_reply_to_status_id %>
+  </p>
+  <p>
+    <%= f.label :in_reply_to_user_id %><br />
+    <%= f.text_field :in_reply_to_user_id %>
+  </p>
+  <p>
+    <%= f.label :favorited %><br />
+    <%= f.text_field :favorited %>
+  </p>
+  <p>
+    <%= f.label :truncated %><br />
+    <%= f.text_field :truncated %>
+  </p>
+  <p>
+    <%= f.label :in_reply_to_screen_name %><br />
+    <%= f.text_field :in_reply_to_screen_name %>
+  </p>
+  <p>
+    <%= f.label :to_user_id %><br />
+    <%= f.text_field :to_user_id %>
+  </p>
+  <p>
+    <%= f.label :created_at %><br />
+    <%= f.datetime_select :created_at %>
+  </p>
+  <p>
+    <%= f.label :updated_at %><br />
+    <%= f.datetime_select :updated_at %>
+  </p>
+  <p>
+    <%= f.label :lat %><br />
+    <%= f.text_field :lat %>
+  </p>
+  <p>
+    <%= f.label :lon %><br />
+    <%= f.text_field :lon %>
+  </p>
+  <p>
+    <%= f.label :metadata_id %><br />
+    <%= f.text_field :metadata_id %>
+  </p>
+  <p>
+    <%= f.submit 'Create' %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', tweets_path %>

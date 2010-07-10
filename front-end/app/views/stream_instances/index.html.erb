@@ -1,0 +1,17 @@
+<h1>Listing stream_instances</h1>
+<table>
+  <tr>
+    <th>Instance</th>
+    <th>Hostname</th>
+  </tr>
+<% @stream_instances.each do |stream_instance| -%>
+  <tr>
+    <td><%=h stream_instance.instance_id %></td>
+    <td><%=h stream_instance.hostname %></td>
+    <td><%= link_to 'Show', stream_instance %></td>
+    <td><%= link_to 'Edit', edit_stream_instance_path(stream_instance) %></td>
+    <td><%= link_to 'Destroy', stream_instance, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end -%>
+</table>
+<%= link_to 'New stream_instance', new_stream_instance_path %>

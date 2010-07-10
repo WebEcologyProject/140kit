@@ -1,0 +1,19 @@
+<% page_param ||= "page" %>
+<div id="<%= elem_id %>">
+<h2><%= instance_header %></h2>
+<table id="<%= elem_id %>Table">
+  <tr>
+    <th>Hostname</th>
+    <th>Instance name</th>
+    <th>Instance hash</th>
+    <th>Options</th>
+  </tr>  
+<% for instance in instances -%>
+  <tr>
+    <%= render :partial => "/instances/instance", :locals => {:instance => instance} %>
+  </tr>
+<% end -%>
+
+</table>
+  <%= will_paginate instances, :class => 'pagination ajax', :param_name => "#{page_param}" %>
+</div>

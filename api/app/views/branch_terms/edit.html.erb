@@ -1,0 +1,32 @@
+<h1>Editing branch_term</h1>
+
+<% form_for(@branch_term) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :word %><br />
+    <%= f.text_field :word %>
+  </p>
+  <p>
+    <%= f.label :frequency %><br />
+    <%= f.text_field :frequency %>
+  </p>
+  <p>
+    <%= f.label :scrape_id %><br />
+    <%= f.text_field :scrape_id %>
+  </p>
+  <p>
+    <%= f.label :metadata_id %><br />
+    <%= f.text_field :metadata_id %>
+  </p>
+  <p>
+    <%= f.label :instance_id %><br />
+    <%= f.text_field :instance_id %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @branch_term %> |
+<%= link_to 'Back', branch_terms_path %>

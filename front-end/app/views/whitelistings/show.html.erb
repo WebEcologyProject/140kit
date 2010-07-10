@@ -1,0 +1,18 @@
+<p>
+  <b>Hostname:</b>
+  <%=h @whitelisting.hostname %>
+</p>
+
+<p>
+  <b>Ip:</b>
+  <%=h @whitelisting.ip %>
+</p>
+
+<p>
+  <b>Whitelisted:</b>
+  <%=h @whitelisting.whitelisted %>
+</p>
+
+
+<%= link_to 'Edit', edit_whitelisting_path(@whitelisting) %> |
+<%= link_to 'Back', whitelistings_path %>

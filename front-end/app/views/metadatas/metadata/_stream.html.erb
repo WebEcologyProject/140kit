@@ -1,0 +1,41 @@
+<div id="<%= "#{id_prefix}_" if !id_prefix.blank? %>metadata_<%= metadata.id %>" class="<%= metadata.class.to_s.underscore %> metadata">
+  <h4><%= link_to "\"#{metadata.term}\"", collection_url(metadata.researcher.user_name, metadata.collection_id), :class => "big" %></h4>
+<% if !collection.blank? && !current_researcher.blank? && collection.researcher_id == current_researcher.id -%>
+    <%= render :partial => "metadatas/associate_button", :locals => {:metadata => metadata, :collection => collection, :id_prefix => id_prefix} %>
+<% end -%>
+<% if display_user_header -%>
+  <h5>(From Collection: <%= link_to collection.name, collection_url(collection.id) %> by user: <%= collection.researcher.user_name %>)</h5>
+<% end -%>
+  <p>
+<% if metadata.term != "retweet" -%>
+      Term Searched for: <%= metadata.term %><br />
+<% else -%>
+      This is a retweet data set, and has no specific term searched for.<br />
+<% end -%>
+
+<% if false -%>
+<% if !metadata.scrape.nil? -%>
+    Number of tweets: <%= number_with_delimiter(metadata.tweets.count) %> 
+<% if metadata.term != "retweet" && metadata.tweets.count > 0 && metadata.scrape.tweets.count > 0 -%>
+      (<%= (metadata.tweets.count.to_f/metadata.scrape.tweets.count*100).round(2) %>% of total)           
+<% end -%><br />
+    Number of users: <%= metadata.users.count %> 
+<% if metadata.term != "retweet" && metadata.users.count > 0 && metadata.scrape.users.count > 0 -%>
+      (<%= (metadata.users.count.to_f/metadata.scrape.users.count*100).round(2) %>% of total)
+<% end -%><br />
+<% if metadata.term != "retweet" %>
+      Scrape duration: <%= metadata.scrape.humanized_length %><br />
+<% else -%>
+      This is a retweet data set, and has no specific time-frame of collection.<br />
+<% end -%>
+<% else -%>
+    This dataset's associated scrape is missing.
+<% end -%>
+<% else -%>
+  Number of tweets: <%= number_with_delimiter(metadata.tweets_count) %><br />
+<% end -%>
+    Created: <%=h distance_of_time_in_words(metadata.created_at, Time.now) %> ago 
+    (<%= metadata.created_at.strftime("%b %d, %Y, at %H:%M:%S %Z")%>)<br />
+    Last Updated: <%=h distance_of_time_in_words(metadata.created_at, Time.now) %> ago (<%= metadata.created_at.strftime("%b %d, %Y, at %H:%M:%S %Z")%>)<br />
+  </p>
+</div>

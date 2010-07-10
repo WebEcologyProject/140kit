@@ -1,0 +1,48 @@
+<p>
+  <b>Title:</b>
+  <%=h @graph.title %>
+</p>
+
+<p>
+  <b>Format:</b>
+  <%=h @graph.format %>
+</p>
+
+<p>
+  <b>Scrape:</b>
+  <%=h @graph.scrape_id %>
+</p>
+
+<p>
+  <b>Hour:</b>
+  <%=h @graph.hour %>
+</p>
+
+<p>
+  <b>Minute:</b>
+  <%=h @graph.minute %>
+</p>
+
+<p>
+  <b>Date:</b>
+  <%=h @graph.date %>
+</p>
+
+<p>
+  <b>Written:</b>
+  <%=h @graph.written %>
+</p>
+
+<p>
+  <b>Lock:</b>
+  <%=h @graph.lock %>
+</p>
+
+<p>
+  <b>Flagged:</b>
+  <%=h @graph.flagged %>
+</p>
+
+
+<%= link_to 'Edit', edit_graph_path(@graph) %> |
+<%= link_to 'Back', graphs_path %>

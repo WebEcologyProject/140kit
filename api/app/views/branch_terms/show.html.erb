@@ -1,0 +1,28 @@
+<p>
+  <b>Word:</b>
+  <%=h @branch_term.word %>
+</p>
+
+<p>
+  <b>Frequency:</b>
+  <%=h @branch_term.frequency %>
+</p>
+
+<p>
+  <b>Scrape:</b>
+  <%=h @branch_term.scrape_id %>
+</p>
+
+<p>
+  <b>Metadata:</b>
+  <%=h @branch_term.metadata_id %>
+</p>
+
+<p>
+  <b>Instance:</b>
+  <%=h @branch_term.instance_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_branch_term_path(@branch_term) %> |
+<%= link_to 'Back', branch_terms_path %>

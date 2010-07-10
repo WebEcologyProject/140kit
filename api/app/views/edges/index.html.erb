@@ -1,0 +1,34 @@
+<h1>Listing edges</h1>
+
+<table>
+  <tr>
+    <th>Start edge</th>
+    <th>End edge</th>
+    <th>Graph</th>
+    <th>Scrape</th>
+    <th>Time</th>
+    <th>Lock</th>
+    <th>Edge</th>
+    <th>Flagg</th>
+  </tr>
+
+<% @edges.each do |edge| %>
+  <tr>
+    <td><%=h edge.start_edge %></td>
+    <td><%=h edge.end_edge %></td>
+    <td><%=h edge.graph_id %></td>
+    <td><%=h edge.scrape_id %></td>
+    <td><%=h edge.time %></td>
+    <td><%=h edge.lock %></td>
+    <td><%=h edge.edge_id %></td>
+    <td><%=h edge.flagg %></td>
+    <td><%= link_to 'Show', edge %></td>
+    <td><%= link_to 'Edit', edit_edge_path(edge) %></td>
+    <td><%= link_to 'Destroy', edge, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New edge', new_edge_path %>

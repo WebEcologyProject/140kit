@@ -1,0 +1,15 @@
+<% @collection = collection || @collection -%>
+<h4>Histograms</h4>
+<ul>
+  <li><%= link_to_remote("Tweet Location",  :replace => 'dataDisplay', :url => google_graph_url("tweet_location", @collection.id)) %></li>
+  <li><%= link_to_remote("Tweet Language",  :replace => 'dataDisplay', :url => google_graph_url("tweet_language", @collection.id)) %></li>
+  <li><%= link_to_remote("Tweet Created At",  :replace => 'dataDisplay', :url => google_graph_url("tweet_created_at", @collection.id)) %></li>
+  <li><%= link_to_remote("Tweet Source",  :replace => 'dataDisplay', :url => google_graph_url("tweet_source", @collection.id)) %></li>
+  <li><%= link_to_remote("User Created At",  :replace => 'dataDisplay', :url => google_graph_url("user_created_at", @collection.id)) %></li>
+  <li><%= link_to_remote("User Favourites Count",  :replace => 'dataDisplay', :url => google_graph_url("user_favourites_count", @collection.id)) %></li>
+  <li><%= link_to_remote("User Followers Count",  :replace => 'dataDisplay', :url => google_graph_url("user_followers_count", @collection.id)) %></li>
+  <li><%= link_to_remote("User Friends Count",  :replace => 'dataDisplay', :url => google_graph_url("user_friends_count", @collection.id)) %></li>
+  <li><%= link_to_remote("User Time Zones",  :replace => 'dataDisplay', :url => google_graph_url("user_time_zone", @collection.id)) %>
+  <li><%= link_to_remote("User Language",  :replace => 'dataDisplay', :url => google_graph_url("user_lang", @collection.id)) %>
+  <li><%= link_to_remote("User Geo Enabled?",  :replace => 'dataDisplay', :url => google_graph_url("user_geo_enabled", @collection.id)) %></li>
+</ul>

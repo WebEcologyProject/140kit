@@ -1,0 +1,18 @@
+<% @collections = collections || @collections %>
+<div id="main">
+  <table>
+    <tr>
+      <th>Name</th>
+  <% if !@collections.collect{|c| c.researcher_id }.include?(current_researcher.id) %>    
+      <th>Researcher</th>
+  <% end %>
+      <th>Tweets</th>
+      <th>Users</th>
+      <th>Last updated</th>
+    </tr>
+  <% for collection in @collections -%>
+      <%= render :partial => "/collections/collection", :locals => {:collection => collection} %>
+  <% end %>
+  </table>
+  <%= will_paginate @collections, :class => 'pagination ajax' %>
+</div>

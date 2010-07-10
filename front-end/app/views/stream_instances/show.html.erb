@@ -1,0 +1,18 @@
+<p>
+  <b>Instance:</b>
+  <%=h @stream_instance.instance_id %>
+</p>
+
+<p>
+  <b>Hostname:</b>
+  <%=h @stream_instance.hostname %>
+</p>
+
+<p>
+  <b>Instance name:</b>
+  <%=h @stream_instance.instance_name %>
+</p>
+
+
+<%= link_to 'Edit', edit_stream_instance_path(@stream_instance) %> |
+<%= link_to 'Back', stream_instances_path %>

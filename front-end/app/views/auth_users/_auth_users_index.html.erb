@@ -1,0 +1,18 @@
+<h1>Listing auth_users</h1>
+<div id="main">
+<table>
+  <tr>
+    <th>User name</th>
+    <th>Password</th>
+    <th>Flagged</th>
+    <th>Instance name</th>
+    <th>Hostname</th>
+  </tr>
+
+<% @auth_users.each do |auth_user| %>
+  <%= render :partial => "auth_user", :locals => {:auth_user => auth_user } %>
+<% end %>
+</table>
+<%= will_paginate @auth_users, :class => 'pagination ajax' %>
+</div>
+<br />

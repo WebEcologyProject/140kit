@@ -1,0 +1,63 @@
+<% model = model || nil -%>
+<% element_id = element_id || nil -%>
+<% partial = partial || nil -%>
+<div id="search" class="<%= controller.controller_name %>">
+<h3>Search:</h3>
+  <span class="input">
+    <% form_tag( search_url, :id => 'search_form', :controller => 'application', :action => 'search') do -%>
+    <script type="text/javascript">
+    	var search_timeout;
+    </script>
+    <script language="JavaScript">
+    function disableEnterKey(e){
+         var key;
+         if(window.event)
+              key = window.event.keyCode;
+         else
+              key = e.which;
+         if(key == 13)
+              return false;
+         else
+              return true;}
+    </script>
+<% if model.nil? -%>
+    <%= select(
+      "model",
+      params['model'],
+      [ 	
+      	['Tweets', 'Tweet'],
+      	['Users', 'User'],
+      	['Researchers', 'Researcher'],
+      	['Graphs', 'Graph'],
+      	['Collections', 'Collection']
+    	]
+  	) %>
+<% else -%>
+    <%= hidden_field("model", "#{model}") %>
+<% end -%>
+<% if !element_id.nil? -%>
+    <%= hidden_field("element_id", "#{element_id}") %>
+<% end -%>
+<% if !partial.nil? -%>
+    <%= hidden_field("partial", "#{partial}") %>
+<% end -%>    
+<%= text_field_tag(
+      "query", 
+      params['query'], 
+      :value => "Search", 
+      :id => 'search_query', 
+      :class => 'fluid',
+      :size => 20, 
+      :onkeypress => 'return disableEnterKey(event);',
+      :onkeyup => "clearTimeout(search_timeout); 
+      		search_timeout = setTimeout(\"" + remote_function(:url => search_url,  
+      		:loading => "$('spinner').show()", 
+      		:complete => "$('spinner').hide()", 
+      		:submit => 'search_form') + "\",500);", 
+      		:autocomplete => 'off'
+    ) %>
+    <%= hidden_field("conditions", "#{conditions}") %>
+    <% end -%>
+  </span>
+</div>
+<div class="clearFloat"></div>

@@ -1,0 +1,7 @@
+<div id="dataDisplay">
+  <h1>Listing users</h1>
+<% for user in @users -%>
+  <%= render :partial => "/users/user_badge", :locals => {:user => user} %>
+<% end -%>
+  <%= will_paginate @users, :class => 'pagination ajax' %>
+</div>

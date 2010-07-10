@@ -1,0 +1,38 @@
+<h1>Your Settings</h1>
+<%= render :partial => 'image' %>
+<% form_for(@researcher) do |f| -%>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label :email %><br />
+    <%= f.text_field :email, :value => @researcher.email %>
+  </p>
+  <p>
+    <%= f.label "Would you like to make your e-mail address available to other researchers?" %><br />
+    <%= f.check_box :share_email, :value => @researcher.share_email %>
+  </p>
+  <p>
+    <%= f.label :website_url %><br />
+    <%= f.text_field :website_url, :value => @researcher.website_url %>
+  </p>
+  <p>
+    <%= f.label :location %><br />
+    <%= f.text_field :location, :value => @researcher.location %>
+  </p>
+  <p>
+    <%= f.label :info %><br />
+    <%= f.text_area :info, :value => @researcher.info %>
+  </p>
+  <h4>Change Password</h4>
+  <p>
+    <%= f.label :password %><br />
+    <%= f.password_field :password %>
+  </p>
+  <p>
+    <%= f.label :password_confirmation %><br />
+    <%= f.password_field :password_confirmation %>
+  </p>  
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end -%>
+<%= render :partial => 'image_add' %>

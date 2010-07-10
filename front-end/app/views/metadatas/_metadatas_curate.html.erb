@@ -1,0 +1,32 @@
+<table id="dataset_curation">
+  <tr>
+    <td>
+      <%= link_to_function "Stream Datasets" do |page|
+          page.hide "restDatasets"
+          page.show "streamDatasets"
+        end %> | 
+      <%= link_to_function "Rest Datasets" do |page|
+          page.hide "streamDatasets"
+          page.show "restDatasets"
+        end %>
+      <div id="streamDatasets">
+        <h3>Stream Datasets</h3>
+        <div id="addableStreamMetadatas">
+          <%= render :partial => "/metadatas/metadatas_associate", :locals => {:collection => @collection, :metadatas => @addable_stream_metadatas, :page_param => "addable_stream_page", :id_prefix => "addable"} %>
+        </div>
+      </div>
+      <div id="restDatasets" style="display:none;">
+        <h3>Rest Datasets</h3>
+        <div id="addableRestMetadatas">
+          <%= render :partial => "/metadatas/metadatas_associate", :locals => {:collection => @collection, :metadatas => @addable_rest_metadatas, :page_param => "addable_rest_page", :id_prefix => "addable"} %>
+        </div>
+      </div>
+    </td>
+    <td>
+      <h3>Added Datasets</h3>
+      <div id="removeableMetadatas">
+        <%= render :partial => "/metadatas/metadatas_associate", :locals => {:collection => @collection, :metadatas => @removeable_metadatas, :page_param => "removeable_page", :id_prefix => "removeable"} %>
+      </div>
+    </td>
+  </tr>
+</table>

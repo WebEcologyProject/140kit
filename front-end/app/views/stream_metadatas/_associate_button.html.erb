@@ -1,0 +1,25 @@
+<%
+id_prefix ||= ""
+element_id = id_prefix.blank? ? "stream_metadata_#{stream_metadata.id}_associate_button" : "#{id_prefix}_stream_metadata_#{stream_metadata.id}_associate_button"
+-%>
+<div id="<%= element_id %>">
+<% if stream_metadata.collections.exists?(collection.id) -%>
+<% if id_prefix == "removeable" -%>
+  <%= link_to_remote("Remove",
+          :url => stream_metadatas_dissociate_url(stream_metadata.id, collection.id),
+          :loading => "Element.update('addable_stream_metadata_#{stream_metadata.id}_associate_button', '<img src=\"/images/loading.gif\">'); Effect.BlindUp('removeable_stream_metadata_#{stream_metadata.id}')",
+          :complete => "Element.highlight('removeableStreamMetadatas')") %>
+<% elsif !collection.finished -%>
+  You've got this. 
+  <%= link_to_remote("Remove it?",
+          :url => stream_metadatas_dissociate_url(stream_metadata.id, collection.id),
+          :loading => "Element.update('#{element_id}', '<img src=\"/images/loading.gif\">'); Effect.BlindUp('removeable_stream_metadata_#{stream_metadata.id}')",
+          :complete => "Element.highlight('removeableStreamMetadatas')") %>
+<% end -%>
+<% else -%>
+  <%= link_to_remote("Add",
+          :url => stream_metadatas_associate_url(stream_metadata.id, collection.id),
+          :loading => "Element.update('#{element_id}', '<img src=\"/images/loading.gif\">')",
+          :complete => "Element.highlight('removeable_stream_metadata_#{stream_metadata.id}')") %>
+<% end -%>
+</div>

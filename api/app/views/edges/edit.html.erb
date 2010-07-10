@@ -1,0 +1,44 @@
+<h1>Editing edge</h1>
+
+<% form_for(@edge) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :start_edge %><br />
+    <%= f.text_field :start_edge %>
+  </p>
+  <p>
+    <%= f.label :end_edge %><br />
+    <%= f.text_field :end_edge %>
+  </p>
+  <p>
+    <%= f.label :graph_id %><br />
+    <%= f.text_field :graph_id %>
+  </p>
+  <p>
+    <%= f.label :scrape_id %><br />
+    <%= f.text_field :scrape_id %>
+  </p>
+  <p>
+    <%= f.label :time %><br />
+    <%= f.datetime_select :time %>
+  </p>
+  <p>
+    <%= f.label :lock %><br />
+    <%= f.text_field :lock %>
+  </p>
+  <p>
+    <%= f.label :edge_id %><br />
+    <%= f.text_field :edge_id %>
+  </p>
+  <p>
+    <%= f.label :flagg %><br />
+    <%= f.check_box :flagg %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @edge %> |
+<%= link_to 'Back', edges_path %>

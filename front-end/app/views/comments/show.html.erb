@@ -1,0 +1,19 @@
+<% researcher = @comment.researcher -%>
+<h1>Ticket #<%= @comment.id %></h1>
+<p>
+  <b>From:</b>
+  <%= link_to researcher.user_name, researcher %>
+  (<%= link_to researcher.email, "mailto:#{researcher.email}" %>)
+</p>
+<p>
+  <b>Problem:</b>
+  <%=h @comment.title %>
+</p>
+<p>
+  <b>Description:</b><br />
+  <%=h @comment.comment %>
+</p>
+<% if logged_in? && current_researcher.id == researcher.id -%>
+<%= link_to 'Edit', edit_comment_path(@comment) %>
+<% if current_researcher.admin? -%> | <%= link_to 'Destroy', @comment, :confirm => "Really?", :method => :delete %><% end -%>
+<% end -%>

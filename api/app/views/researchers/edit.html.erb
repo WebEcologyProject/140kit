@@ -1,0 +1,56 @@
+<h1>Editing researcher</h1>
+
+<% form_for(@researcher) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :user_name %><br />
+    <%= f.text_field :user_name %>
+  </p>
+  <p>
+    <%= f.label :email %><br />
+    <%= f.text_field :email %>
+  </p>
+  <p>
+    <%= f.label :pass_hash %><br />
+    <%= f.text_field :pass_hash %>
+  </p>
+  <p>
+    <%= f.label :pass_hash_confirm %><br />
+    <%= f.text_field :pass_hash_confirm %>
+  </p>
+  <p>
+    <%= f.label :join_date %><br />
+    <%= f.datetime_select :join_date %>
+  </p>
+  <p>
+    <%= f.label :last_login %><br />
+    <%= f.text_field :last_login %>
+  </p>
+  <p>
+    <%= f.label :account %><br />
+    <%= f.text_field :account %>
+  </p>
+  <p>
+    <%= f.label :last_access %><br />
+    <%= f.datetime_select :last_access %>
+  </p>
+  <p>
+    <%= f.label :info %><br />
+    <%= f.text_field :info %>
+  </p>
+  <p>
+    <%= f.label :avatar %><br />
+    <%= f.text_field :avatar %>
+  </p>
+  <p>
+    <%= f.label :country %><br />
+    <%= f.text_field :country %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @researcher %> |
+<%= link_to 'Back', researchers_path %>

@@ -1,0 +1,3 @@
+<%= render :partial => "/instances/instance_index", :locals => {:instances => @rest_instances, :instance_header => "Rest Instances", :elem_id => "restInstance", :page_param => "r_page"} %>
+<%= render :partial => "/instances/instance_index", :locals => {:instances => @stream_instances, :instance_header => "Stream Instances", :elem_id => "streamInstance", :page_param => "s_page"} %>
+<%= render :partial => "/instances/instance_index", :locals => {:instances => @analytical_instances, :instance_header => "Analytical Instances", :elem_id => "analyticalInstance", :page_param => "a_page"} %>

@@ -1,0 +1,33 @@
+<p>
+  <b>Title:</b>
+  <%=h @analytical_offering.title %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%=h @analytical_offering.description %>
+</p>
+
+<p>
+  <b>Function:</b>
+  <%=h @analytical_offering.function %>
+</p>
+
+<p>
+  <b>Source code link:</b>
+  <%=h @analytical_offering.source_code_link %>
+</p>
+
+<p>
+  <b>Created by:</b>
+  <%=h @analytical_offering.created_by %>
+</p>
+
+<p>
+  <b>Created by link:</b>
+  <%=h @analytical_offering.created_by_link %>
+</p>
+
+
+<%= link_to 'Edit', edit_analytical_offering_path(@analytical_offering) %> |
+<%= link_to 'Back', analytical_offerings_path %>

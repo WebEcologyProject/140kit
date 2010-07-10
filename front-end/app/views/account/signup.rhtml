@@ -1,0 +1,17 @@
+<h1>Sign up</h1>
+<%= error_messages_for :researcher %>
+<% form_for :researcher do |f| -%>
+<p><label for="user_name">User Name</label><br/>
+<%= f.text_field :user_name %></p>
+
+<p><label for="email">Email</label><br/>
+<%= f.text_field :email %></p>
+
+<p><label for="password">Password</label><br/>
+<%= f.password_field :password %></p>
+
+<p><label for="password_confirmation">Confirm Password</label><br/>
+<%= f.password_field :password_confirmation %></p>
+
+<p><%= submit_tag 'Sign up' %></p>
+<% end -%>

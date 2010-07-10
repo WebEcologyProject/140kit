@@ -1,0 +1,28 @@
+<p>
+  <b>Term:</b>
+  <%=h @trend.term %>
+</p>
+
+<p>
+  <b>Created at:</b>
+  <%=h @trend.created_at %>
+</p>
+
+<p>
+  <b>Ended at:</b>
+  <%=h @trend.ended_at %>
+</p>
+
+<p>
+  <b>Tweet count:</b>
+  <%=h @trend.tweet_count %>
+</p>
+
+<p>
+  <b>Scrape:</b>
+  <%=h @trend.scrape_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_trend_path(@trend) %> |
+<%= link_to 'Back', trends_path %>

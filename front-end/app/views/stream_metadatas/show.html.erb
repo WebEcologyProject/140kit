@@ -1,0 +1,15 @@
+<% if @stream_metadata.collection_id != 0 -%>
+<h2>Dataset <%= @stream_metadata.id %></h2>
+<h3>Originally collected by: <%= link_to @stream_metadata.researcher.user_name, researcher_page_url(@stream_metadata.researcher.user_name) %></h3>
+
+  <%= render :partial => "overview", :locals => {:stream_metadata => @stream_metadata} %>
+  <%= render :partial => "explore", :locals => {:stream_metadata => @stream_metadata} %>
+  <%= render :partial => "analytics", :locals => {:stream_metadata => @stream_metadata} %>
+  <%= render :partial => "/layouts/search", :locals => {:conditions => "metadata_id:#{@stream_metadata.id}"} %>
+
+  <div id="dataDisplay">
+
+  </div>
+<% elsif @stream_metadata.scrape_id == 0 -%>
+  <p>This is some weird dataset, like maybe a retweet dataset. It does not concern you.</p>
+<% end -%>

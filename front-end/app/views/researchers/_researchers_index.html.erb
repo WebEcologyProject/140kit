@@ -1,0 +1,6 @@
+<div id="main">
+<% for researcher in @researchers -%>
+  <%= render :partial => "researcher", :locals => {:researcher => researcher}%>
+<% end -%>
+  <%= will_paginate @researchers, :class => 'pagination ajax' %>
+</div>

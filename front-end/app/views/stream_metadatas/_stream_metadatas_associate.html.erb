@@ -1,0 +1,17 @@
+<% 
+id_prefix ||= ""
+display_user_header = display_user_header || false
+stream_metadatas ||= nil
+@stream_metadatas = stream_metadatas || @stream_metadatas
+collection ||= nil
+@collection = @collection || collection || nil
+page_param ||= "page"
+-%>
+
+<div id="streamMetadataDataDisplay">
+  <center><%= will_paginate @stream_metadatas, :class => 'pagination ajax', :param_name => "#{page_param}" %></center>
+<% for stream_metadata in @stream_metadatas -%>
+  <%= render :partial => "/stream_metadatas/stream_metadata", :locals => {:stream_metadata => stream_metadata, :display_user_header => display_user_header, :collection => @collection, :id_prefix => id_prefix} %>
+<% end -%>
+  <center><%= will_paginate @stream_metadatas, :class => 'pagination ajax', :param_name => "#{page_param}" %></center>
+</div>

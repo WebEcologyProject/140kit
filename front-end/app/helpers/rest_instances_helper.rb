@@ -1,0 +1,2 @@
+module RestInstancesHelper
+end

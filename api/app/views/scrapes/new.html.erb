@@ -1,0 +1,59 @@
+<h1>New scrape</h1>
+
+<% form_for(@scrape) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :researcher_id %><br />
+    <%= f.text_field :researcher_id %>
+  </p>
+  <p>
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </p>
+  <p>
+    <%= f.label :length %><br />
+    <%= f.text_field :length %>
+  </p>
+  <p>
+    <%= f.label :created_at %><br />
+    <%= f.datetime_select :created_at %>
+  </p>
+  <p>
+    <%= f.label :updated_at %><br />
+    <%= f.datetime_select :updated_at %>
+  </p>
+  <p>
+    <%= f.label :finished %><br />
+    <%= f.check_box :finished %>
+  </p>
+  <p>
+    <%= f.label :notified %><br />
+    <%= f.check_box :notified %>
+  </p>
+  <p>
+    <%= f.label :scrape_finished %><br />
+    <%= f.check_box :scrape_finished %>
+  </p>
+  <p>
+    <%= f.label :folder_name %><br />
+    <%= f.text_field :folder_name %>
+  </p>
+  <p>
+    <%= f.label :lock %><br />
+    <%= f.text_field :lock %>
+  </p>
+  <p>
+    <%= f.label :flagged %><br />
+    <%= f.check_box :flagged %>
+  </p>
+  <p>
+    <%= f.label :scrape_type %><br />
+    <%= f.text_field :scrape_type %>
+  </p>
+  <p>
+    <%= f.submit 'Create' %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', scrapes_path %>

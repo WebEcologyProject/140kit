@@ -1,0 +1,13 @@
+<p>
+  <b>Message:</b>
+  <%=h @failure.message %>
+</p>
+<p>
+  <b>Trace:</b>
+  <%=h @failure.trace %>
+</p>
+<p>
+  <b>Instance:</b>
+  <%=h @failure.instance_id %>
+</p>
+<%= link_to 'Edit', edit_failure_path(@failure) %> | <%= link_to 'Back', failures_path %>

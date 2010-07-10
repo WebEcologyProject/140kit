@@ -1,0 +1,56 @@
+<script language="javascript">
+  function numbers_only(e) {
+    input = document.getElementById("logic_params_limit").value
+    e = (e) ? e : window.event
+    var char_code = (e.which) ? e.which : e.keyCode
+    if (char_code > 31 && (char_code < 48 || char_code > 57)) {
+      status = "This field accepts numbers only."
+      return false
+    }
+    status = ""
+    return true
+  }
+</script>
+<% submit_action = controller.action_name.include?("rgraph") ? "submit_rgraph" : "submit" %>
+<% form_for :logic_params, :url => {:action => submit_action}, :html => {:name => "logic_form"} do |f| -%>
+  <%= f.error_messages %>
+<% if params[:collection_id].blank? && !@collections.blank? -%>
+  <table>
+    <tr>
+      <th></th>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Tweets</th>
+      <th>Users</th>
+      <th>Scrape duration</th>
+      <th>Created</th>
+      <th>Last updated</th>
+    </tr>
+  </table>
+  <p>
+    <%= f.label :retweets %>
+    <%= f.radio_button :f_style, "retweets" %><br>
+    <%= f.label :followers %>
+    <%= f.radio_button :f_style, "followers" %><br>
+    <%= f.label :friends %>
+    <%= f.radio_button :f_style, "friends" %>
+  </p>  
+<% end -%>
+  <p>
+    <%= f.label :limit %><br />
+    <%= f.text_field :limit, :onkeypress => "return numbers_only(event)", :value => "#{params[:limit]}" %>
+  </p>
+  <p>
+    <%= f.label :conn_comp, "Connected Component" %> (0 is the largest)<br />
+    <%= f.text_field :conn_comp, :onkeypress => "return numbers_only(event)", :value => "#{params[:conn_comp]}" %>
+  </p>
+  <p>
+    <%= f.label :verbose %><br />
+    <%= f.check_box :verbose, :checked => (params[:verbose] || "false").to_bool %>
+  </p>
+  <%= f.hidden_field :collection_id, :value => params[:collection_id] %>
+  <%= f.hidden_field :style, :value => params[:style] %>
+  <p>
+    <%= f.submit 'Submit' %>
+  </p>
+<% end -%>

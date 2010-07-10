@@ -1,0 +1,23 @@
+<p>
+  <b>Label:</b>
+  <%=h @graph_point.label %>
+</p>
+
+<p>
+  <b>Graph:</b>
+  <%=h @graph_point.graph_id %>
+</p>
+
+<p>
+  <b>Value:</b>
+  <%=h @graph_point.value %>
+</p>
+
+<p>
+  <b>Scrape:</b>
+  <%=h @graph_point.scrape_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_graph_point_path(@graph_point) %> |
+<%= link_to 'Back', graph_points_path %>

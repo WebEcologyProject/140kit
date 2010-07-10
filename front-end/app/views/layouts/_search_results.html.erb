@@ -1,0 +1,17 @@
+<div id="dataDisplay">
+<% if @items.first.class.to_s == "Tweet" -%>
+  <% @tweets = @items -%>
+  <h1>Listing tweets</h1>
+<% for tweet in @tweets -%>
+  <%= render :partial => "/tweets/tweet", :locals => {:tweet => tweet} %>
+<% end -%>
+  <%= will_paginate @tweets, :class => 'pagination ajax' %>
+<% elsif @items.first.class.to_s == "User" -%>
+<% @users = @items -%>
+  <h1>Listing users</h1>
+<% for user in @users -%>
+  <%= render :partial => "/users/user", :locals => {:user => user} %>
+<% end -%>
+  <%= will_paginate @users, :class => 'pagination ajax' %>
+<% end -%>
+</div>

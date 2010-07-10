@@ -1,0 +1,20 @@
+<div id="main">
+  <% for analytical_offering in @analytical_offerings %>
+  <div id="analytical_offering_<%= analytical_offering.id %>">
+    <h3><%=h analytical_offering.title %></h3>
+    <p><%=h analytical_offering.description %></p>
+    Created by <%= link_to analytical_offering.created_by, analytical_offering.created_by_link %><br />
+    (<%= link_to "View Source Code in Github", analytical_offering.source_code_link %>)
+    <% if logged_in? && current_researcher.admin? %>
+    <br />
+    <%= link_to "Edit", edit_analytical_offering_url(analytical_offering) %> | 
+      <% if analytical_offering.enabled %>
+        <%= link_to "Disable", analytical_offering_enable_url(analytical_offering) %>
+      <% else %>
+        <%= link_to "Enable", analytical_offering_enable_url(analytical_offering) %>
+      <% end %>
+    <% end %>
+    <div class="line"></div>
+  <% end %>
+</div>
+  <%= will_paginate @analytical_offerings, :class => 'pagination ajax' %>

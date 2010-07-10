@@ -1,0 +1,24 @@
+<h1>Editing whitelisting</h1>
+
+<% form_for(@whitelisting) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :hostname %><br />
+    <%= f.text_field :hostname %>
+  </p>
+  <p>
+    <%= f.label :ip %><br />
+    <%= f.text_field :ip %>
+  </p>
+  <p>
+    <%= f.label :whitelisted %><br />
+    <%= f.check_box :whitelisted %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @whitelisting %> |
+<%= link_to 'Back', whitelistings_path %>

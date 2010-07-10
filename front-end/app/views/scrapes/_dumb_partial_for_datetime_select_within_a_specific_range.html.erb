@@ -1,0 +1,62 @@
+<select id="scrape_run_ends_1i" name="scrape[run_ends(1i)]">
+<% start_time.year.upto(end_time.year) do |year| -%>
+  <% if selected_time.year == year -%>
+  <option selected="selected" value="<%= year %>"><%= year %></option>
+  <% else -%>
+  <option value="<%= year %>"><%= year %></option>
+  <% end -%>
+<% end -%>
+</select>
+ : 
+<select id="scrape_run_ends_2i" name="scrape[run_ends(2i)]">
+<% start_time.month.upto(end_time.month) do |month| -%>
+  <% if selected_time.month == month -%>
+  <option selected="selected" value="<%= month %>"><%= Date::MONTHNAMES[month] %></option>
+  <% else -%>
+  <option value="<%= month %>"><%= month %></option>
+  <% end -%>
+<% end -%>
+</select>
+ : 
+<select id="scrape_run_ends_3i" name="scrape[run_ends(3i)]">
+<% 
+months = []
+start_time.month.upto(end_time.month){|x| months<<x}
+-%>
+<% if months.length == 1 -%>
+  <% start_time.day.upto(end_time.day) do |day| -%>
+    <% if selected_time.day == day -%>
+    <option selected="selected" value="<%= day %>"><%= day %></option>
+    <% else -%>
+    <option value="<%= day %>"><%= day %></option>
+    <% end -%>
+  <% end -%>
+<% else -%>
+  <% 1.upto(31) do |day| -%>
+    <% if selected_time.day == day -%>
+    <option selected="selected" value="<%= day %>"><%= day %></option>
+    <% else -%>
+    <option value="<%= day %>"><%= day %></option>
+    <% end -%>
+  <% end -%>
+<% end -%>
+</select>
+<select id="scrape_run_ends_4i" name="scrape[run_ends(4i)]">
+<% "01".upto("23") do |hour| -%>
+  <% if selected_time.hour.to_s == hour -%>
+  <option selected="selected" value="<%= hour %>"><%= hour %></option>
+  <% else -%>
+  <option value="<%= hour %>"><%= hour %></option>
+  <% end -%>
+<% end -%>  
+</select>
+ : 
+<select id="scrape_run_ends_5i" name="scrape[run_ends(5i)]">
+<% "00".upto("59") do |minute| -%>
+  <% if selected_time.min.to_s == minute -%>
+  <option selected="selected" value="<%= minute %>"><%= minute %></option>
+  <% else -%>
+  <option value="<%= minute %>"><%= minute %></option>
+  <% end -%>
+<% end -%>
+</select>

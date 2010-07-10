@@ -1,0 +1,16 @@
+<%
+  addable ||= false
+  @added_functions ||= []
+-%>
+<div id="analytical_offering_<%= analytical_offering.id %>_associate_button">
+<% if (addable || @added_functions.include?(analytical_offering.function)) -%>
+  You've got this.
+  <%= link_to_remote("Remove it?",
+      :url => "/collections/#{@collection.id}/remove/analytics/#{analytical_offering.id}",
+      :loading => "Element.update('analytical_offering_#{analytical_offering.id}_associate_button', '<img src=\"/images/loading.gif\">');") %>
+<% else -%>
+  <%= link_to_remote("Add",
+      :url => "/collections/#{@collection.id}/add/analytics/#{analytical_offering.id}",
+      :loading => "Element.update('analytical_offering_#{analytical_offering.id}_associate_button', '<img src=\"/images/loading.gif\">');") %>
+<% end -%>
+</div>

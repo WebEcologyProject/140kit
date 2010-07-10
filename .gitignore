@@ -8,4 +8,5 @@
 wiki/
 visualization/
 back-end/config/*.txt
-
+front-end/public/images/0000/*
+front-end/public/files/source_data/*

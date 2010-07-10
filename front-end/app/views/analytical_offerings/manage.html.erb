@@ -1,0 +1,22 @@
+<h2>Analytical Offerings</h2>
+<div id="analyticalOfferings">
+<table id="analyticalOfferingsTable">
+  <tr>
+    <th>Title</th>
+    <th>Function</th>
+    <th>Source Code</th>
+    <th>Author</th>
+    <th>Actions</th>
+  </tr>  
+
+<% for analytical_offering in @analytical_offerings -%>
+  <tr>
+    <td><%= link_to analytical_offering.title, researcher_url(analytical_offering.id) %></td>
+    <td><%= analytical_offering.function %></td>
+    <td><a href="<%= analytical_offering.source_code_link %>">link</a></td>
+    <td><a href="<%=h analytical_offering.created_by_link %>"><%=h analytical_offering.created_by %></a></td>
+    <td><% if analytical_offering.enabled %><%= link_to "Disable", analytical_offering_enable_path(analytical_offering.id) %><% else %><%= link_to "Disable", analytical_offering_enable_path(analytical_offering.id) %><% end %></td>
+  </tr>
+<% end -%>
+</table>
+<%= link_to "New Analytical Offering", new_analytical_offering_path %>

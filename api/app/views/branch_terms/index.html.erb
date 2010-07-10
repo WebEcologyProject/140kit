@@ -1,0 +1,28 @@
+<h1>Listing branch_terms</h1>
+
+<table>
+  <tr>
+    <th>Word</th>
+    <th>Frequency</th>
+    <th>Scrape</th>
+    <th>Metadata</th>
+    <th>Instance</th>
+  </tr>
+
+<% @branch_terms.each do |branch_term| %>
+  <tr>
+    <td><%=h branch_term.word %></td>
+    <td><%=h branch_term.frequency %></td>
+    <td><%=h branch_term.scrape_id %></td>
+    <td><%=h branch_term.metadata_id %></td>
+    <td><%=h branch_term.instance_id %></td>
+    <td><%= link_to 'Show', branch_term %></td>
+    <td><%= link_to 'Edit', edit_branch_term_path(branch_term) %></td>
+    <td><%= link_to 'Destroy', branch_term, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New branch_term', new_branch_term_path %>

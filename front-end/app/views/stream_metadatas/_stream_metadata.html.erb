@@ -1,0 +1,43 @@
+<% id_prefix ||= "" -%>
+<% display_user_header = display_user_header || false -%>
+<div id="<%= "#{id_prefix}_" if !id_prefix.blank? %>stream_metadata_<%= stream_metadata.id %>" class="stream_metadata">
+  <h4><%= link_to "\"#{stream_metadata.term}\"", stream_metadata_url(stream_metadata.id), :class => "big" %></h4>
+<% if !collection.blank? && !current_researcher.blank? && collection.researcher_id == current_researcher.id -%>
+    <%= render :partial => "stream_metadatas/associate_button", :locals => {:stream_metadata => stream_metadata, :collection => collection, :id_prefix => id_prefix} %>
+<% end -%>
+<% if display_user_header -%>
+  <h5>(From Collection: <%= link_to collection.name, collection_url(collection.id) %> by user: <%= collection.researcher.user_name %>)</h5>
+<% end -%>
+  <p>
+<% if stream_metadata.term != "retweet" -%>
+      Term Searched for: <%= stream_metadata.term %><br />
+<% else -%>
+      This is a retweet data set, and has no specific term searched for.<br />
+<% end -%>
+
+<% if false -%>
+<% if !stream_metadata.scrape.nil? -%>
+    Number of tweets: <%= number_with_delimiter(stream_metadata.tweets.count) %> 
+<% if stream_metadata.term != "retweet" && stream_metadata.tweets.count > 0 && stream_metadata.scrape.tweets.count > 0 -%>
+      (<%= (stream_metadata.tweets.count.to_f/stream_metadata.scrape.tweets.count*100).round(2) %>% of total)           
+<% end -%><br />
+    Number of users: <%= stream_metadata.users.count %> 
+<% if stream_metadata.term != "retweet" && stream_metadata.users.count > 0 && stream_metadata.scrape.users.count > 0 -%>
+      (<%= (stream_metadata.users.count.to_f/stream_metadata.scrape.users.count*100).round(2) %>% of total)
+<% end -%><br />
+<% if stream_metadata.term != "retweet" %>
+      Scrape duration: <%= stream_metadata.scrape.humanized_length %><br />
+<% else -%>
+      This is a retweet data set, and has no specific time-frame of collection.<br />
+<% end -%>
+<% else -%>
+    This dataset's associated scrape is missing.
+<% end -%>
+<% else -%>
+  Number of tweets: <%= number_with_delimiter(stream_metadata.tweets_count) %><br />
+<% end -%>
+    Created: <%=h distance_of_time_in_words(stream_metadata.created_at, Time.now) %> ago 
+    (<%= stream_metadata.created_at.strftime("%b %d, %Y, at %H:%M:%S %Z")%>)<br />
+    Last Updated: <%=h distance_of_time_in_words(stream_metadata.created_at, Time.now) %> ago (<%= stream_metadata.created_at.strftime("%b %d, %Y, at %H:%M:%S %Z")%>)<br />
+  </p>
+</div>

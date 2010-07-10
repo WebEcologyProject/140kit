@@ -1,0 +1,23 @@
+<% ams = metadata.collection.analysis_metadatas.collect{|am| am.function } -%>
+<h3>Analytics:</h3>
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<script type="text/javascript">
+google.load('visualization', '1', {packages: ['table','barchart','columnchart','linechart','piechart']});
+</script>
+<div>
+<% if ams.include?("basic_histograms") -%>
+  <%= render :partial => "/analysis_metadatas/basic_histograms", :locals => {:collection => metadata.collection} %>
+<% end -%>
+<% if ams.include?("retweet_graph") -%>
+  <%= render :partial => "/analysis_metadatas/retweet_graph", :locals => {:collection => metadata.collection} %>
+<% end -%>
+<% if ams.include?("raw_csv") || ams.include?("raw_sql") -%>
+  <h3>Export<h3>
+<% end -%>
+<% if ams.include?("raw_csv") -%>
+  <%= render :partial => "/analysis_metadatas/raw_csv", :locals => {:collection => metadata.collection} %>
+<% end -%>
+<% if ams.include?("mysql_dumper") -%>
+  <%= render :partial => "/analysis_metadatas/mysql_dumper", :locals => {:collection => metadata.collection} %>
+<% end -%>
+</div>

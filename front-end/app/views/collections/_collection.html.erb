@@ -1,0 +1,64 @@
+<%
+  extra_columns ||= []
+  if !collection.finished 
+    element_class = "not_finished"
+  elsif !collection.analyzed
+    element_class = "not_analyzed"
+  else
+    element_class = "finished"
+  end
+-%>
+
+<% if !collection.researcher.nil? -%>
+
+  <tr class="<%= element_class %>">
+    <% for column in extra_columns -%>
+      <td><%= column %></td>
+    <% end -%>
+
+      <td><b><%= link_to collection.name, collection_url(collection.researcher.user_name, collection.id) %></b></td>
+    <% if show_researchers -%>
+      <td><%= link_to collection.researcher.user_name, researcher_page_url(collection.researcher.user_name) %></td>
+    <% end -%>
+      <td><%= number_with_delimiter(collection.tweets_count) %></td>
+      <td><%= number_with_delimiter(collection.users_count) %></td>
+      <td><%=h distance_of_time_in_words(collection.created_at, Time.now) %> ago (<%= collection.created_at.strftime("%b %d, %Y, at %H:%M:%S %Z")%>)</td>
+      <td>
+
+      <% if !collection.finished -%>
+        <% if current_researcher == collection.researcher -%>  
+          <%= link_to "Freeze?", collection_freeze_url(collection.id), :confirm => "Warning, you can't add any more analysis to this job if you press OK. Still want to proceed?" %>
+        <% else -%>
+          Unfrozen
+        <% end -%>
+      <% elsif !collection.analyzed -%>
+        In process
+      <% else %>
+        Done
+      <% end -%>
+    </td>
+    <% if logged_in? && (current_researcher.admin? || (collection.researcher_id == current_researcher.id)) %>
+    <td>
+      <% if collection.mothballed %>
+        <%= link_to "Recover?", collection_mothball_url(collection) %>
+      <% else %>
+        <%= link_to "Mothball?", collection_mothball_url(collection) %>
+      <% end %>
+    <% end %>
+    </td>
+  </tr>
+
+<% else -%>
+
+  <tr>
+  <% for column in extra_columns -%>
+    <td><%= column %></td>
+  <% end -%>
+    <td><%= collection.name %></td>
+    <td>N/A</td>
+    <td><%= collection.metadatas.collect{|m| m.tweets_count}.sum %></td>
+    <td><%= collection.metadatas.collect{|m| m.users_count}.sum %></td>
+    <td>N/A</td>
+    <td></td>
+  </tr>
+<% end -%>

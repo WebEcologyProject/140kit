@@ -1,0 +1,19 @@
+<% @collection = @collection || collection -%>
+<% @added_functions ||= [] -%>
+<div id="analytical_offering_<%= analytical_offering.id %>">
+  <h3><%=h analytical_offering.title %></h3>
+  <div id="analytical_offering_<%= analytical_offering.id %>_add">
+<% if @added_functions.include?(analytical_offering.function) -%>
+    You've got this.
+<% else -%>
+    <%= link_to_remote("Add Analysis",
+        :url => "/collections/#{@collection.id}/add/analytics/#{analytical_offering.id}",
+        :loading => "Element.update('analytical_offering_#{analytical_offering.id}_add', '<img src=\"/images/loading.gif\">');",
+        :complete => "$('analytical_offering_#{analytical_offering.id}_add').hide();",
+        :confirm => "Are you sure?") %>
+<% end -%>
+  </div>
+  <p><%=h analytical_offering.description %></p>
+  Created by <%= link_to analytical_offering.created_by, analytical_offering.created_by_link %><br />
+  (<%= link_to "View Source Code in Github", analytical_offering.source_code_link %>)
+</div>

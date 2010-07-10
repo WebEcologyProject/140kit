@@ -1,0 +1,58 @@
+<p>
+  <b>User name:</b>
+  <%=h @researcher.user_name %>
+</p>
+
+<p>
+  <b>Email:</b>
+  <%=h @researcher.email %>
+</p>
+
+<p>
+  <b>Pass hash:</b>
+  <%=h @researcher.pass_hash %>
+</p>
+
+<p>
+  <b>Pass hash confirm:</b>
+  <%=h @researcher.pass_hash_confirm %>
+</p>
+
+<p>
+  <b>Join date:</b>
+  <%=h @researcher.join_date %>
+</p>
+
+<p>
+  <b>Last login:</b>
+  <%=h @researcher.last_login %>
+</p>
+
+<p>
+  <b>Account:</b>
+  <%=h @researcher.account %>
+</p>
+
+<p>
+  <b>Last access:</b>
+  <%=h @researcher.last_access %>
+</p>
+
+<p>
+  <b>Info:</b>
+  <%=h @researcher.info %>
+</p>
+
+<p>
+  <b>Avatar:</b>
+  <%=h @researcher.avatar %>
+</p>
+
+<p>
+  <b>Country:</b>
+  <%=h @researcher.country %>
+</p>
+
+
+<%= link_to 'Edit', edit_researcher_path(@researcher) %> |
+<%= link_to 'Back', researchers_path %>

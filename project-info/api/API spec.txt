@@ -1,0 +1,51 @@
+API URL Scheme
+//API will run on EGGS at api.twittergrab.com//
+
+
+Base Requests:
+
+/stats/ #return site stats as of now
+/:model/stats/ #return stats of given model as of now
+
+
+Dataset Requests:
+
+/dataset/:dataset_id/:datatype/:subtype.(json || graphml)
+
+
+Logic Requests:
+
+/:scrape_id/:datatype.json?logic="#{LOGIC SYSTEM}"
+
+:model => User, Tweet, Graph, Researcher, Scrape
+:datatype => Network, Histogram, Linguistic, User, Tweet
+:subtype => (Network) retweet_influence_map, user_followers_network, user_friends_network, user_retweet_network user_mention_network;(Histogram) account_creation_dates, tweet_traffic_day, follower_count, friend_count, retweeting_frequencies, tweets_per_user, tweet_minute, tweet_date, tweet_hour, time_zone;(Linguistic) word_frequency
+
+
+
+
+
+LOGIC SYSTEM:
+Separate variables based on "|" sign, set parameter variables by ">" sign. On API side, parse the request by splitting up logic parameter first by "|" then by ">", then 
+
+:subtype #specify a subtype of :datatype, such as a Retweet Influence Network or a AccountBirth Histogram
+:attribute #any attributes of the specified :datatype
+:limit #limit the number of results with integer
+:start_time #start time of query, in epoc
+:end_time #end time of query, in epoc
+:degree #degree of which to spread in given network graph
+:user_id #twitter_id with which to spread from in given network graph, twitter internal id
+:tweet_id #twitter_id with which to spread from in given network graph, twitter internal id
+
+Logic Examples:
+
+/1/histogram?logic="subtype>account_birth|start_time>1268167827|end_time>1268107827|limit>2000"
+#grab the account_birth graph data for scrape 1, paginate 2000,  start with specified time, end with specified time.
+/2/user?logic="attribute>screen_name,location,followers_count,time_zone|start_time>1268167827|end_time>1268107827"
+#grab all users screen_name, location, followers_count, and time_zone data for scrape two with specified start and end time. No default pagination limits.
+/3/tweet?logic="limit>2000" 
+#no attribute specified for User or Tweet implies  all attributes
+/4/linguistic?logic="subtype>word_frequency|limit>40000"
+#grab the 40,000 most used words for scrape 4.
+/5/network?logic="subtype>followers|degree>4|user_id>43293842"
+#grab a network of followers up to four degrees of separation for user_id 43293842.

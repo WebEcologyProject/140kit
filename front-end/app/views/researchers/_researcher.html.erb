@@ -1,0 +1,18 @@
+<% collections_count = researcher.collections.select {|c| !c.single_dataset }.count -%>
+<div class="researcher">
+<h3><%= link_to researcher.user_name, researcher_page_url(researcher.user_name), :class => "user_name" %></h3>
+    <div class="researcherImage">
+    <%= render :partial => 'image', :locals => {:researcher => researcher} %>
+    </div>
+    <div class="researcherTab">
+     <strong>Hailing from:</strong> <%= researcher.location %><br />
+     <% if researcher.share_email %>
+      <strong>E-mail:</strong> <%= researcher.email %><br />
+     <% end %>
+    <% if !researcher.website_url.nil? %>
+      <%= link_to researcher.website_url, researcher.website_url %><br />
+    <% end %>
+      <strong>Joined:</strong> about <%= distance_of_time_in_words(researcher.join_date, Time.now) %> ago
+    </div>
+</div>
+<div class="clearFloat">

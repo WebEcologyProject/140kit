@@ -1,0 +1,24 @@
+<h1>Listing analytical_instances</h1>
+
+<table>
+  <tr>
+    <th>Instance</th>
+    <th>Hostname</th>
+    <th>Instance name</th>
+  </tr>
+
+<% @analytical_instances.each do |analytical_instance| %>
+  <tr>
+    <td><%=h analytical_instance.instance_id %></td>
+    <td><%=h analytical_instance.hostname %></td>
+    <td><%=h analytical_instance.instance_name %></td>
+    <td><%= link_to 'Show', analytical_instance %></td>
+    <td><%= link_to 'Edit', edit_analytical_instance_path(analytical_instance) %></td>
+    <td><%= link_to 'Destroy', analytical_instance, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New analytical_instance', new_analytical_instance_path %>

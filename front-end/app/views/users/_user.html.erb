@@ -1,0 +1,13 @@
+<div>
+  <h4><%= link_to user.name, user_url(user.screen_name) %></h4>
+  <p>
+    <img src="<%= user.profile_image_url %>" />
+    <%= user.description %><br />
+    <%= link_to "User's Site", user.url %><br />
+    <%= user.followers_count %> followers, <%= user.friends_count %> friends, <%= user.favourites_count %> favorites, <%= user.statuses_count %> total tweets  <br />
+    Time zone: <%= user.time_zone %><br />
+    Geo Enabled? <%= user.geo_enabled ? "Yes" : "No" %><br />
+    Verified? <%= user.verified ? "Yes" : "No" %><br />
+    Primary Language: <%= User.language(user.lang) %>
+  </p>
+</div>

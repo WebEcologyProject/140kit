@@ -1,0 +1,23 @@
+<p>
+  <b>Sent:</b>
+  <%=h @pending_email.sent %>
+</p>
+
+<p>
+  <b>Message content:</b>
+  <%=h @pending_email.message_content %>
+</p>
+
+<p>
+  <b>Recipient:</b>
+  <%=h @pending_email.recipient %>
+</p>
+
+<p>
+  <b>Subject:</b>
+  <%=h @pending_email.subject %>
+</p>
+
+
+<%= link_to 'Edit', edit_pending_email_path(@pending_email) %> |
+<%= link_to 'Back', pending_emails_path %>

@@ -1,0 +1,7 @@
+<% display_user_header = display_user_header || false %>
+<div id="dataDisplay">
+<% for tweet in @tweets -%>
+  <%= render :partial => "/tweets/tweet", :locals => {:tweet => tweet, :display_user_header => display_user_header} %>
+<% end -%>
+  <%= will_paginate @tweets, :class => 'pagination ajax' %>
+</div>

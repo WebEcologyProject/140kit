@@ -1,0 +1,6 @@
+<div>
+<h1>Collections</h1>
+  <%= render :partial => "/layouts/search", :locals => {:conditions => "single_dataset:0", :model => "Collection", :element_id => "main", :partial => "/collections/search_results"} %>
+  <%= render :partial => "collections_index", :locals => {:collections => @collections}%>
+<br />
+</div>

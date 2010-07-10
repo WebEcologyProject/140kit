@@ -1,0 +1,25 @@
+<% 
+  collection_name = @collection.single_dataset ? @collection.stream_metadata.term : @collection.name
+  collection_name = "\"#{collection_name}\"" if @collection.scraped_collection
+-%>
+<script type="text/javascript">
+var flashvars = {
+  api_call: "<%= @api_url %>"
+};
+var params = {};
+var attributes = {};
+swfobject.switchOffAutoHideShow();
+swfobject.embedSWF("http://<%= API_URL %>/flare2/demos.swf", "flare", "920", "644", "9.0.0","demos.swf", flashvars, params, attributes);
+</script>
+<h1>Networks</h1>
+<h2><%= params[:style].capitalize %> Network for <%= link_to collection_name, "/collections/#{@collection.id}" %></h2>
+API URL: <%= link_to @api_url, @api_url %>
+<%= render :partial => "api_form" %>
+<p>(This is only the largest connected component<%= " found in the first #{params[:limit]} edges" if !params[:limit].nil? %>)
+<div id="flareDraw" class="roundedEdge shadow">
+<div id="flare">
+  Flare is not loading correctly. Sorry.
+</div>
+</div>
+<br />
+<p>Back to <%= link_to collection_name, "/collections/#{@collection.id}" %>.</p>

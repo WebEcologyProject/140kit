@@ -1,0 +1,16 @@
+<% if stream_metadata.finished -%>
+<h3>Overview:</h3>
+  <ul>
+    <li>Number of Tweets: <%= number_with_delimiter(stream_metadata.tweets.count) %></li>
+    <li>Number of Users: <%= number_with_delimiter(stream_metadata.users.count) %></li>
+    <li>Scrape duration:  <%= stream_metadata.scrape.humanized_length %></li>
+    <li>Created: <%=h distance_of_time_in_words(stream_metadata.created_at, Time.now) %> ago (<%= stream_metadata.created_at.strftime("%b %d, %Y, at %H:%M:%S %Z")%>)</li>
+    <li>Last Updated: <%=h distance_of_time_in_words(stream_metadata.created_at, Time.now) %> ago (<%= stream_metadata.created_at.strftime("%b %d, %Y, at %H:%M:%S %Z")%>)</li>
+  </ul>
+<% else -%>
+  Sorry, this job has not completed yet, so we can't tell you much.
+<% end -%>
+<% if stream_metadata.finished -%>
+<% else -%>
+  Sorry, this job has not been analyzed yet, so we can't tell you much.
+<% end -%>

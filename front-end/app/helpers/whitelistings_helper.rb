@@ -1,0 +1,2 @@
+module WhitelistingsHelper
+end

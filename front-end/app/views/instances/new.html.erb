@@ -1,0 +1,23 @@
+<h1>New rest_instance</h1>
+
+<% form_for(@rest_instance) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :instance_id %><br />
+    <%= f.text_field :instance_id %>
+  </p>
+  <p>
+    <%= f.label :hostname %><br />
+    <%= f.text_field :hostname %>
+  </p>
+  <p>
+    <%= f.label :instance_name %><br />
+    <%= f.text_field :instance_name %>
+  </p>
+  <p>
+    <%= f.submit 'Create' %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', rest_instances_path %>

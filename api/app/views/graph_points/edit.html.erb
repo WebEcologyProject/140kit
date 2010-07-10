@@ -1,0 +1,28 @@
+<h1>Editing graph_point</h1>
+
+<% form_for(@graph_point) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :label %><br />
+    <%= f.text_field :label %>
+  </p>
+  <p>
+    <%= f.label :graph_id %><br />
+    <%= f.text_field :graph_id %>
+  </p>
+  <p>
+    <%= f.label :value %><br />
+    <%= f.text_field :value %>
+  </p>
+  <p>
+    <%= f.label :scrape_id %><br />
+    <%= f.text_field :scrape_id %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @graph_point %> |
+<%= link_to 'Back', graph_points_path %>

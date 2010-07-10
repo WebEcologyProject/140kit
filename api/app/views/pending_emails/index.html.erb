@@ -1,0 +1,26 @@
+<h1>Listing pending_emails</h1>
+
+<table>
+  <tr>
+    <th>Sent</th>
+    <th>Message content</th>
+    <th>Recipient</th>
+    <th>Subject</th>
+  </tr>
+
+<% for pending_email in @pending_emails %>
+  <tr>
+    <td><%=h pending_email.sent %></td>
+    <td><%=h pending_email.message_content %></td>
+    <td><%=h pending_email.recipient %></td>
+    <td><%=h pending_email.subject %></td>
+    <td><%= link_to 'Show', pending_email %></td>
+    <td><%= link_to 'Edit', edit_pending_email_path(pending_email) %></td>
+    <td><%= link_to 'Destroy', pending_email, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New pending_email', new_pending_email_path %>

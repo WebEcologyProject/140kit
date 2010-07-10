@@ -1,0 +1,10 @@
+<tr>
+  <td><%=h auth_user.user_name %></td>
+  <td><%=h auth_user.password %></td>
+  <td><%=h auth_user.flagged %></td>
+  <td><%=h auth_user.instance_name %></td>
+  <td><%=h auth_user.hostname %></td>
+  <td><%= link_to 'Show', auth_user %></td>
+  <td><%= link_to 'Edit', edit_auth_user_path(auth_user) %></td>
+  <td><%= link_to 'Destroy', auth_user, :confirm => 'Are you sure?', :method => :delete %></td>
+</tr>

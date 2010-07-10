@@ -1,0 +1,32 @@
+<h1>News Item</h1>
+<% form_for(@news) do |f| -%>
+  <%= f.error_messages %>
+    <%= f.hidden_field :researcher_id, :value => current_researcher.id %>
+  <p>
+    <%= f.label :headline %> (<%=link_to_function "Click here for textile instructions", visual_effect(:toggle_appear, "quickRef", :duration => 0.5) %>)<br />
+    <%= f.text_field :headline %>
+  </p>
+  <p>
+    <%= f.label :slug %><br />
+    <%= f.text_field :slug %>
+  </p>
+  <p>
+    <%= f.label :post %><br />
+    <%= f.text_area :post %>
+  </p>
+  <p>
+    Treat this as a special page?<br />
+    <%= f.check_box :page_item %>    
+  </p>
+  <p>
+    Display this page as raw HTML?<br />
+    <%= f.check_box :raw_html %>    
+  </p>
+  <p>
+    <%= f.submit 'Create' %>
+  </p>
+<% end -%>
+<%= link_to 'Back', news_path %>
+<div id="quickRef" style="display:none;">
+  <%= render :partial => "/layouts/textile_reference" %>
+</div>

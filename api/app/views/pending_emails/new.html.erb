@@ -1,0 +1,27 @@
+<h1>New pending_email</h1>
+
+<% form_for(@pending_email) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :sent %><br />
+    <%= f.check_box :sent %>
+  </p>
+  <p>
+    <%= f.label :message_content %><br />
+    <%= f.text_area :message_content %>
+  </p>
+  <p>
+    <%= f.label :recipient %><br />
+    <%= f.text_field :recipient %>
+  </p>
+  <p>
+    <%= f.label :subject %><br />
+    <%= f.text_field :subject %>
+  </p>
+  <p>
+    <%= f.submit "Create" %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', pending_emails_path %>

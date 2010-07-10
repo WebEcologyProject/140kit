@@ -1,0 +1,2 @@
+class RestInstancesController < ApplicationController
+end

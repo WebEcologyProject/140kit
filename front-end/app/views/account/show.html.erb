@@ -1,0 +1,45 @@
+<% 
+  scraped_collection_count = @collections.select{|c| c.scraped_collection && !c.single_dataset }.compact.length
+  curated_collection_count = @collections.select{|c| !c.scraped_collection && c.finished && !c.single_dataset }.compact.length
+  curating_collection_count = @collections.select{|c| !c.analyzed && !c.single_dataset }.compact.length
+  in_process_collection_count = @collections.select{|c| (c.scraped_collection || c.finished) && !c.analyzed && !c.single_dataset }.compact.length
+  dataset_count = @collections.collect{|sm| sm if sm.finished && !sm.analyzed && !sm.single_dataset }.compact.length
+-%>
+
+<h1>Hi, <%= current_researcher.user_name.capitalize %>.</h1>
+
+<h2>Your Collections</h2>
+<% if !@collections.empty? -%>
+<% if false -%>
+<p>
+  <%= "#{scraped_collection_count} Scraped Collection#{'s' if scraped_collection_count != 1}.<br />" if scraped_collection_count > 0 %>
+  <%= "#{curated_collection_count} Finished Curated Collection#{'s' if curated_collection_count != 1}.<br />" if curated_collection_count > 0 %>
+  <%= "#{curating_collection_count} Unfrozen Collection#{'s' if curating_collection_count != 1}.<br />" if curating_collection_count > 0 %>
+  <%= "#{in_process_collection_count} In-Process Collection#{'s' if in_process_collection_count != 1}.<br />" if in_process_collection_count > 0 %>
+  <%= "#{dataset_count} Dataset#{'s' if dataset_count != 1}." if dataset_count > 0 %>
+</p>
+<% end -%>
+<%= render :partial => "/collections/collections_index", :locals => {:collections => @collections, :show_researchers => false} %>
+<%= link_to "Add a new collection", collection_add_path, :class => "big" %>
+<% else -%>
+<p>You don't have any collections yet. <%= link_to "Add one now.", collection_add_url, :class => "big" %></p>
+<% end -%>
+
+<h2>Your Information</h2>
+<%= render :partial => "/researchers/image", :locals => {:researcher => current_researcher} %>
+<p>
+  <strong>Role:</strong> <%= current_researcher.role %><br />
+ <strong>Hailing from:</strong> <%= current_researcher.location %><br />
+ <% if current_researcher.share_email %>
+   <strong>E-mail:</strong> <%= current_researcher.email %><br />
+ <% end %>
+<% if !current_researcher.website_url.nil? %>
+  <%= link_to current_researcher.website_url, current_researcher.website_url %><br />
+<% end %>
+  <strong>Joined:</strong> about <%= distance_of_time_in_words(current_researcher.join_date, Time.now) %> ago
+</p>
+
+<% if !current_researcher.info.nil? %>
+<h4>Info:</h4>
+<p><%= current_researcher.info %></p>
+<% end %>

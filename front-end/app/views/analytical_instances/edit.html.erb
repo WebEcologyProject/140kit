@@ -1,0 +1,24 @@
+<h1>Editing analytical_instance</h1>
+
+<% form_for(@analytical_instance) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :instance_id %><br />
+    <%= f.text_field :instance_id %>
+  </p>
+  <p>
+    <%= f.label :hostname %><br />
+    <%= f.text_field :hostname %>
+  </p>
+  <p>
+    <%= f.label :instance_name %><br />
+    <%= f.text_field :instance_name %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @analytical_instance %> |
+<%= link_to 'Back', analytical_instances_path %>

@@ -1,0 +1,5 @@
+<h1>Congratulations!</h1>
+You have just set up a scrape. The term <%= @collection.name %> is being spun through the tubes, and tweets are being collected.
+<p>You have just begun your journey to beautiful data, however. We have some analytical offerings that we can provide you with. Select zero or more analytical offerings, then click submit to lock the data set (cannot be undone)</p>
+<%= link_to "Freeze This collection!", collection_freeze_url(@collection.id), :confirm => "Warning, you can't add any more analysis to this job if you press OK. Still want to proceed?" %>
+<%= render :partial => '/analytical_offerings/analytical_offerings_index', :locals => {:analytical_offerings => @analytical_offerings, :collection => @collection} %>

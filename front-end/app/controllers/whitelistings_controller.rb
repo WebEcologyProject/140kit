@@ -1,0 +1,2 @@
+class WhitelistingsController < ApplicationController
+end

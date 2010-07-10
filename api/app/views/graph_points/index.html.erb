@@ -1,0 +1,26 @@
+<h1>Listing graph_points</h1>
+
+<table>
+  <tr>
+    <th>Label</th>
+    <th>Graph</th>
+    <th>Value</th>
+    <th>Scrape</th>
+  </tr>
+
+<% @graph_points.each do |graph_point| %>
+  <tr>
+    <td><%=h graph_point.label %></td>
+    <td><%=h graph_point.graph_id %></td>
+    <td><%=h graph_point.value %></td>
+    <td><%=h graph_point.scrape_id %></td>
+    <td><%= link_to 'Show', graph_point %></td>
+    <td><%= link_to 'Edit', edit_graph_point_path(graph_point) %></td>
+    <td><%= link_to 'Destroy', graph_point, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New graph_point', new_graph_point_path %>

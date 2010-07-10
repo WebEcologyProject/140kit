@@ -1,0 +1,2 @@
+class RestMetadatasController < ApplicationController
+end

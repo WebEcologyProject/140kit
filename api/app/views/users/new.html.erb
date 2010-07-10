@@ -1,0 +1,131 @@
+<h1>New user</h1>
+
+<% form_for(@user) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :twitter_id %><br />
+    <%= f.text_field :twitter_id %>
+  </p>
+  <p>
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </p>
+  <p>
+    <%= f.label :screen_name %><br />
+    <%= f.text_field :screen_name %>
+  </p>
+  <p>
+    <%= f.label :location %><br />
+    <%= f.text_field :location %>
+  </p>
+  <p>
+    <%= f.label :description %><br />
+    <%= f.text_field :description %>
+  </p>
+  <p>
+    <%= f.label :profile_image_url %><br />
+    <%= f.text_field :profile_image_url %>
+  </p>
+  <p>
+    <%= f.label :url %><br />
+    <%= f.text_field :url %>
+  </p>
+  <p>
+    <%= f.label :protected %><br />
+    <%= f.check_box :protected %>
+  </p>
+  <p>
+    <%= f.label :followers_count %><br />
+    <%= f.text_field :followers_count %>
+  </p>
+  <p>
+    <%= f.label :profile_background_color %><br />
+    <%= f.text_field :profile_background_color %>
+  </p>
+  <p>
+    <%= f.label :profile_text_color %><br />
+    <%= f.text_field :profile_text_color %>
+  </p>
+  <p>
+    <%= f.label :profile_link_color %><br />
+    <%= f.text_field :profile_link_color %>
+  </p>
+  <p>
+    <%= f.label :profile_sidebar_fill_color %><br />
+    <%= f.text_field :profile_sidebar_fill_color %>
+  </p>
+  <p>
+    <%= f.label :profile_sidebar_border_color %><br />
+    <%= f.text_field :profile_sidebar_border_color %>
+  </p>
+  <p>
+    <%= f.label :friends_count %><br />
+    <%= f.text_field :friends_count %>
+  </p>
+  <p>
+    <%= f.label :created_at %><br />
+    <%= f.datetime_select :created_at %>
+  </p>
+  <p>
+    <%= f.label :favourites_count %><br />
+    <%= f.text_field :favourites_count %>
+  </p>
+  <p>
+    <%= f.label :utc_offset %><br />
+    <%= f.text_field :utc_offset %>
+  </p>
+  <p>
+    <%= f.label :time_zone %><br />
+    <%= f.text_field :time_zone %>
+  </p>
+  <p>
+    <%= f.label :profile_background_image_url %><br />
+    <%= f.text_field :profile_background_image_url %>
+  </p>
+  <p>
+    <%= f.label :profile_background_tile %><br />
+    <%= f.check_box :profile_background_tile %>
+  </p>
+  <p>
+    <%= f.label :notifications %><br />
+    <%= f.check_box :notifications %>
+  </p>
+  <p>
+    <%= f.label :geo_enabled %><br />
+    <%= f.check_box :geo_enabled %>
+  </p>
+  <p>
+    <%= f.label :verified %><br />
+    <%= f.check_box :verified %>
+  </p>
+  <p>
+    <%= f.label :following %><br />
+    <%= f.check_box :following %>
+  </p>
+  <p>
+    <%= f.label :statuses_count %><br />
+    <%= f.text_field :statuses_count %>
+  </p>
+  <p>
+    <%= f.label :scrape_id %><br />
+    <%= f.text_field :scrape_id %>
+  </p>
+  <p>
+    <%= f.label :contributors_enabled %><br />
+    <%= f.check_box :contributors_enabled %>
+  </p>
+  <p>
+    <%= f.label :lang %><br />
+    <%= f.text_field :lang %>
+  </p>
+  <p>
+    <%= f.label :metadata_id %><br />
+    <%= f.text_field :metadata_id %>
+  </p>
+  <p>
+    <%= f.submit 'Create' %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', users_path %>

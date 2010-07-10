@@ -1,0 +1,32 @@
+<%
+  if @collection.metadatas.empty? && @collection.metadata.nil?
+    @scrape = nil
+  else
+    @scrape = @collection.single_dataset ? @collection.metadata.scrape : @collection.metadatas.first.scrape
+  end
+-%>
+
+<% if @collection.scraped_collection -%>
+<h3>Overview:</h3>
+<ul>
+  <li>Collection: <%= @collection.scrape_method.capitalize %></li>
+  <li>Number of Tweets: <%= number_with_delimiter(@collection.tweets_count) %></li>
+  <li>Number of Users: <%= number_with_delimiter(@collection.users_count) %></li>
+<% if @scrape -%>
+  <li>Scrape duration:  <%= @scrape.humanized_length %></li>
+<% end -%>
+  <li>Created: <%=h distance_of_time_in_words(@collection.created_at, Time.now) %> ago (<%= @collection.created_at.strftime("%b %d, %Y, at %H:%M:%S %Z")%>)</li>
+  <li>Last Updated: <%=h distance_of_time_in_words(@collection.created_at, Time.now) %> ago (<%= @collection.created_at.strftime("%b %d, %Y, at %H:%M:%S %Z")%>)</li>
+</ul>
+<% elsif @collection.finished -%>
+<h3>Overview:</h3>
+<ul>
+  <li>Type: Search</li>
+  <li>Number of Tweets: <%= number_with_delimiter(@collection.tweets_count) %></li>
+  <li>Number of Users: <%= number_with_delimiter(@collection.users_count) %></li>
+  <li>Created: <%=h distance_of_time_in_words(@collection.created_at, Time.now) %> ago (<%= @collection.created_at.strftime("%b %d, %Y, at %H:%M:%S %Z")%>)</li>
+  <li>Last Updated: <%=h distance_of_time_in_words(@collection.created_at, Time.now) %> ago (<%= @collection.created_at.strftime("%b %d, %Y, at %H:%M:%S %Z")%>)</li>
+</ul>
+<% else -%>
+Sorry, this job has not completed yet, so we can't tell you much.
+<% end -%>

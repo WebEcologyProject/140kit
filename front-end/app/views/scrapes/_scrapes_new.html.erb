@@ -1,0 +1,83 @@
+<% 
+if @scrape.nil?
+  scrape_type = scrape_type || "stream" 
+elsif @scrape.scrape_type.nil?
+  scrape_type = scrape_type || "stream" 
+else
+  scrape_type = @scrape.scrape_type
+end
+
+-%>
+<h1>New <%= scrape_type %> scrape</h1>
+<% if (scrape_type == "stream" || scrape_type == "Search") -%>
+<div id="searchScrape">
+  <% form_for(@scrape) do |f| -%>
+  <%= f.error_messages %>
+    <p>
+      <%= f.label :name, "Search Term (cannot contain spaces)" %><br />
+      <%= f.text_field :name, :value => "" %>
+    </p>
+    <p>
+      <%= f.label :scrape_type, "Search Type" %><br />
+      <%= f.select(:scrape_type,
+        [
+         ['Term-based Search', 'Search'],
+         ['Trending Topics', 'Trend']
+       ]
+     ) %>
+    </p>
+    <p>
+      <%= f.label :run_ends, "Run this scrape until" %><br>
+      <%= render :partial => "dumb_partial_for_datetime_select_within_a_specific_range", :locals => {:start_time => Time.now+10.minutes, :end_time => Time.now+1.week, :selected_time => Time.now+10.minutes} %>
+    </p>
+    <p>
+      <%= f.label :branching, "Also search for terms we think might be related to your term?" %>
+      <%= f.check_box :branching %>
+    </p>
+    <%= f.hidden_field :researcher_id, :value => current_researcher.id %>
+    <p>
+      <%= f.submit 'Create' %>
+    </p>
+  <% end -%>  
+</div>
+<% elsif scrape_type == "rest" || scrape_type == "user_source_scrape" -%>
+<div id="userScrape">
+  <% form_for :scrape, :url => @scrape, :html => { :multipart => true }  do |f| -%>
+  <%= f.error_messages %>
+    <p>
+      <%= f.label :name, "Name your Scrape" %><br />
+      <%= f.text_field :name, :value => "" %>
+    </p>
+    <p>
+      <%= f.label :scrape_type, "Request Type" %><br />
+      <%= f.select(:scrape_type,
+        [
+         ['User-Based Scrape', 'user_source_scrape']
+       ]
+     ) %>
+    </p>
+    <p>
+      <%= f.label "Source data will come from" %>
+      <ul>
+        <li><%= link_to_function "Comma Separated Text file of User Names" do |page|
+          page.visual_effect(:toggle_blind, "source_file_upload")
+          page.hide("text_area_upload") end %></li>
+        <li><%= link_to_function "Comma Separated User Names in form" do |page|
+          page.visual_effect(:toggle_blind, "text_area_upload")
+          page.hide("source_file_upload")
+           end %></li>
+      </ul>
+      <div id="text_area_upload" style="display:none;">
+        <%= f.text_area :uploaded_data, :value => "" %>
+      </div>
+      <div id="source_file_upload" style="display:none;">
+        <label for="scrape_uploaded_data">Upload Source Data:</label>
+        <%= f.file_field :uploaded_data %>
+      </div>
+    <%= f.hidden_field :researcher_id, :value => current_researcher.id %>
+    <p>
+      <%= f.submit 'Create' %>
+    </p>
+  <% end -%>  
+</div>
+<% end -%>

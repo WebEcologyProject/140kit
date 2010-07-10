@@ -1,0 +1,8 @@
+<div id="main">
+<% for news in @news_items -%>
+  <% if !news.page_item -%>
+    <%= render :partial => "/news/news", :locals => {:news => news}%>
+  <% end -%>
+<% end -%>
+  <%= will_paginate @news_items, :class => 'pagination ajax' %>
+</div>

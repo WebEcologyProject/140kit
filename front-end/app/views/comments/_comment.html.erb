@@ -1,0 +1,11 @@
+  <tr>
+    <td><%= comment.id %>
+    <% if comment.researcher %>
+      <td><%= link_to comment.researcher.user_name, researcher_url(comment.researcher) %></td>
+    <% else %>
+      <td>(user was not logged in)</td>
+    <% end %>
+    <td><%= link_to truncate(comment.title, :length => 50), comment %></td>
+    <td><%=h truncate(comment.comment, :length => 50) %></td>
+    <td><%= link_to 'Destroy', comment, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>

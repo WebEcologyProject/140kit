@@ -1,0 +1,335 @@
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+            "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
+    <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"> 
+    <head> 
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+    <title>Textile Quick Reference</title> 
+    <style type="text/css"> 
+    BODY {
+        margin: 5px;
+    }
+    TABLE {
+        font-family: georgia, serif;
+        font-size: 10pt;
+        padding: 5px;
+        width: 200px;
+    }
+    TH {
+        padding-top: 10px;
+    }
+    TD {
+        border-top: solid 1px #eee;
+    }
+    H1 {
+        font-size: 18pt;
+    }
+    H4 {
+        color: #999;
+        background-color: #fee;
+        border: solid 1px #caa;
+        margin: 10px 15px 5px 10px;
+        padding: 5px;
+    }
+    P {
+        margin: 2px 5px 2px 5px;
+    }
+    TD.example1 PRE {
+        background-color: #FEE;
+        font-family: georgia, serif;
+        font-size: 8pt;
+        padding: 5px;
+        padding: 5px;
+    }
+    TD.example3 {
+        border: solid 1px #DDD;
+        background-color: #EEE;
+        font-size: 8pt;
+        padding: 5px;
+    }
+    .big {
+        font-size: 12pt;
+    }
+    #big-red {
+        font-size: 12pt;
+        color: red;
+    }
+    #big-red2 {
+        font-size: 15pt;
+        color: red;
+    }
+    </style> 
+    </head> 
+    <body> 
+ 
+<div style="position:relative"> 
+ 
+    <table> 
+    <tr><th colspan='3'><h1>Textile Quick Reference</h1></th></tr> 
+    <tr><th colspan='3'>Sections: <a href='#writing-in-textile'>Writing&nbsp;in&nbsp;Textile</a> | <a href='#quick-block-modifiers'>Quick&nbsp;Block&nbsp;Modifiers</a> | <a href='#quick-phrase-modifiers'>Quick&nbsp;Phrase&nbsp;Modifiers</a> | <a href='#attributes'>Attributes</a> | <a href='#lists'>Lists</a> | <a href='#external-references'>External&nbsp;References</a> | <a href='#tables'>Tables</a></th></tr> 
+<tr><th colspan='5'><a name='writing-in-textile'>Writing in Textile</a></th></tr> 
+<tr><td class='example1'><pre>A single paragraph.<br /><br />Followed by another.</pre></td><td>&rarr;</td><td class='example2'><p>A single paragraph.</p> 
+ 
+	<p>Followed by another.</p></td></tr> 
+<tr><td class='example1'><pre>I am &lt;b&gt;very&lt;/b&gt; serious.<br /><br />&lt;pre&gt;<br />  I am &lt;b&gt;very&lt;/b&gt; serious.<br />&lt;/pre&gt;</pre></td><td>&rarr;</td><td class='example2'><p>I am <b>very</b> serious.</p> 
+ 
+ 
+<pre> 
+  I am &lt;b&gt;very&lt;/b&gt; serious.
+</pre></td></tr> 
+<tr><td class='example1'><pre>I spoke.<br />And none replied.</pre></td><td>&rarr;</td><td class='example2'><p>I spoke.
+And none replied.</p></td></tr> 
+<tr><td class='example1'><pre>"Observe!"</pre></td><td>&rarr;</td><td class='example2'><p>&#8220;Observe!&#8221;</p></td></tr> 
+<tr><td class='example1'><pre>Observe -- very nice!</pre></td><td>&rarr;</td><td class='example2'><p>Observe&#8212;very nice!</p></td></tr> 
+<tr><td class='example1'><pre>Observe - tiny and brief.</pre></td><td>&rarr;</td><td class='example2'><p>Observe &#8211; tiny and brief.</p></td></tr> 
+<tr><td class='example1'><pre>Observe...</pre></td><td>&rarr;</td><td class='example2'><p>Observe&#8230;</p></td></tr> 
+<tr><td class='example1'><pre>Observe: 2 x 2.</pre></td><td>&rarr;</td><td class='example2'><p>Observe: 2&#215;2.</p></td></tr> 
+<tr><td class='example1'><pre>one(TM), two(R), three(C).</pre></td><td>&rarr;</td><td class='example2'><p>one&#8482;, two&#174;, three&#169;.</p></td></tr> 
+<tr><th colspan='5'><a name='quick-block-modifiers'>Quick Block Modifiers</a></th></tr> 
+<tr><td class='example1'><pre>h1. Header 1</pre></td><td>&rarr;</td><td class='example2'><h1>Header 1</h1></td></tr> 
+<tr><td class='example1'><pre>h2. Header 2</pre></td><td>&rarr;</td><td class='example2'><h2>Header 2</h2></td></tr> 
+<tr><td class='example1'><pre>h3. Header 3</pre></td><td>&rarr;</td><td class='example2'><h3>Header 3</h3></td></tr> 
+<tr><td class='example1'><pre>An old text<br /><br />bq. A block quotation.<br /><br />Any old text</pre></td><td>&rarr;</td><td class='example2'><p>An old text</p> 
+ 
+	<blockquote> 
+		<p>A block quotation.</p> 
+	</blockquote> 
+ 
+	<p>Any old text</p></td></tr> 
+<tr><td class='example1'><pre>This is covered elsewhere[1].</pre></td><td>&rarr;</td><td class='example2'><p>This is covered elsewhere<sup><a href="#fn1">1</a></sup>.</p></td></tr> 
+<tr><td class='example1'><pre>fn1. Down here, in fact.</pre></td><td>&rarr;</td><td class='example2'><p id="fn1"><sup>1</sup> Down here, in fact.</p></td></tr> 
+<tr><th colspan='5'><a name='quick-phrase-modifiers'>Quick Phrase Modifiers</a></th></tr> 
+<tr><td class='example1'><pre>I _believe_ every word.</pre></td><td>&rarr;</td><td class='example2'><p>I <em>believe</em> every word.</p></td></tr> 
+<tr><td class='example1'><pre>And then? She *fell*!</pre></td><td>&rarr;</td><td class='example2'><p>And then? She <strong>fell</strong>!</p></td></tr> 
+<tr><td class='example1'><pre>I __know__.<br />I **really** __know__.</pre></td><td>&rarr;</td><td class='example2'><p>I <i>know</i>.
+I <b>really</b> <i>know</i>.</p></td></tr> 
+<tr><td class='example1'><pre>??Cat's Cradle?? by Vonnegut</pre></td><td>&rarr;</td><td class='example2'><p><cite>Cat&#8217;s Cradle</cite> by Vonnegut</p></td></tr> 
+<tr><td class='example1'><pre>Convert with @r.to_html@</pre></td><td>&rarr;</td><td class='example2'><p>Convert with <code>r.to_html</code></p></td></tr> 
+<tr><td class='example1'><pre>I'm -sure- not sure.</pre></td><td>&rarr;</td><td class='example2'><p>I&#8217;m <del>sure</del> not sure.</p></td></tr> 
+<tr><td class='example1'><pre>You are a +pleasant+ child.</pre></td><td>&rarr;</td><td class='example2'><p>You are a <ins>pleasant</ins> child.</p></td></tr> 
+<tr><td class='example1'><pre>a ^2^ + b ^2^ = c ^2^</pre></td><td>&rarr;</td><td class='example2'><p>a <sup>2</sup> + b <sup>2</sup> = c <sup>2</sup></p></td></tr> 
+<tr><td class='example1'><pre>log ~2~ x</pre></td><td>&rarr;</td><td class='example2'><p>log <sub>2</sub> x</p></td></tr> 
+<tr><td class='example1'><pre>I'm %unaware% of most soft drinks.</pre></td><td>&rarr;</td><td class='example2'><p>I&#8217;m <span>unaware</span> of most soft drinks.</p></td></tr> 
+<tr><td class='example1'><pre>I'm %{color:red}unaware%<br />of most soft drinks.</pre></td><td>&rarr;</td><td class='example2'><p>I&#8217;m <span style="color:red;">unaware</span> 
+of most soft drinks.</p></td></tr> 
+<tr><th colspan='5'><a name='attributes'>Attributes</a></th></tr> 
+<tr><td class='example1'><pre>p(example1). An example</pre></td><td>&rarr;</td><td class='example2'><p class="example1">An example</p></td></tr> 
+<tr><td class='example1'><pre>p(#big-red). Red here</pre></td><td>&rarr;</td><td class='example2'><p id="big-red">Red here</p></td></tr> 
+<tr><td class='example1'><pre>p(example1#big-red2). Red here</pre></td><td>&rarr;</td><td class='example2'><p class="example1" id="big-red2">Red here</p></td></tr> 
+<tr><td class='example1'><pre>p{color:blue;margin:30px}. Spacey blue</pre></td><td>&rarr;</td><td class='example2'><p style="color:blue;margin:30px;">Spacey blue</p></td></tr> 
+<tr><td class='example1'><pre>p[fr]. rouge</pre></td><td>&rarr;</td><td class='example2'><p lang="fr">rouge</p></td></tr> 
+<tr><td class='example1'><pre>I seriously *{color:red}blushed*<br />when I _(big)sprouted_ that<br />corn stalk from my<br />%[es]cabeza%.</pre></td><td>&rarr;</td><td class='example2'><p>I seriously <strong style="color:red;">blushed</strong> 
+when I <em class="big">sprouted</em> that
+corn stalk from my
+<span lang="es">cabeza</span>.</p></td></tr> 
+<tr><td class='example1'><pre>p&lt;. align left</pre></td><td>&rarr;</td><td class='example2'><p style="text-align:left;">align left</p></td></tr> 
+<tr><td class='example1'><pre>p&gt;. align right</pre></td><td>&rarr;</td><td class='example2'><p style="text-align:right;">align right</p></td></tr> 
+<tr><td class='example1'><pre>p=. centered</pre></td><td>&rarr;</td><td class='example2'><p style="text-align:center;">centered</p></td></tr> 
+<tr><td class='example1'><pre>p&lt;&gt;. justified</pre></td><td>&rarr;</td><td class='example2'><p style="text-align:justify;">justified</p></td></tr> 
+<tr><td class='example1'><pre>p(. left ident 1em</pre></td><td>&rarr;</td><td class='example2'><p style="padding-left:1em;">left ident 1em</p></td></tr> 
+<tr><td class='example1'><pre>p((. left ident 2em</pre></td><td>&rarr;</td><td class='example2'><p style="padding-left:2em;">left ident 2em</p></td></tr> 
+<tr><td class='example1'><pre>p))). right ident 3em</pre></td><td>&rarr;</td><td class='example2'><p style="padding-right:3em;">right ident 3em</p></td></tr> 
+<tr><td class='example1'><pre>h2()&gt;. Bingo.</pre></td><td>&rarr;</td><td class='example2'><h2 style="padding-left:1em;padding-right:1em;text-align:right;">Bingo.</h2></td></tr> 
+<tr><td class='example1'><pre>h3()&gt;[no]{color:red}. Bingo</pre></td><td>&rarr;</td><td class='example2'><h3 style="color:red;padding-left:1em;padding-right:1em;text-align:right;" lang="no">Bingo</h3></td></tr> 
+<tr><td class='example1'><pre>&lt;pre&gt;<br />&lt;code&gt;<br />  a.gsub!( /&lt;/, '' )<br />&lt;/code&gt;<br />&lt;/pre&gt;<br /></pre></td><td>&rarr;</td><td class='example2'><pre> 
+<code> 
+  a.gsub!( /&lt;/, '' )
+</code> 
+</pre></td></tr> 
+<tr><td class='example1'><pre>&lt;div style="float:right;"&gt;<br /><br />h3. Sidebar<br /><br />"Hobix":http://hobix.com/<br />"Ruby":http://ruby-lang.org/<br /><br />&lt;/div&gt;<br /><br />The main text of the<br />page goes here and will <br />stay to the left of the <br />sidebar.<br /></pre></td><td>&rarr;</td><td class='example2'><div style="float:right;"> 
+	<h3>Sidebar</h3> 
+ 
+	<p><a href="http://hobix.com/">Hobix</a> 
+<a href="http://ruby-lang.org/">Ruby</a></p> 
+ 
+ 
+</div> 
+	<p>The main text of the
+page goes here and will 
+stay to the left of the 
+sidebar.</p></td></tr> 
+<tr><th colspan='5'><a name='lists'>Lists</a></th></tr> 
+<tr><td class='example1'><pre># A first item<br /># A second item<br /># A third</pre></td><td>&rarr;</td><td class='example2'><ol> 
+	<li>A first item</li> 
+		<li>A second item</li> 
+		<li>A third</li> 
+	</ol></td></tr> 
+<tr><td class='example1'><pre># Fuel could be:<br />## Coal<br />## Gasoline<br />## Electricity<br /># Humans need only:<br />## Water<br />## Protein</pre></td><td>&rarr;</td><td class='example2'><ol> 
+	<li>Fuel could be:
+	<ol> 
+	<li>Coal</li> 
+		<li>Gasoline</li> 
+		<li>Electricity</li> 
+	</ol> 
+	</li> 
+		<li>Humans need only:
+	<ol> 
+	<li>Water</li> 
+		<li>Protein</li> 
+	</ol></li> 
+	</ol></td></tr> 
+<tr><td class='example1'><pre>* A first item<br />* A second item<br />* A third</pre></td><td>&rarr;</td><td class='example2'><ul> 
+	<li>A first item</li> 
+		<li>A second item</li> 
+		<li>A third</li> 
+	</ul></td></tr> 
+<tr><td class='example1'><pre>* Fuel could be:<br />** Coal<br />** Gasoline<br />** Electricity<br />* Humans need only:<br />** Water<br />** Protein</pre></td><td>&rarr;</td><td class='example2'><ul> 
+	<li>Fuel could be:
+	<ul> 
+	<li>Coal</li> 
+		<li>Gasoline</li> 
+		<li>Electricity</li> 
+	</ul> 
+	</li> 
+		<li>Humans need only:
+	<ul> 
+	<li>Water</li> 
+		<li>Protein</li> 
+	</ul></li> 
+	</ul></td></tr> 
+<tr><th colspan='5'><a name='external-references'>External References</a></th></tr> 
+<tr><td class='example1'><pre>I searched "Google":http://google.com.</pre></td><td>&rarr;</td><td class='example2'><p>I searched <a href="http://google.com">Google</a>.</p></td></tr> 
+<tr><td class='example1'><pre>I am crazy about "Hobix":hobix<br />and "it's":hobix "all":hobix I ever<br />"link to":hobix!<br /><br />[hobix]http://hobix.com<br /></pre></td><td>&rarr;</td><td class='example2'><p>I am crazy about <a href="http://hobix.com">Hobix</a> 
+and <a href="http://hobix.com">it&#8217;s</a> <a href="http://hobix.com">all</a> I ever
+<a href="http://hobix.com">link to</a>!</p></td></tr> 
+<tr><td class='example1'><pre>!http://redcloth.org/hobix.com/textile/sample.jpg!</pre></td><td>&rarr;</td><td class='example2'><p><img src="http://redcloth.org/hobix.com/textile/sample.jpg" alt="" /></p></td></tr> 
+<tr><td class='example1'><pre>!openwindow1.gif(Bunny.)!</pre></td><td>&rarr;</td><td class='example2'><p><img src="openwindow1.gif" title="Bunny." alt="Bunny." /></p></td></tr> 
+<tr><td class='example1'><pre>!openwindow1.gif!:http://hobix.com/</pre></td><td>&rarr;</td><td class='example2'><p><a href="http://hobix.com/"><img src="openwindow1.gif" alt="" /></a></p></td></tr> 
+<tr><td class='example1'><pre>!&gt;obake.gif!<br /><br />And others sat all round the small<br />machine and paid it to sing to them.</pre></td><td>&rarr;</td><td class='example2'><p style="float:right"><img src="obake.gif" alt="" /></p> 
+ 
+	<p>And others sat all round the small
+machine and paid it to sing to them.</p></td></tr> 
+<tr><td class='example1'><pre>We use CSS(Cascading Style Sheets).</pre></td><td>&rarr;</td><td class='example2'><p>We use <acronym title="Cascading Style Sheets">CSS</acronym>.</p></td></tr> 
+<tr><th colspan='5'><a name='tables'>Tables</a></th></tr> 
+<tr><td class='example1'><pre>| name | age | sex |<br />| joan | 24 | f |<br />| archie | 29 | m |<br />| bella | 45 | f |</pre></td><td>&rarr;</td><td class='example2'><table> 
+		<tr> 
+			<td> name </td> 
+			<td> age </td> 
+			<td> sex </td> 
+		</tr> 
+		<tr> 
+			<td> joan </td> 
+			<td> 24 </td> 
+			<td> f </td> 
+		</tr> 
+		<tr> 
+			<td> archie </td> 
+			<td> 29 </td> 
+			<td> m </td> 
+		</tr> 
+		<tr> 
+			<td> bella </td> 
+			<td> 45 </td> 
+			<td> f </td> 
+		</tr> 
+	</table></td></tr> 
+<tr><td class='example1'><pre>|_. name |_. age |_. sex |<br />| joan | 24 | f |<br />| archie | 29 | m |<br />| bella | 45 | f |</pre></td><td>&rarr;</td><td class='example2'><table> 
+		<tr> 
+			<th>name </th> 
+			<th>age </th> 
+			<th>sex </th> 
+		</tr> 
+		<tr> 
+			<td> joan </td> 
+			<td> 24 </td> 
+			<td> f </td> 
+		</tr> 
+		<tr> 
+			<td> archie </td> 
+			<td> 29 </td> 
+			<td> m </td> 
+		</tr> 
+		<tr> 
+			<td> bella </td> 
+			<td> 45 </td> 
+			<td> f </td> 
+		</tr> 
+	</table></td></tr> 
+<tr><td class='example1'><pre>|_. attribute list |<br />|&lt;. align left |<br />|&gt;. align right|<br />|=. center |<br />|&lt;&gt;. justify |<br />|^. valign top |<br />|~. bottom |</pre></td><td>&rarr;</td><td class='example2'><table> 
+		<tr> 
+			<th>attribute list </th> 
+		</tr> 
+		<tr> 
+			<td style="text-align:left;">align left </td> 
+		</tr> 
+		<tr> 
+			<td style="text-align:right;">align right</td> 
+		</tr> 
+		<tr> 
+			<td style="text-align:center;">center </td> 
+		</tr> 
+		<tr> 
+			<td style="text-align:justify;">justify </td> 
+		</tr> 
+		<tr> 
+			<td style="vertical-align:top;">valign top </td> 
+		</tr> 
+		<tr> 
+			<td style="vertical-align:bottom;">bottom </td> 
+		</tr> 
+	</table></td></tr> 
+<tr><td class='example1'><pre>|\2. spans two cols |<br />| col 1 | col 2 |</pre></td><td>&rarr;</td><td class='example2'><table> 
+		<tr> 
+			<td colspan="2">spans two cols </td> 
+		</tr> 
+		<tr> 
+			<td> col 1 </td> 
+			<td> col 2 </td> 
+		</tr> 
+	</table></td></tr> 
+<tr><td class='example1'><pre>|/3. spans 3 rows | a |<br />| b |<br />| c |</pre></td><td>&rarr;</td><td class='example2'><table> 
+		<tr> 
+			<td rowspan="3">spans 3 rows </td> 
+			<td> a </td> 
+		</tr> 
+		<tr> 
+			<td> b </td> 
+		</tr> 
+		<tr> 
+			<td> c </td> 
+		</tr> 
+	</table></td></tr> 
+<tr><td class='example1'><pre>|{background:#ddd}. Grey cell|</pre></td><td>&rarr;</td><td class='example2'><table> 
+		<tr> 
+			<td style="background:#ddd;">Grey cell</td> 
+		</tr> 
+	</table></td></tr> 
+<tr><td class='example1'><pre>table{border:1px solid black}.<br />|This|is|a|row|<br />|This|is|a|row|</pre></td><td>&rarr;</td><td class='example2'><table style="border:1px solid black;"> 
+		<tr> 
+			<td>This</td> 
+			<td>is</td> 
+			<td>a</td> 
+			<td>row</td> 
+		</tr> 
+		<tr> 
+			<td>This</td> 
+			<td>is</td> 
+			<td>a</td> 
+			<td>row</td> 
+		</tr> 
+	</table></td></tr> 
+<tr><td class='example1'><pre>|This|is|a|row|<br />{background:#ddd}. |This|is|grey|row|</pre></td><td>&rarr;</td><td class='example2'><table> 
+		<tr> 
+			<td>This</td> 
+			<td>is</td> 
+			<td>a</td> 
+			<td>row</td> 
+		</tr> 
+		<tr style="background:#ddd;"> 
+			<td>This</td> 
+			<td>is</td> 
+			<td>grey</td> 
+			<td>row</td> 
+		</tr> 
+	</table></td></tr> 
+</table> 
+<script type="text/javascript"> 
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script> 
+<script type="text/javascript"> 
+var pageTracker = _gat._getTracker("UA-345379-5");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script> 
+</body> 
+</html>

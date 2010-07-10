@@ -1,0 +1,15 @@
+<h1>Listing tickets</h1>
+<div id="main">
+  <table>
+    <tr>
+      <th>#</th>
+      <th>Researcher</th>
+      <th>Problem</th>
+      <th>Description</th>
+    </tr>
+  <% @comments.each do |comment| %>
+    <%= render :partial => "comment", :locals => {:comment => comment} %>
+  <% end %>
+  </table>
+</div>
+<%= will_paginate @comments, :class => 'pagination ajax' %>

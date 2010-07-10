@@ -1,0 +1,40 @@
+<h1>Listing researchers</h1>
+
+<table>
+  <tr>
+    <th>User name</th>
+    <th>Email</th>
+    <th>Pass hash</th>
+    <th>Pass hash confirm</th>
+    <th>Join date</th>
+    <th>Last login</th>
+    <th>Account</th>
+    <th>Last access</th>
+    <th>Info</th>
+    <th>Avatar</th>
+    <th>Country</th>
+  </tr>
+
+<% @researchers.each do |researcher| %>
+  <tr>
+    <td><%=h researcher.user_name %></td>
+    <td><%=h researcher.email %></td>
+    <td><%=h researcher.pass_hash %></td>
+    <td><%=h researcher.pass_hash_confirm %></td>
+    <td><%=h researcher.join_date %></td>
+    <td><%=h researcher.last_login %></td>
+    <td><%=h researcher.account %></td>
+    <td><%=h researcher.last_access %></td>
+    <td><%=h researcher.info %></td>
+    <td><%=h researcher.avatar %></td>
+    <td><%=h researcher.country %></td>
+    <td><%= link_to 'Show', researcher %></td>
+    <td><%= link_to 'Edit', edit_researcher_path(researcher) %></td>
+    <td><%= link_to 'Destroy', researcher, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New researcher', new_researcher_path %>

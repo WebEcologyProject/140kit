@@ -1,0 +1,19 @@
+<h1>Listing failures</h1>
+<table>
+  <tr>
+    <th>Message</th>
+    <th>Trace</th>
+    <th>Instance</th>
+  </tr>
+<% @failures.each do |failure| -%>
+  <tr>
+    <td><%=h failure.message %></td>
+    <td><%=h failure.trace %></td>
+    <td><%=h failure.instance_id %></td>
+    <td><%= link_to 'Show', failure %></td>
+    <td><%= link_to 'Edit', edit_failure_path(failure) %></td>
+    <td><%= link_to 'Destroy', failure, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end -%>
+</table>
+<%= link_to 'New failure', new_failure_path %>

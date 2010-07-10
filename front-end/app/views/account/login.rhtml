@@ -1,0 +1,23 @@
+<h1>Login</h1>
+(Don't have an account? <%= link_to "Sign up", signup_path %>)<br />
+<% form_tag do -%>
+  <p><label for="user_name">User Name</label><br/>
+  <%= text_field_tag 'user_name' %></p>
+
+  <p><label for="password">Password</label><br/>
+  <%= password_field_tag 'password' %></p>
+
+  <p><label for="remember_me">Remember me:</label>
+  <%= check_box_tag 'remember_me' %></p>
+
+  <p><%= submit_tag 'Log in' %></p>
+<% end -%>
+
+<%=link_to_function "Forgot your password?", visual_effect(:toggle_appear, "forgotPassword", :duration => 0.5) %>
+<div id="forgotPassword" style="display:none;">
+  <% form_tag '/account/forgot' do -%>
+    Type in either your user name or your e-mail, and we will send your password to you:
+    <p><%= text_field_tag 'login' %></p>
+    <%= submit_tag 'Submit' %>
+  <% end -%>
+</div>

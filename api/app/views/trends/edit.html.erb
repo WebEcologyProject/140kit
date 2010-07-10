@@ -1,0 +1,32 @@
+<h1>Editing trend</h1>
+
+<% form_for(@trend) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :term %><br />
+    <%= f.text_field :term %>
+  </p>
+  <p>
+    <%= f.label :created_at %><br />
+    <%= f.datetime_select :created_at %>
+  </p>
+  <p>
+    <%= f.label :ended_at %><br />
+    <%= f.datetime_select :ended_at %>
+  </p>
+  <p>
+    <%= f.label :tweet_count %><br />
+    <%= f.text_field :tweet_count %>
+  </p>
+  <p>
+    <%= f.label :scrape_id %><br />
+    <%= f.text_field :scrape_id %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @trend %> |
+<%= link_to 'Back', trends_path %>

@@ -1,0 +1,41 @@
+<h1>Listing Scrapes</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Folder Name</th>
+    <th>Created At</th>
+    <th>Notified</th>
+    <th>Lock</th>
+    <th>Flagged</th>
+    <th>Scrape Type</th>
+    <th>Scrape Finished</th>
+    <th>Length</th>
+    <th>Researcher ID</th>
+    <th>Finished</th>
+  </tr>
+
+<% @scrapes.each do |scrape| %>
+  <tr>
+    <td><%=h scrape.name %></td>
+    <td><%=h scrape.folder_name %></td>
+    <td><%=h scrape.created_at %></td>
+    <td><%=h scrape.created_at %></td>
+    <td><%=h scrape.notified %></td>
+    <td><%=h scrape.lock %></td>
+    <td><%=h scrape.flagged %></td>
+    <td><%=h scrape.scrape_type %></td>
+    <td><%=h scrape.scrape_finished %></td>
+    <td><%=h scrape.length %></td>
+    <td><%=h scrape.researcher_id %></td>
+    <td><%=h scrape.finished %></td>
+    <td><%= link_to 'Show', scrape %></td>
+    <td><%= link_to 'Edit', edit_scrape_path(scrape) %></td>
+    <td><%= link_to 'Destroy', scrape, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New scrape', new_scrape_path %>

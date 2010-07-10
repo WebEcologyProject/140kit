@@ -1,0 +1,24 @@
+<%
+  collections ||= nil
+  @collections = collections || @collections
+  show_researchers = true if show_researchers.nil?
+  field_selected = field_selected || @field_selected
+-%>
+<div id="main">
+<table id="collections">
+  <tr>
+    <th>Name</th>
+<% if show_researchers -%>
+    <th>Researcher</th>
+<% end -%>
+    <th>Tweets</th>
+    <th>Users</th>
+    <th>Last updated</th>
+    <th>Status</th>
+  </tr>
+<% for collection in @items -%>
+    <%= render :partial => "/collections/collection", :locals => {:collection => collection, :show_researchers => show_researchers} %>
+<% end -%>
+</table>
+  <%= will_paginate @items, :class => 'pagination ajax' %>
+</div>

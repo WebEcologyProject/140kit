@@ -1,0 +1,78 @@
+<h1>Listing users</h1>
+
+<table>
+  <tr>
+    <th>Twitter</th>
+    <th>Name</th>
+    <th>Screen name</th>
+    <th>Location</th>
+    <th>Description</th>
+    <th>Profile image url</th>
+    <th>Url</th>
+    <th>Protected</th>
+    <th>Followers count</th>
+    <th>Profile background color</th>
+    <th>Profile text color</th>
+    <th>Profile link color</th>
+    <th>Profile sidebar fill color</th>
+    <th>Profile sidebar border color</th>
+    <th>Friends count</th>
+    <th>Created at</th>
+    <th>Favourites count</th>
+    <th>Utc offset</th>
+    <th>Time zone</th>
+    <th>Profile background image url</th>
+    <th>Profile background tile</th>
+    <th>Notifications</th>
+    <th>Geo enabled</th>
+    <th>Verified</th>
+    <th>Following</th>
+    <th>Statuses count</th>
+    <th>Scrape</th>
+    <th>Contributors enabled</th>
+    <th>Lang</th>
+    <th>Metadata</th>
+  </tr>
+
+<% @users.each do |user| %>
+  <tr>
+    <td><%=h user.twitter_id %></td>
+    <td><%=h user.name %></td>
+    <td><%=h user.screen_name %></td>
+    <td><%=h user.location %></td>
+    <td><%=h user.description %></td>
+    <td><%=h user.profile_image_url %></td>
+    <td><%=h user.url %></td>
+    <td><%=h user.protected %></td>
+    <td><%=h user.followers_count %></td>
+    <td><%=h user.profile_background_color %></td>
+    <td><%=h user.profile_text_color %></td>
+    <td><%=h user.profile_link_color %></td>
+    <td><%=h user.profile_sidebar_fill_color %></td>
+    <td><%=h user.profile_sidebar_border_color %></td>
+    <td><%=h user.friends_count %></td>
+    <td><%=h user.created_at %></td>
+    <td><%=h user.favourites_count %></td>
+    <td><%=h user.utc_offset %></td>
+    <td><%=h user.time_zone %></td>
+    <td><%=h user.profile_background_image_url %></td>
+    <td><%=h user.profile_background_tile %></td>
+    <td><%=h user.notifications %></td>
+    <td><%=h user.geo_enabled %></td>
+    <td><%=h user.verified %></td>
+    <td><%=h user.following %></td>
+    <td><%=h user.statuses_count %></td>
+    <td><%=h user.scrape_id %></td>
+    <td><%=h user.contributors_enabled %></td>
+    <td><%=h user.lang %></td>
+    <td><%=h user.metadata_id %></td>
+    <td><%= link_to 'Show', user %></td>
+    <td><%= link_to 'Edit', edit_user_path(user) %></td>
+    <td><%= link_to 'Destroy', user, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New user', new_user_path %>

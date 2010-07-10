@@ -1,0 +1,63 @@
+<p>
+  <b>Researcher:</b>
+  <%=h @scrape.researcher_id %>
+</p>
+
+<p>
+  <b>Name:</b>
+  <%=h @scrape.name %>
+</p>
+
+<p>
+  <b>Length:</b>
+  <%=h @scrape.length %>
+</p>
+
+<p>
+  <b>Created at:</b>
+  <%=h @scrape.created_at %>
+</p>
+
+<p>
+  <b>Updated at:</b>
+  <%=h @scrape.updated_at %>
+</p>
+
+<p>
+  <b>Finished:</b>
+  <%=h @scrape.finished %>
+</p>
+
+<p>
+  <b>Notified:</b>
+  <%=h @scrape.notified %>
+</p>
+
+<p>
+  <b>Scrape finished:</b>
+  <%=h @scrape.scrape_finished %>
+</p>
+
+<p>
+  <b>Folder name:</b>
+  <%=h @scrape.folder_name %>
+</p>
+
+<p>
+  <b>Lock:</b>
+  <%=h @scrape.lock %>
+</p>
+
+<p>
+  <b>Flagged:</b>
+  <%=h @scrape.flagged %>
+</p>
+
+<p>
+  <b>Scrape type:</b>
+  <%=h @scrape.scrape_type %>
+</p>
+
+
+<%= link_to 'Edit', edit_scrape_path(@scrape) %> |
+<%= link_to 'Back', scrapes_path %>

@@ -1,0 +1,30 @@
+<% profile_page = profile_page || true %>
+<h3>Scraped Collections</h3>
+<% if !scraped_collections.empty? -%>
+  <%= render :partial => "collections/table", :locals => {:collections => scraped_collections} %>
+<% else -%>
+  <% if profile_page %>
+You haven't scraped any of your own collections yet. <%= link_to "Start a new Scrape?", new_scrape_url %>
+  <% end -%>
+<% end -%>
+<br>
+
+<h3>Curated Collections</h3>
+<% if !curated_collections.empty? -%>
+  <%= render :partial => "collections/table", :locals => {:collections => curated_collections} %>
+<% else -%>
+  <% if profile_page %>
+You haven't curated any of your own collections yet. <%= link_to "Collect data into a curation now?", new_collection_url %>
+  <% end -%>
+<% end -%>
+
+<br>
+
+<h3>Collections In Process</h3>
+<% if !curating_collections.empty? -%>
+  <%= render :partial => "collections/table", :locals => {:collections => curating_collections} %>
+<% else -%>
+  <% if profile_page %>
+  You have no curations that are currently in process.
+  <% end -%>
+<% end -%>

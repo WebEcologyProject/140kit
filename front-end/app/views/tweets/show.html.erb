@@ -1,0 +1,18 @@
+<% display_user_header = display_user_header || false %>
+<div>
+<% if display_user_header -%>
+  <h4><%= link_to tweet.screen_name, user_url(tweet.screen_name) %></h4>
+<% end -%>
+  <p>
+    <%= tweet.text %><br />
+    <%= link_to "Originally Posted from #{Tweet.source(tweet.source)}", tweet.source %><br />
+    Self-Reported Location: <%= tweet.location %><br />
+    <% if !tweet.in_reply_to_screen_name.empty? -%>
+    Reply/Retweeted to tweet from: <%= link_to tweet.in_reply_to_screen_name, "/users/#{tweet.in_reply_to_screen_name}" %><br />
+<% end -%>
+<% if !tweet.lat.empty? -%>
+    Coordinates of tweet: <%= tweet.lat %>, <%= tweet.lon %><br />
+<% end -%>
+    Primary Language: <%= Tweet.language(tweet.language) %>
+  </p>
+</div>

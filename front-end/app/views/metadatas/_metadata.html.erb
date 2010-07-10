@@ -1,0 +1,8 @@
+<% id_prefix ||= "" -%>
+<% display_user_header = display_user_header || false -%>
+<% case metadata.class.to_s -%>
+<% when "RestMetadata" -%>
+<%= render :partial => "metadatas/metadata/rest", :locals => {:collection => collection, :metadata => metadata, :id_prefix => id_prefix, :display_user_header => display_user_header} %>
+<% when "StreamMetadata" -%>
+<%= render :partial => "metadatas/metadata/stream", :locals => {:collection => collection, :metadata => metadata, :id_prefix => id_prefix, :display_user_header => display_user_header} %>
+<% end -%>

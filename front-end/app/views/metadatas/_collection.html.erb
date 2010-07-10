@@ -1,0 +1,22 @@
+<%
+  extra_columns ||= []  
+  if !collection.finished 
+    style = "#999"
+  elsif !collection.analyzed
+    style = "#666"
+  else
+    style = "#CCC"
+  end
+-%>
+<tr style="background:<%= style %>">
+<% for column in extra_columns -%>
+  <td><%= column %></td>
+<% end -%>
+  <td><%= link_to collection.name, collection_url(collection.researcher.user_name, collection.id) %></td>
+<% if current_researcher.id != collection.researcher.id -%>
+  <td><%= link_to collection.researcher.user_name, researcher_page_url(collection.researcher.user_name) %></td>
+<% end -%>
+  <td><%= number_with_delimiter(collection.tweets_count) %></td>
+  <td><%= number_with_delimiter(collection.users_count) %></td>
+  <td><%=h distance_of_time_in_words(collection.created_at, Time.now) %> ago (<%= collection.created_at.strftime("%b %d, %Y, at %H:%M:%S %Z")%>)</td>
+</tr>

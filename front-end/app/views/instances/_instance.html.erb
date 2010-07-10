@@ -1,0 +1,4 @@
+<td><%=h instance.hostname %></td>
+<td><%=h instance.instance_name %></td>
+<td><%=h instance.instance_id %></td>
+<td><%= link_to "Kill?", kill_instance_path(instance.class.to_s.underscore, instance.id) %></td>

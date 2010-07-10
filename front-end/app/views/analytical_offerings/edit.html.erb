@@ -1,0 +1,36 @@
+<h1>Editing analytical_offering</h1>
+
+<% form_for(@analytical_offering) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :title %><br />
+    <%= f.text_field :title %>
+  </p>
+  <p>
+    <%= f.label :description %><br />
+    <%= f.text_area :description %>
+  </p>
+  <p>
+    <%= f.label :function %><br />
+    <%= f.text_field :function %>
+  </p>
+  <p>
+    <%= f.label :source_code_link %><br />
+    <%= f.text_field :source_code_link %>
+  </p>
+  <p>
+    <%= f.label :created_by %><br />
+    <%= f.text_field :created_by %>
+  </p>
+  <p>
+    <%= f.label :created_by_link %><br />
+    <%= f.text_field :created_by_link %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @analytical_offering %> |
+<%= link_to 'Back', analytical_offerings_path %>

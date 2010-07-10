@@ -1,0 +1,16 @@
+<% 
+researcher ||= nil
+@researcher = researcher || @researcher
+-%>
+<% if @researcher.image != nil -%>
+<div>
+  <%= image_tag(@researcher.image.public_filename(:thumb), :align => "left", :hspace => "10px", :vspace => "10px") %>
+<% if current_researcher != :false && (current_researcher.admin? || current_researcher == @researcher) -%>
+  <br /><%= link_to_remote 'delete', :url => "/images/#{@researcher.image.id}", :method => :delete %>
+<% end -%>
+</div>
+<% else -%>
+<div>
+  <%= image_tag(DEFAULT_IMAGE_URL, :align => "left", :hspace => "10px", :vspace => "10px") %>
+</div>
+<% end -%>

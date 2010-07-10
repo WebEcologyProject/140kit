@@ -1,0 +1,60 @@
+<h1>Listing tweets</h1>
+
+<table>
+  <tr>
+    <th>Twitter</th>
+    <th>Published</th>
+    <th>Content</th>
+    <th>Source</th>
+    <th>Language</th>
+    <th>User</th>
+    <th>Scrape</th>
+    <th>Screen name</th>
+    <th>Location</th>
+    <th>Link</th>
+    <th>In reply to status</th>
+    <th>In reply to user</th>
+    <th>Favorited</th>
+    <th>Truncated</th>
+    <th>In reply to screen name</th>
+    <th>To user</th>
+    <th>Created at</th>
+    <th>Updated at</th>
+    <th>Lat</th>
+    <th>Lon</th>
+    <th>Metadata</th>
+  </tr>
+
+<% @tweets.each do |tweet| %>
+  <tr>
+    <td><%=h tweet.twitter_id %></td>
+    <td><%=h tweet.published %></td>
+    <td><%=h tweet.content %></td>
+    <td><%=h tweet.source %></td>
+    <td><%=h tweet.language %></td>
+    <td><%=h tweet.user_id %></td>
+    <td><%=h tweet.scrape_id %></td>
+    <td><%=h tweet.screen_name %></td>
+    <td><%=h tweet.location %></td>
+    <td><%=h tweet.link %></td>
+    <td><%=h tweet.in_reply_to_status_id %></td>
+    <td><%=h tweet.in_reply_to_user_id %></td>
+    <td><%=h tweet.favorited %></td>
+    <td><%=h tweet.truncated %></td>
+    <td><%=h tweet.in_reply_to_screen_name %></td>
+    <td><%=h tweet.to_user_id %></td>
+    <td><%=h tweet.created_at %></td>
+    <td><%=h tweet.updated_at %></td>
+    <td><%=h tweet.lat %></td>
+    <td><%=h tweet.lon %></td>
+    <td><%=h tweet.metadata_id %></td>
+    <td><%= link_to 'Show', tweet %></td>
+    <td><%= link_to 'Edit', edit_tweet_path(tweet) %></td>
+    <td><%= link_to 'Destroy', tweet, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New tweet', new_tweet_path %>

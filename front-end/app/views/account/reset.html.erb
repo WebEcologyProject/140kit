@@ -1,0 +1,13 @@
+<%= error_messages_for :researcher %>
+<h1>Welcome back! We were so worried about you.</h1>
+Put in a new password and get back down to business.
+<% form_tag "/account/reset/#{params["reset_code"]}" do -%>
+
+<p><label for="password">Password</label><br/>
+<%= password_field :researcher, :password %></p>
+
+<p><label for="password_confirmation">Confirm Password</label><br/>
+<%= password_field :researcher, :password_confirmation %></p>
+<%= hidden_field :researcher, :reset_code, :value => params[:reset_code] %>
+<p><%= submit_tag 'Sign up' %></p>
+<% end -%>

@@ -1,0 +1,17 @@
+<div>
+  <h1>News/Page Items</h1>
+  <div id="main">
+  <% for news in @news_items -%>
+      <div>
+        <% if news.page_item %>
+          <h2>Page Item</h2>
+        <% else %>
+          <h2>News Item</h2>
+        <% end %>
+      <%= render :partial => "/news/news", :locals => {:news => news}%>
+      </div>
+  <% end -%>
+    <%= will_paginate @news_items, :class => 'pagination ajax' %>
+  </div>
+  <%= link_to "New News Item", new_news_path %>
+</div>
