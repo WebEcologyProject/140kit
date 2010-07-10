@@ -1,0 +1,5 @@
+hostname:HOSTNAME
+database:DATABASE
+user:USERNAME
+password:PASSWORD
+
