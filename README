@@ -1,0 +1,38 @@
+Setting up the front end: 
+
+1. Create the following local config files: 
+
+			api/config/database.yml
+			front-end/config/database.yml
+			back-end/config/production.txt
+			back-end/config/development.txt
+			back-end/config/test.txt
+		
+	 You will find examples of each file in the same directory as the file to be created. Sorry we have so many config files, we're planning to centralize them soon. 	
+	
+2. Create the production, development, and test databases you specify in the configs above
+
+3. cd front-end
+
+4. rake db:migrate
+
+5. rake db:seed (This step will add an admin account for you to play with.)
+
+6. run script/server to serve up a local instance of 140kit.com
+	
+
+Collecting and analyzing your first dataset: 
+
+1. Go to localhost:3000 on your favorite browser
+
+2. Login at "username", "password" (the default admin account created above)
+
+3. 140kit needs at least one Twitter Account to use for streaming data collection. To specify an account, click on "Twitter Accounts Management" and create a new auth_user with an existing Twitter account and password. For testing and such, you can probably just use your personal twitter account (you ARE on Twitter, right??)
+
+4. Now you need to create a new streaming instance on your machine--streaming instances continuously run, checking for data collection jobs ('scrapes') that need to be completed. To create an instance: 
+
+	
+		
+			
+	
+	
