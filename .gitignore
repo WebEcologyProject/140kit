@@ -1,0 +1,11 @@
+*.log
+*.yml
+*.cache
+*.graphml
+*.DS_Store
+*.zip
+
+wiki/
+visualization/
+back-end/config/*.txt
+
