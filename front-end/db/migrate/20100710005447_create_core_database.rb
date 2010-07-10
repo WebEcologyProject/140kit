@@ -210,8 +210,8 @@ class CreateCoreDatabase < ActiveRecord::Migration
         t.integer :researcher_id
         t.string :name, :default => "A default Scrape Name"
         t.integer :length
-        t.datetime :created_at, :default => '2010-01-01 01:01:01'
-        t.datetime :updated_at, :default => '2010-01-01 01:01:01'
+        t.datetime :created_at
+        t.datetime :updated_at
         t.boolean :finished, :default =>false
         t.boolean :scrape_finished, :default =>false
         t.string :folder_name
