@@ -9,21 +9,9 @@
   </p>
   <p>
     <%= f.label :password %><br />
-    <%= f.text_field :password %>
+    <%= f.password_field :password %>
   </p>
-  <p>
-    <%= f.label :flagged %><br />
-    <%= f.check_box :flagged %>
-  </p>
-  <p>
-    <%= f.label :instance_name %><br />
-    <%= f.text_field :instance_name %>
-  </p>
-  <p>
-    <%= f.label :hostname %><br />
-    <%= f.text_field :hostname %>
-  </p>
-  <p>
+	<p>
     <%= f.submit 'Create' %>
   </p>
 <% end %>
