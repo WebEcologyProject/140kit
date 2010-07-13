@@ -10,12 +10,12 @@
 
 <p>
   <b>Current Instance name:</b>
-  <%=h @auth_user.instance_name.empty? ? "(none)" : @auth_user.instance_name %>
+  <%=h @auth_user.instance_name ? "(none)" : @auth_user.instance_name %>
 </p>
 
 <p>
   <b>Current Hostname:</b>
-  <%=h @auth_user.hostname.empty? ? "(none)" : @auth_user.hostname %>
+  <%=h @auth_user.hostname ? "(none)" : @auth_user.hostname %>
 </p>
 
 
