@@ -2,8 +2,8 @@
   collection ||= collection
   @collection = collection || @collection
   @graph_id = Graph.find(:first, :conditions => {:collection_id => @collection.id, :style => "retweet"}, :select => 'id')
-  @am = AnalysisMetadata.find(:first, :conditions => {:collection_id => @collection.id, :function => "retweet_graph"})
   @graph_id = @graph_id.id if !@graph_id.nil?
+  @am = am || @am
   @edge_count = @graph_id.nil? ? 0 : Edge.count(:conditions => {:graph_id => @graph_id})
 -%>
 <% logger.debug(@am.inspect) %>

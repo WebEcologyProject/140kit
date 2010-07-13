@@ -17,7 +17,8 @@ ActionController::Routing::Routes.draw do |map|
   map.analytical_offerings_curate '/collections/:id/analytical_offerings', :controller => 'analytical_offerings', :action => 'curate'
   map.collection_add_analytics '/collections/:collection_id/add/analytics/:analytical_offering_id', :controller => 'collections', :action => 'add_analytics'
   map.collection_remove_analytics '/collections/:collection_id/remove/analytics/:analytical_offering_id', :controller => 'collections', :action => 'remove_analytics'
-  map.collection_mothball '/collections/:collection_id/mothoball', :controller => 'collections', :action => 'mothball'
+  map.collection_mothball '/collections/:collection_id/mothball', :controller => 'collections', :action => 'mothball'
+  map.collection_rollback '/collections/:collection_id/rollback', :controller => 'collections', :action => 'rollback'
   
   map.datasets '/datasets', :controller => 'collections', :action => 'index', :single_dataset => 'true'
   map.dataset '/datasets/:id', :controller => 'collections', :action => 'show'

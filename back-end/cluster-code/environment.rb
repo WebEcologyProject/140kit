@@ -1,7 +1,6 @@
 load "#{ROOT_FOLDER}cluster-code/utils/extensions.rb"
 
 class Environment
-  
   require "#{ROOT_FOLDER}cluster-code/database"
   require "#{ROOT_FOLDER}cluster-code/scheduler"
   require "#{ROOT_FOLDER}cluster-code/site_data"
@@ -14,16 +13,21 @@ class Environment
   @@dev_db = nil
   @@rest_db = nil
   @@stream_db = nil
+  @@storage_type = nil
+  @@storage_path = nil
+  @@storage_ssh = nil
 
   def self.read_from_config(runtime_environment, class_var=nil)
-    
-    settings = {}
-    File.open("../config/#{runtime_environment}.txt", "r").read.split("\n").collect{|x| settings[x.split(":")[0]] = x.split(":")[1].nil? ? nil : x.split(":")[1].strip  }
+    settings = U.get_config[runtime_environment]
     if !class_var.nil?
-      class_variable_set(class_var, Mysql.real_connect(settings["hostname"], settings["user"], settings["password"], settings["database"]))
+      class_variable_set(class_var, Mysql.real_connect(settings["host"], settings["username"], settings["password"], settings["database"]))
       @@db = eval(class_var.to_s)
       @@db.reconnect = true
       @@env = runtime_environment
+      @@host = settings["host"]
+      @@password = settings["password"]
+      @@username = settings["username"]
+      @@database = settings["database"]
     else return settings
     end
     puts "### #{runtime_environment.upcase} ENVIRONMENT ###"
@@ -38,6 +42,7 @@ class Environment
     when "development"
       Environment.load_development
     end
+    Environment.setup_file_storage
   end
   
   def self.load_production
@@ -96,7 +101,66 @@ class Environment
     return @@env
   end
   
+  def self.host
+    return @@host
+  end
+  
+  def self.username
+    return @@username
+  end
+  
+  def self.password
+    return @@password
+  end
+  
+  def self.database
+    return @@database
+  end
+  
+  def self.storage_type
+    return @@storage_type
+  end
+  
+  def self.storage_path
+    return @@storage_path
+  end
+  
+  def self.storage_ssh
+    return @@storage_ssh
+  end
+  
   def self.set_db(db)
     @@db = db
+  end
+  
+  def self.load_arguments
+    database = nil
+    storage_location = nil
+    run_type = ARGV.shift
+    if ARGV.include?("-db")
+      database = ARGV[ARGV.index("-db")+1]
+    elsif ARGV.include?("--database")
+      database = ARGV[ARGV.index("--database")+1]
+    end
+    if ARGV.include?("-sl")
+      storage_location = ARGV[ARGV.index("-sl")+1]  
+    elsif ARGV.include?("--storage-location")
+      storage_location = ARGV[ARGV.index("--storage-location")+1]
+    end  
+    database = database.nil? ? ENVIRONMENT : database
+    storage_location = storage_location.nil? ? "local" : storage_location
+    return run_type,database,storage_location
+  end
+  
+  def self.setup_file_storage
+    settings = U.get_config["file_storage"]
+    if settings.nil?
+      @@storage_type = "local"
+      @@storage_path = "front_end/public/files"
+    else
+      settings.each_pair do |k,v|
+        class_variable_set(("@@"+k).to_sym, v)
+      end
+    end
   end
 end

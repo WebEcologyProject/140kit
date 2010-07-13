@@ -18,6 +18,7 @@
   <% if !@collection.analyzed -%>
 <p><b>Warning:</b> Not all of the analysis functions have finished for this collection. We'll let you click around, but don't get mad if some things are missing.</p>
   <% end -%>
+  <%= link_to "Clear Analytical Results?", collection_rollback_url(@collection.id), :confirm => "Warning, this will destroy all analytical results and force a refresh of all the data - reverts back to phase before frozen. Still want to proceed?", :class => "big" %>
 <%= render :partial => "overview" %>
 <%= render :partial => "explore" %>
 <%= render :partial => "analytics" %>

@@ -43,7 +43,7 @@ module AnalysisFlow
           else
             AnalysisFlow.create_singular_analysis_metadatas(collection) 
             collection.finished = true
-            Collection.save_all(datasets.collect{|d| d.attributes}<<collection.attributes)
+            Collection.update_all(datasets.collect{|d| d.attributes}<<collection.attributes)
             scrape.finished = true
             scrape.save
             puts "-+"*20
@@ -210,8 +210,10 @@ module AnalysisFlow
   end
   
   def self.route(metadata)
-    puts "#{metadata.function}(#{metadata.collection_id})"
-    eval("#{metadata.function}(#{metadata.collection_id})")
+    $w.session_hash = Digest::SHA1.hexdigest(Time.ntp.to_s+rand(100000).to_s)
+    puts "#{metadata.function}(#{metadata.collection_id}, \"#{metadata.save_path}\")"
+    eval("#{metadata.function}(#{metadata.collection_id}, \"#{metadata.save_path}\")")
+    $w.session_hash = nil
   end
   
   def self.grow_branch(scrape, term)
@@ -282,6 +284,7 @@ module AnalysisFlow
     analytical_offerings.each do |ao|
       new_am = {}
       new_am["function"] = ao.function
+      new_am["save_path"] = ao.save_path
       new_am["collection_id"] = collection.id
       new_am["rest"] = ao.rest
       new_analysis_metadatas << new_am

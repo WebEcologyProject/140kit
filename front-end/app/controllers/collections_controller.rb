@@ -74,6 +74,7 @@ class CollectionsController < ApplicationController
     @analytical_offering = AnalyticalOffering.find(params[:analytical_offering_id])
     @analysis_metadata = AnalysisMetadata.new
     @analysis_metadata.function = @analytical_offering.function
+    @analysis_metadata.save_path = @analytical_offering.save_path
     @analysis_metadata.rest = @analytical_offering.rest
     @analysis_metadata.collection = @collection
     @analysis_metadata.save
@@ -88,6 +89,34 @@ class CollectionsController < ApplicationController
     @collection.mothballed = !@collection.mothballed
     @collection.save
     flash[:notice] = "Your collection has been successfully <a href=\"/pages/mothballing\">mothballed</a> for the time being"
-    redirect_to("/collections")
+    redirect_to(request.referrer)
+  end
+  
+  def rollback
+    @collection = Collection.find(params[:collection_id])
+    @collection.finished = false
+    @collection.analyzed = false
+    ActiveRecord::Base.connection.execute("delete from graphs where collection_id = #{@collection.id}")
+    ActiveRecord::Base.connection.execute("delete from graph_points where collection_id = #{@collection.id}")
+    ActiveRecord::Base.connection.execute("delete from analysis_metadatas where collection_id = #{@collection.id}")
+    debugger
+    if @collection.scrape
+      (scrape = @collection.scrape).finished = false
+      if !@collection.single_dataset
+        single_collections = Collection.find(:all, :conditions => {:scrape_id => scrape.id, :single_dataset => true})
+        single_collections.each do |collection|
+          ActiveRecord::Base.connection.execute("delete from graphs where collection_id = #{collection.id}")
+          ActiveRecord::Base.connection.execute("delete from graph_points where collection_id = #{collection.id}")
+          ActiveRecord::Base.connection.execute("delete from analysis_metadatas where collection_id = #{collection.id}")
+          collection.finished = false
+          collection.analyzed = false
+          collection.save
+        end
+      end
+      scrape.save
+    end
+    @collection.save
+    flash[:notice] = "Your collection has been successfully <a href=\"/pages/rolling-back\">rolled back</a> for the time being"
+    redirect_to(request.referrer)
   end
 end

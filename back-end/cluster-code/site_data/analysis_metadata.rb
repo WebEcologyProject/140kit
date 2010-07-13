@@ -1,5 +1,5 @@
 class AnalysisMetadata < SiteData
-  attr_accessor :function, :instance_id, :collection_id, :finished, :id, :collection, :processing, :scrape_id, :scrape, :rest
+  attr_accessor :function, :instance_id, :collection_id, :finished, :id, :collection, :processing, :scrape_id, :scrape, :rest, :save_path
 
   ###############Relation methods
 

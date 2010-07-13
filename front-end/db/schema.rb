@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100710021410) do
+ActiveRecord::Schema.define(:version => 20100712015906) do
 
   create_table "analysis_metadatas", :force => true do |t|
     t.boolean "finished",      :default => false
@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(:version => 20100710021410) do
     t.boolean "processing",    :default => false
     t.integer "collection_id"
     t.boolean "rest",          :default => false
+    t.string  "save_path"
   end
 
   add_index "analysis_metadatas", ["function", "collection_id"], :name => "analysis_metadatas_function_collection_id", :unique => true
@@ -40,6 +41,7 @@ ActiveRecord::Schema.define(:version => 20100710021410) do
     t.string  "created_by_link"
     t.boolean "rest",             :default => false
     t.boolean "enabled",          :default => false
+    t.string  "save_path"
   end
 
   create_table "auth_users", :force => true do |t|

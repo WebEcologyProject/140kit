@@ -81,6 +81,10 @@ module U
     return raw_data
   end  
   
+  def self.get_config
+    return YAML.load_file("#{ROOT_FOLDER}/config/config.yml")
+  end
+
   def hashes_to_csv()
     file = File.new(path, "w+")
     iterator = 0

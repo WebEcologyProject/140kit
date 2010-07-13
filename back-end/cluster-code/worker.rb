@@ -4,7 +4,8 @@ class Worker
   require "#{ROOT_FOLDER}cluster-code/streamer/stream"
   require "#{ROOT_FOLDER}cluster-code/rester/rest"
     
-  attr_accessor :instance_id, :hostname, :db, :scrape, :metadata, :stream_instance, :run_type, :rest_allowed, :rest_instance, :instance_name, :pid, :last_count_check
+  attr_accessor :instance_id, :hostname, :db, :scrape, :metadata, :stream_instance, :run_type, :rest_allowed, :rest_instance, :instance_name, :pid, :last_count_check, :tmp_path
+  attr_accessor :session_hash
 
   def initialize(run_type)
     @db = Environment.db

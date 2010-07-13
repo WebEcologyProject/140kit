@@ -1,0 +1,23 @@
+development:
+  database: DATABASE
+  username: USERNAME
+  password: PASSWORD
+  host: HOST
+
+test:
+  database: DATABASE
+  username: USERNAME
+  password: PASSWORD 
+  host: HOST
+
+production:
+  database: DATABASE
+  username: USERNAME
+  password: PASSWORD 
+  host: HOST
+
+file_storage:
+  storage_type: remote|local
+  storage_ssh: SOME_SSH_SERVER (username@whatever.calm) IF REMOTE IS USED
+  storage_path: BASE PATH TO STORE THINGS (relative to 140kit/ if local, relative to username@whatever.calm: if remote)
+

@@ -22,27 +22,31 @@
   <div id="graphDraw" class="roundedEdge shadow"></div>
   <h4>Embed code to your site:</h4>
   <textarea>
-    &lt;script type=&quot;text/javascript&quot; src=&quot;http://www.google.com/jsapi&quot;&gt;&lt;/script&gt;
-    &lt;script type=&quot;text/javascript&quot;&gt;
-      google.load('visualization', '1', {packages: ['table','barchart','columnchart','linechart','piechart','geomap']});
-    &lt;/script&gt;
-    &lt;script type=&quot;text/javascript&quot;&gt;
-      function graphData() {
-          var query;
-          query = new google.visualization.Query(
-            &quot;http://<%= API_URL %>/graphs/<%= collection_id %>/histogram/<%= title %>.json?tqx=reqId:<%= rand(10000) %>&quot;
-          );
-          query.send(graphDataHandler);
-      }
+&lt;script type=&quot;text/javascript&quot; src=&quot;http://www.google.com/jsapi&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+  google.load('visualization', '1', {packages: ['table','barchart','columnchart','linechart','piechart','geomap']});
+  &lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;http://www.google.com/jsapi&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+  google.load('visualization', '1', {packages: ['table','barchart','columnchart','linechart','piechart','geomap']});
+&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+  function graphData() {
+      var query;
+      query = new google.visualization.Query(
+        &quot;http://<%= API_URL %>/graphs/<%= collection_id %>/histogram/<%= title %>.json?tqx=reqId:<%= rand(10000) %>&quot;
+      );
+      query.send(graphDataHandler);
+  }
 
-      function graphDataHandler(response) {
-        var data = response.getDataTable();
-        var visualization;
-        visualization = new google.visualization.<%= chart_type %>(document.getElementById('graphDraw'));
-        visualization.draw(data, {<%= chart_options %>});
-      }
-      google.load(graphData());
-    &lt;/script&gt;
-    &lt;div id=&quot;graphDraw&quot;&gt;&lt;/div&gt;
+  function graphDataHandler(response) {
+    var data = response.getDataTable();
+    var visualization;
+    visualization = new google.visualization.<%= chart_type %>(document.getElementById('graphDraw'));
+    visualization.draw(data, {<%= chart_options %>});
+  }
+  google.load(graphData());
+&lt;/script&gt;
+&lt;div id=&quot;graphDraw&quot;&gt;&lt;/div&gt;
   </textarea>
 </div>

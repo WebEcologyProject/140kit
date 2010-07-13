@@ -8,6 +8,7 @@ require 'json'
 require 'eventmachine'
 require 'em-http' #sudo gem install em-http-request
 require 'ntp'
+require 'yaml'
 include NET
 
 #########################################################
@@ -34,11 +35,8 @@ ENVIRONMENT = "production"
 # Very low likeness_threshold corresponds to high branching degrees
 LIKENESS_THRESHOLD = 0.50
 ANALYTICAL_INTERVAL = 300
-#Analytical Constants
-ROOT_ADDRESS = "linode:/var/www/TwitterGrep/front-end/"
-CSV_ADDRESS = "linode:/var/www/TwitterGrep/front-end/public/files/raw_data/raw_csv/"
-SQL_ADDRESS = "linode:/var/www/TwitterGrep/front-end/public/files/raw_data/raw_sql/"
-GRAPH_POINT_ADDRESS = "linode:/var/www/TwitterGrep/front-end/public/files/raw_data/graph_points/"
+#OTHER STUFF
+ERROR_THRESHOLD = 50
 
 #                                                       #
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - #
@@ -50,16 +48,7 @@ require "#{ROOT_FOLDER}cluster-code/environment"
 #ruby run.rb stream-0 -db production
 #ruby run.rb rest-0 --database testing
 #ruby run.rb worker-0 --database production
-database = nil
-run_type = ARGV.shift
-if ARGV.include?("-db")
-  database = ARGV[ARGV.index("-db")+1]
-elsif ARGV.include?("--database")
-  database = ARGV[ARGV.index("--database")+1]
-end
-if database.nil?
-  database = ENVIRONMENT
-end
+run_type,database,storage_location = Environment.load_arguments
 Environment.load(database)
 if !run_type.nil?
     $w = Worker.new(run_type)

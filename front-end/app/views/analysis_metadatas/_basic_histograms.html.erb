@@ -1,4 +1,10 @@
 <% @collection = collection || @collection -%>
+<% @am = am || @am -%>
+<%=link_to "Download the CSV of Basic Histogram Data", "http://#{SITE_URL}/files#{@am.save_path}#{@collection.folder_name}.zip" %><br />
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<script type="text/javascript">
+google.load('visualization', '1', {packages: ['table','barchart','columnchart','linechart','piechart','geomap']});
+</script>
 <h4>Histograms</h4>
 <ul>
   <li><%= link_to_remote("Tweet Location",  :replace => 'dataDisplay', :url => google_graph_url("tweet_location", @collection.id)) %></li>

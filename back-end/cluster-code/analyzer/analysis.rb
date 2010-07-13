@@ -191,8 +191,9 @@ class Analysis
     return " where "+conditional
   end
   
-  def self.hashes_to_csv(path, hash_array)
-    file = File.new(path, "w+")
+  def self.hashes_to_csv(hash_array, file_name, path=$w.tmp_path)
+    raise "Temp Folder not declared" if $w.tmp_path.nil?
+    file = File.new(path+file_name, "w+")
     iterator = 0
     if !hash_array.empty?
       keys = hash_array.first.keys

@@ -1,5 +1,5 @@
 #Results: Frequency Charts of basic data on Tweets and Users per data set
-def basic_histograms(collection_id)
+def basic_histograms(collection_id, save_path)
   collection = Collection.find({:id => collection_id})
   conditional = Analysis.conditional(collection)
   tweet_languages = Analysis.frequency_hash(Tweet, "language", conditional)
@@ -51,17 +51,13 @@ def basic_histograms(collection_id)
   graph_points_groups.each do |group|
     Database.save_all({"graph_points" => group})
   end
-  session_hash = Digest::SHA1.hexdigest(Time.ntp.to_s+rand(100000).to_s)
-  `mkdir ../tmp_files/#{session_hash}/`
-  `mkdir ../tmp_files/#{session_hash}/#{collection.folder_name}`
+  tmp_folder = FilePathing.tmp_folder(collection)
   graph_hashes.each_pair do |k,v|
     row_hashes = []
     v.collect{|l,w| row_hashes << {"label" => l, "value" => w}}
-    Analysis.hashes_to_csv("../tmp_files/#{session_hash}/#{collection.folder_name}/#{k}.csv", row_hashes)
+    Analysis.hashes_to_csv(row_hashes, "#{k}.csv")
   end
-  `zip -r -9 -j ../tmp_files/#{session_hash}/#{collection.folder_name} ../tmp_files/#{session_hash}/#{collection.folder_name}`
-  `rsync -r ../tmp_files/#{session_hash}/#{collection.folder_name}.zip #{GRAPH_POINT_ADDRESS}`
-  `rm -r ../tmp_files/#{session_hash}`
+  FilePathing.push_tmp_folder(save_path)
   if !collection.single_dataset
     recipient = collection.researcher.email
     subject = "#{collection.researcher.user_name}, the raw Graph data for the basic histograms in the \"#{collection.name}\" data set is complete."
