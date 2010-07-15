@@ -1,0 +1,19 @@
+<% page_param ||= "page" %>
+<% @partial_path ||= partial_path %>
+<div id="<%= elem_id %>">
+<table id="<%= elem_id %>Table">
+  <tr>
+    <th>Function</th>
+    <th>Finished?</th>
+    <th>Processing?</th>
+    <th>Collection</th>
+  </tr>  
+<% for job in jobs -%>
+  <tr>
+    <%= render :partial => "/instances/#{@partial_path}/job", :locals => {:job => job} %>
+  </tr>
+<% end -%>
+
+</table>
+  <%= will_paginate jobs, :class => 'pagination ajax', :param_name => "#{page_param}" %>
+</div>

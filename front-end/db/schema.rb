@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100712015906) do
+ActiveRecord::Schema.define(:version => 20100715035954) do
 
   create_table "analysis_metadatas", :force => true do |t|
     t.boolean "finished",      :default => false
@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(:version => 20100712015906) do
     t.datetime "updated_at",    :default => '2010-01-01 01:01:01'
     t.string   "instance_name"
     t.integer  "pid"
+    t.boolean  "killed",        :default => false
   end
 
   create_table "analytical_offerings", :force => true do |t|
@@ -210,6 +211,7 @@ ActiveRecord::Schema.define(:version => 20100712015906) do
     t.datetime "updated_at",    :default => '2010-01-01 01:01:01'
     t.string   "instance_name"
     t.integer  "pid"
+    t.boolean  "killed",        :default => false
   end
 
   create_table "rest_metadatas", :force => true do |t|
@@ -256,6 +258,7 @@ ActiveRecord::Schema.define(:version => 20100712015906) do
     t.datetime "updated_at",    :default => '2010-01-01 01:01:01'
     t.string   "instance_name"
     t.integer  "pid"
+    t.boolean  "killed",        :default => false
   end
 
   create_table "stream_metadatas", :force => true do |t|
