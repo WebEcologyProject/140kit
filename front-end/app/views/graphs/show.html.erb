@@ -7,7 +7,7 @@
     function graphData() {
       var query;
       query = new google.visualization.Query(
-        "http://<%= API_URL %>/graphs/<%= @collection_id %>/histogram/<%= @title %>.json?tqx=reqId:<%= rand(10000) %>"
+        "http://<%= API_URL %>/graphs/<%= @collection_id %>/histogram/<%= @title %>.json?tqx=reqId:blahfuckyou<%= rand(10000) %>"
       );
       query.send(graphDataHandler);
     }

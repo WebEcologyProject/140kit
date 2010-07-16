@@ -42,15 +42,7 @@ def basic_histograms(collection_id, save_path)
     graph_points = graph_points+Pretty.pretty_up_labels(k, ugly_graph_points)
     finished_graphs << g
   end
-  graph_points_groups = []
-  graph_points_allocated = 0
-  while graph_points_allocated < graph_points.length
-    graph_points_groups << graph_points[graph_points_allocated..graph_points_allocated+MAX_ROW_COUNT_PER_BATCH]
-    graph_points_allocated = graph_points_allocated+MAX_ROW_COUNT_PER_BATCH > graph_points.length ? graph_points.length : graph_points_allocated+MAX_ROW_COUNT_PER_BATCH
-  end
-  graph_points_groups.each do |group|
-    Database.save_all({"graph_points" => group})
-  end
+  Database.save_all({"graph_points" => graph_points})
   tmp_folder = FilePathing.tmp_folder(collection)
   graph_hashes.each_pair do |k,v|
     row_hashes = []
@@ -58,11 +50,15 @@ def basic_histograms(collection_id, save_path)
     Analysis.hashes_to_csv(row_hashes, "#{k}.csv")
   end
   FilePathing.push_tmp_folder(save_path)
+  recipient = collection.researcher.email
+  subject = "#{collection.researcher.user_name}, the raw Graph data for the basic histograms in the \"#{collection.name}\" data set is complete."
+  message_content = "Your CSV files are ready for download. You can grab them by clicking this link: <a href=\"http://140kit.com/files/raw_data/graph_points/#{collection.folder_name}.zip\">http://140kit.com/files/raw_data/graph_points/#{collection.folder_name}.zip</a>."
+  send_email(recipient, subject, message_content, collection)
+  Database.update_attributes(:graphs, finished_graphs, {:written => true})
+end
+
+def send_email(recipient, subject, message_content, collection)
   if !collection.single_dataset
-    recipient = collection.researcher.email
-    subject = "#{collection.researcher.user_name}, the raw Graph data for the basic histograms in the \"#{collection.name}\" data set is complete."
-    message_content = "Your CSV files are ready for download. You can grab them by clicking this link: <a href=\"http://140kit.com/files/raw_data/graph_points/#{collection.folder_name}.zip\">http://140kit.com/files/raw_data/graph_points/#{collection.folder_name}.zip</a>."
     email = PendingEmail.new({:recipient => recipient, :subject => subject, :message_content => message_content}).save
   end
-  Database.update_attributes(:graphs, finished_graphs, {:written => true})
 end

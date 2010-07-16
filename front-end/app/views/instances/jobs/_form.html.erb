@@ -1,0 +1,11 @@
+<h2><%= submit.capitalize %> Job</h2>
+As it stands, this job <%= job.finished ? "was" : "is" %> assigned to <%= job.instance.hostname %>/<%= job.instance.instance_name %>.
+<% form_for :job, :url => "/jobs/#{job.class.to_s.underscore+"s"}/#{job.id}/#{submit}" do |f| -%>
+  <label>Machine</label><br />
+  <% if submit == "restart" -%>
+    <%= f.select :instance_id, @instances.collect{|i| ["#{i.hostname}/#{i.instance_name}", i.instance_id]}, :default => [job.instance.hostname, job.instance.instance_name] %>
+  <% else -%>
+    <%= f.select :instance_id, @instances.collect{|i| ["#{i.hostname}/#{i.instance_name}", i.instance_id] if i.id != job.instance.id}.compact, :default => [job.instance.hostname, job.instance.instance_name] %>
+  <% end -%>
+  <%= f.submit %>
+<% end -%>

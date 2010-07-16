@@ -1,0 +1,14 @@
+<% @collection = collection || @collection -%>
+<% @am = am || @am -%>
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<script type="text/javascript">
+google.load('visualization', '1', {packages: ['table','barchart','columnchart','linechart','piechart','geomap']});
+</script>
+<h4>Word Frequencies</h4>
+<%=link_to "Download the CSV of Word Frequency Data", "http://#{FILE_URL}/files#{@am.save_path}#{@collection.folder_name}.zip" %><br />
+<ul>
+  <li><%= link_to_remote("Hashtags",  :replace => 'dataDisplay', :url => google_graph_url(@collection.id, "word_frequency", "hashtags")) %></li>
+  <li><%= link_to_remote("User Mentions",  :replace => 'dataDisplay', :url => google_graph_url(@collection.id, "word_frequency", "mentions")) %></li>
+  <li><%= link_to_remote("URLs",  :replace => 'dataDisplay', :url => google_graph_url(@collection.id, "word_frequency", "urls")) %></li>
+  <li><%= link_to_remote("Significant Words",  :replace => 'dataDisplay', :url => google_graph_url(@collection.id, "word_frequency", "significant_words")) %></li>
+</ul>

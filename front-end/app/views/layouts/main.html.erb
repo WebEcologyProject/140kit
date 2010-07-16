@@ -4,7 +4,7 @@
 <head>
   <meta name="google-site-verification" content="-FNazUfnpuG4Fg1xNGC1voCEPz9TO50anvKoT7ymsVY" />
   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-  <title>140kit: <%= @page_title.nil? ? controller.controller_name+" : "+controller.action_name : @page_title %></title>
+  <title>140kit : <%= @page_title.nil? ? controller.controller_name+" : "+controller.action_name : @page_title %></title>
   <link rel="shortcut icon" href="/favicon.gif" />
   <% if controller.controller_name == "networks" -%>
     <% if controller.action_name == "rgraph" -%>
@@ -20,6 +20,7 @@
   <%= stylesheet_link_tag 'style' %>
   <%= javascript_include_tag :defaults %>
   <%= javascript_include_tag "pagination" %>
+
   
 </head>
 <body>

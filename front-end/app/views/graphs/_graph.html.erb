@@ -1,13 +1,10 @@
 <div id="dataDisplay">
   <h1>Analytics: <%= title.split("_").collect{|k| k.capitalize }.join(" ") %></h1>
-  <% if title == "tweet_location" -%>
-  (We know this doesn't look really useful as a chart. We are currently working on the analytical option to re-display the data on a world map. Check our news for more information about this development project.)
-  <% end -%>
   <script type="text/javascript">
     function graphData() {
       var query;
       query = new google.visualization.Query(
-        "http://<%= API_URL %>/graphs/<%= collection_id %>/histogram/<%= title %>.json?tqx=reqId:<%= rand(10000) %>"
+        "http://<%= API_URL %>/graphs/<%= collection_id %>/<%= style %>/<%= title %>.json"
       );
       query.send(graphDataHandler);
     }
@@ -34,7 +31,7 @@
   function graphData() {
       var query;
       query = new google.visualization.Query(
-        &quot;http://<%= API_URL %>/graphs/<%= collection_id %>/histogram/<%= title %>.json?tqx=reqId:<%= rand(10000) %>&quot;
+        &quot;http://<%= API_URL %>/graphs/<%= collection_id %>/<%= style %>/<%= title %>.json&quot;
       );
       query.send(graphDataHandler);
   }

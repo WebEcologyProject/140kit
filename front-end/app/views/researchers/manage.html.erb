@@ -1,21 +1,2 @@
 <h2>Researchers</h2>
-<div id="researchers">
-<table id="researchersTable">
-  <tr>
-    <th>User Name</th>
-    <th>E-mail</th>
-    <th>Total Collections</th>
-    <th>Access Level</th>
-    <th>Actions</th>
-  </tr>  
-
-<% for researcher in @researchers -%>
-  <tr>
-    <td><%= link_to researcher.user_name, researcher_url(researcher.id) %></td>
-    <td><a href="mailto:<%=h researcher.email %>"><%=h researcher.email %></a></td>
-    <td><%=h researcher.collections.length %></td>
-    <td><%=h researcher.role %></td>
-    <td><%= link_to "Promote", researcher_promote_path(researcher.id) %> | <%= link_to "Suspend", researcher_suspend_path(researcher.id) %></td>
-  </tr>
-<% end -%>
-</table>
+<%= render :partial => "researcher_manage_index", :locals => {:researchers => @researchers}%>

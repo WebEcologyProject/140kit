@@ -54,10 +54,7 @@ def retweet_graph(collection_id)
       retweet_metadata = StreamMetadata.new({:finished => false, :term => 'retweet', :researcher_id => collection.researcher_id, :created_at => Time.ntp, :updated_at => Time.ntp, :collection_id => collection_id}).save
       cm = CollectionsStreamMetadata.new({:collection_id => collection_id, :stream_metadata_id => retweet_metadata.id}).save
     end
-    retweet_graph = Graph.find(:style => 'retweet', :title => 'Network Map', :collection_id => collection_id)
-    if retweet_graph.nil?
-      retweet_graph = Graph.new({:style => 'retweet', :title => 'Network Map', :collection_id => collection_id}).save
-    end
+    graph = generate_graph("retweet", "Network Map", collection_id)    
     edges = []
     users = []
     tweets = []
@@ -143,4 +140,12 @@ def add_metadata_data(hash, metadata_id)
   hash["metadata_id"] = metadata_id
   hash["metadata_type"] = "Retweet"
   return hash
+end
+
+def generate_graph(style, title, collection_id)
+  graph = Graph.find(:style => style, :title => title, :collection_id => collection_id)
+  if graph.nil?
+    graph = Graph.new({:style => style, :title => title, :collection_id => collection_id}).save
+  end
+  return graph
 end

@@ -1,0 +1,16 @@
+<% @researchers ||= researchers %>
+<div id="main">
+<table id="researchersTable">
+  <tr>
+    <th>User Name</th>
+    <th>E-mail</th>
+    <th>Total Collections</th>
+    <th>Access Level</th>
+    <th>Actions</th>
+  </tr>
+<% for researcher in @researchers -%>
+  <%= render :partial => "researcher_manage", :locals => {:researcher => researcher}%>
+<% end -%>
+</table>
+<%= will_paginate @researchers, :class => 'pagination ajax' %>
+</div>

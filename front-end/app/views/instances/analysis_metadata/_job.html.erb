@@ -1,7 +1,13 @@
 <% collection = Collection.find(job.collection_id) %>
 <td><%= link_to job.function, analytical_offering_path(AnalyticalOffering.find_by_function(job.function)) %></td>
+<td><%= link_to collection.name, collection_path(collection.researcher.user_name, collection) %></td>
 <td><%= job.finished ? "Yes" : "No" %></td>
 <td><%= job.processing ? "Yes" : "No" %></td>
-<td><%= link_to collection.name, collection_path(collection.researcher.user_name, collection) %></td>
-
+<% if job.finished -%>
+  <td><%= link_to_remote("Restart?",  :replace => 'main', :url => job_form_path(job.class.to_s.underscore+"s", job.id, "restart")) %>
+  </td>
+<% else -%>
+  <td><%= link_to_remote("Re-Assign?",  :replace => 'main', :url => job_form_path(job.class.to_s.underscore+"s", job.id, "reassign")) %>
+  </td>
+<% end -%>
 

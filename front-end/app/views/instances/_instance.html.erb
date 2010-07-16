@@ -1,6 +1,5 @@
-<td><%= link_to instance.hostname, machine_show_path(instance.hostname) %></td>
+<td><%= link_to instance.hostname, machine_show_path(CGI::escape(instance.hostname)) %></td>
 <td><%= link_to instance.instance_name, instance_show_path(instance.class.to_s.underscore, instance.instance_id) %></td>
-<td><%=h instance.instance_name %></td>
 <td><%=h instance.instance_id %></td>
 <% if !instance.killed -%>
   <td><%= link_to "Kill?", kill_instance_path(instance.class.to_s.underscore, instance.id) %></td>
