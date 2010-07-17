@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100715035954) do
+ActiveRecord::Schema.define(:version => 20100716221216) do
 
   create_table "analysis_metadatas", :force => true do |t|
     t.boolean "finished",      :default => false
@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(:version => 20100715035954) do
     t.string   "instance_name"
     t.integer  "pid"
     t.boolean  "killed",        :default => false
+    t.string   "slug"
   end
 
   create_table "analytical_offerings", :force => true do |t|
@@ -212,6 +213,7 @@ ActiveRecord::Schema.define(:version => 20100715035954) do
     t.string   "instance_name"
     t.integer  "pid"
     t.boolean  "killed",        :default => false
+    t.string   "slug"
   end
 
   create_table "rest_metadatas", :force => true do |t|
@@ -259,6 +261,7 @@ ActiveRecord::Schema.define(:version => 20100715035954) do
     t.string   "instance_name"
     t.integer  "pid"
     t.boolean  "killed",        :default => false
+    t.string   "slug"
   end
 
   create_table "stream_metadatas", :force => true do |t|
@@ -311,6 +314,7 @@ ActiveRecord::Schema.define(:version => 20100715035954) do
   add_index "tweets", ["metadata_type", "scrape_id", "metadata_id", "screen_name"], :name => "tweets_twitter_id_scrape_id_metadata_id", :unique => true
   add_index "tweets", ["scrape_id"], :name => "index_tweets_on_scrape_id"
   add_index "tweets", ["screen_name"], :name => "index_tweets_on_screen_name"
+  add_index "tweets", ["text"], :name => "text"
 
   create_table "users", :force => true do |t|
     t.integer  "twitter_id"

@@ -1,6 +1,17 @@
 class CommentsController < ApplicationController
   layout "main"
   before_filter :login_required, :except => [:new, :create]
+  def index
+    @page_title = "Tickets Management"
+    super
+  end
+
+  def show
+    super
+    @page_title = "Ticket ##{@comment.id}"
+  end
+
+  
   def new(element_id='main')
     @page_title = "submit a ticket"
     model = params[:controller].classify.constantize

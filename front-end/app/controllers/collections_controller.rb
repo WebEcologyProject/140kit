@@ -3,6 +3,7 @@ class CollectionsController < ApplicationController
   before_filter :login_required, :except => [:show, :index, :search]
   
   def index(conditions={}, per_page=10, element_id='main')
+    @page_title = params[:single_dataset].to_bool ? "All Datasets" : "All Collections"
     super({:single_dataset => params[:single_dataset].to_bool, :order_by => "finished desc, analyzed desc, created_at desc"}, per_page, element_id)
   end
   
@@ -28,6 +29,7 @@ class CollectionsController < ApplicationController
     inst_var = instance_variable_set("@#{params[:controller].singularize}", model.find(params[:id]))
     @analytical_offerings = AnalyticalOffering.paginate :page => params[:page], :per_page => 10
     @current_researcher_id = current_researcher.id
+    @page_title = "#{@collection.researcher.user_name}'s collections : #{@collection.name}"
     respond_to do |format|
       format.html
       format.xml  { render :xml => inst_var }
@@ -50,7 +52,12 @@ class CollectionsController < ApplicationController
   end
   
   def manage
+    @page_title = "Collections Management"
     index({:researcher_id => current_researcher.id})
+  end
+  
+  def creator
+    @page_title = "Start a new collection"
   end
   
   def freeze
@@ -99,7 +106,6 @@ class CollectionsController < ApplicationController
     ActiveRecord::Base.connection.execute("delete from graphs where collection_id = #{@collection.id}")
     ActiveRecord::Base.connection.execute("delete from graph_points where collection_id = #{@collection.id}")
     ActiveRecord::Base.connection.execute("delete from analysis_metadatas where collection_id = #{@collection.id}")
-    debugger
     if @collection.scrape
       (scrape = @collection.scrape).finished = false
       if !@collection.single_dataset
@@ -119,4 +125,5 @@ class CollectionsController < ApplicationController
     flash[:notice] = "Your collection has been successfully <a href=\"/pages/rolling-back\">rolled back</a> for the time being"
     redirect_to(request.referrer)
   end
+  
 end

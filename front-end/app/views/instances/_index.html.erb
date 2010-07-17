@@ -1,0 +1,26 @@
+<% page_param ||= "page" %>
+<h2><%= instance_header %></h2>
+<% if jobs.length > 0 -%>
+  <div id="<%= elem_id %>">
+    <%= link_to_remote("Restart Processes?",  :replace => 'main', :url => machine_form_path(job_type, slug, "restart")) %> | 
+    <%= link_to_remote("Re-Assign Processes?",  :replace => 'main', :url => machine_form_path(job_type, slug, "reassign")) %>
+    <table id="<%= elem_id %>Table">
+      <tr>
+        <th>Instance name</th>
+        <th>Instance hash</th>
+        <th>Processing Job?</th>
+        <th>Total jobs running</th>
+        <th>Total jobs ran</th>
+        <th>Options</th>
+      </tr>
+    <% for job in jobs -%>
+      <tr>
+        <%= render :partial => "/instances/instance_show", :locals => {:instance => job} %>
+      </tr>
+    <% end -%>
+    </table>
+      <%= will_paginate jobs, :class => 'pagination ajax', :param_name => page_param %>
+  </div>
+<% else -%>
+  This machine is currently running none of these processes.
+<% end -%>

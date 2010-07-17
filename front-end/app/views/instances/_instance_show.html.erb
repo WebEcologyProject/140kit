@@ -1,6 +1,8 @@
-<td><%= link_to instance.hostname, machine_show_path(sluggify(instance.hostname)) %></td>
 <td><%= link_to instance.instance_name, instance_show_path(instance.class.to_s.underscore, instance.instance_id) %></td>
 <td><%=h instance.instance_id %></td>
+<td><%=h instance.metadatas.select{|m| !m.finished}.empty? ? "No" : "Yes" %></td>
+<td><%=h instance.metadatas.select{|m| !m.finished}.length %></td>
+<td><%=h instance.metadatas.select{|m| m.finished}.length %></td>
 <% if !instance.killed -%>
   <td><%= link_to "Kill?", kill_instance_path(instance.class.to_s.underscore, instance.id) %></td>
 <% else -%>

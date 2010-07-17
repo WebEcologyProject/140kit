@@ -1,0 +1,5 @@
+<h1><%= @name %></h1>
+<% @job_set.each_pair do |job_type, jobs| -%>
+<%= render :partial => "/instances/index", :locals => {:jobs => jobs, :elem_id => job_type, :page_param => job_type+"_page", :job_type => job_type, :instance_header => job_type.split("_").collect{|s| s.capitalize}.join(" ")+"s", :slug => @slug} %>
+<% end -%>
+<div id="main"></div>

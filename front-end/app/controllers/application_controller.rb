@@ -59,6 +59,7 @@ class ApplicationController < ActionController::Base
   end
   
   def welcome
+    @page_title = "The Free, Open Source Twitter Analytics Platform"
     @news = News.find_by_slug("welcome-to-140kit")
   end
   

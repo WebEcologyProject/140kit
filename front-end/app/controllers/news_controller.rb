@@ -20,6 +20,7 @@ class NewsController < ApplicationController
   end
   
   def index(conditions={}, per_page=10, element_id='main')
+    @page_title = "News" if !@page_title
     model = params[:controller].classify.constantize
     if conditions.nil?
       value = (model.paginate :page => params[:page], :per_page => per_page)
@@ -39,6 +40,7 @@ class NewsController < ApplicationController
   end
 
   def manage
+    @page_title = "News/Page Management"
     index
   end
 

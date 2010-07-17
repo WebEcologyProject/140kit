@@ -2,6 +2,7 @@ class AuthUsersController < ApplicationController
   layout "main"
   before_filter :login_required
   def index(conditions={}, per_page=10, element_id='main')
+    @page_title = "Twitter Accounts Management"
     if current_researcher.admin?
       model = params[:controller].classify.constantize
       if conditions.nil?

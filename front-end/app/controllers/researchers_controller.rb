@@ -1,9 +1,15 @@
 class ResearchersController < ApplicationController
   layout "main"
-
+  
+  def index
+    @page_title = "All Researchers"
+    super
+  end
+  
   def edit
     model = params[:controller].classify.constantize
     inst_var = instance_variable_set("@#{params[:controller].singularize}", model.find(params[:id]))
+    @page_title = "Edit Profile"
   end
 
   def create
@@ -43,6 +49,7 @@ class ResearchersController < ApplicationController
 
   def show
     @researcher = Researcher.find_by_user_name(params[:user_name])
+    @page_title = "#{@researcher.user_name}'s page"
     @collections = Collection.paginate :page => params[:page], :conditions => {:researcher_id => @researcher.id, :single_dataset => false}, :per_page => 10
   end
 
@@ -62,6 +69,18 @@ class ResearchersController < ApplicationController
   end
   
   def manage
-    index
+    @page_title = "Researcher Management"
+    model = params[:controller].classify.constantize
+    value = (model.paginate :page => params[:page], :per_page => 10)
+    inst_var = instance_variable_set("@#{params[:controller]}", value)
+    respond_to do |format|
+      format.html
+      format.xml  { render :xml => inst_var }
+      format.js {
+        render :update do |page|
+          page.replace_html 'main', :partial => "researcher_manage_index"
+        end
+      }
+    end
   end
 end

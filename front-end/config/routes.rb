@@ -23,7 +23,7 @@ ActionController::Routing::Routes.draw do |map|
   map.datasets '/datasets', :controller => 'collections', :action => 'index', :single_dataset => 'true'
   map.dataset '/datasets/:id', :controller => 'collections', :action => 'show'
   
-  map.google_graph '/graphs/show/:title/:collection_id', :controller => 'graphs', :action => 'show'
+  map.google_graph '/graphs/:collection_id/:style/:title', :controller => 'graphs', :action => 'show'
   
   map.login '/login', :controller => 'account', :action => 'login'
   map.logout '/logout', :controller => 'account', :action => 'logout'
@@ -57,17 +57,7 @@ ActionController::Routing::Routes.draw do |map|
   
   map.settings '/settings/:id', :controller => 'researchers', :action => 'edit'
   map.signup '/signup', :controller => 'account', :action => 'signup'
-  
-  map.analytical_offerings_manage 'analytical_offerings/manage', :controller => 'analytical_offerings', :action => 'manage'
-  map.analytical_offering_enable 'analytical_offerings/enable/:id', :controller => 'analytical_offerings', :action => 'enable'
-  map.researchers_manage 'researchers/manage', :controller => 'researchers', :action => 'manage'
-  map.researcher_promote '/researchers/promote/:id', :controller => 'researchers', :action => 'promote'
-  map.researcher_suspend '/researchers/suspend/:id', :controller => 'researchers', :action => 'suspend'
-  map.manage_cluster '/cluster/manage', :controller => 'cluster', :action => 'manage'
-  map.kill_instance '/instances/kill/:instance_type/:id', :controller => 'cluster', :action => 'kill_instance'
-  map.metadatas_collection_paginate '/metadatas/collection_paginate/:id', :controller => 'stream_metadatas', :action => 'collection_paginate'
-  map.metadata '/metadatas/:metadata_type/:metadata_id', :controller => 'stream_metadatas', :action => 'show'
-  
+    
   map.metadatas_curate '/collections/:id/metadatas', :controller => 'stream_metadatas', :action => 'curate'
   map.metadatas_associate '/metadatas/:metadata_id/:metadata_type/associate/:collection_id', :controller => 'stream_metadatas', :action => 'associate'
   map.metadatas_dissociate '/metadatas/:metadata_id/:metadata_type/dissociate/:collection_id', :controller => 'stream_metadatas', :action => 'dissociate'
@@ -78,6 +68,28 @@ ActionController::Routing::Routes.draw do |map|
   map.user '/users/:screen_name', :controller => 'users', :action => 'show'
   map.users_collection_paginate '/users/collection_paginate/:id', :controller => 'users', :action => 'collection_paginate'
   map.users_collection_paginate_dataset '/users/collection_paginate/dataset/:metadata_type/:id', :controller => 'users', :action => 'collection_paginate_dataset'
+
+  #ADMIN
+  map.new_tickets '/tickets', :controller => 'comments', :action => 'new'
+  map.tickets_manage '/tickets/manage', :controller => 'comments', :action => 'index'  
+  map.instance_show '/instances/:instance_type/:instance_id', :controller => 'cluster', :action => 'instance_show' 
+  map.machine_show '/machines/:slug', :controller => 'cluster', :action => 'machine_show'
+  map.analytical_offerings_manage 'analytical_offerings/manage', :controller => 'analytical_offerings', :action => 'manage'
+  map.analytical_offering_enable 'analytical_offerings/enable/:id', :controller => 'analytical_offerings', :action => 'enable'
+  map.researchers_manage 'researchers/manage', :controller => 'researchers', :action => 'manage'
+  map.researcher_promote '/researchers/promote/:id', :controller => 'researchers', :action => 'promote'
+  map.researcher_suspend '/researchers/suspend/:id', :controller => 'researchers', :action => 'suspend'
+  map.manage_cluster '/cluster/manage', :controller => 'cluster', :action => 'manage'
+  map.kill_instance '/instances/kill/:instance_type/:id', :controller => 'cluster', :action => 'kill_instance'
+  map.resurrect_instance '/instances/resurrect/:instance_type/:id', :controller => 'cluster', :action => 'resurrect_instance'
+  map.machine_form '/machines/form/:instance_type/:slug/:submit_type', :controller => 'cluster', :action => 'machine_form'
+  map.restart_machine_jobs '/machines/:instance_type/:slug/restart', :controller => 'cluster', :action => 'restart_machine_jobs'
+  map.reassign_machine_jobs '/machines/:instance_type/:slug/reassign', :controller => 'cluster', :action => 'reassign_machine_jobs'
+  map.job_form '/jobs/form/:instance_type/:id/:submit_type', :controller => 'cluster', :action => 'job_form'
+  map.restart_job '/jobs/:instance_type/:id/restart', :controller => 'cluster', :action => 'restart_job'
+  map.reassign_job '/jobs/:instance_type/:id/reassign', :controller => 'cluster', :action => 'reassign_job'
+  map.metadatas_collection_paginate '/metadatas/collection_paginate/:id', :controller => 'stream_metadatas', :action => 'collection_paginate'
+  map.metadata '/metadatas/:metadata_type/:metadata_id', :controller => 'stream_metadatas', :action => 'show'
 
   map.resources :whitelistings
   map.resources :auth_users
@@ -99,14 +111,12 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :scrapes
   map.resources :stream_instances
   map.resources :tweets
-  map.resources :users
-  
-  map.new_tickets '/tickets', :controller => 'comments', :action => 'new'
-  map.tickets_manage '/tickets/manage', :controller => 'comments', :action => 'index'
+  map.resources :users 
   
   map.connect '/:controller/:action/:id'
   map.connect '/:controller/:action/:id.:format'
   map.researcher_page '/:user_name', :controller => 'researchers', :action => 'show'
   map.collection '/:user_name/collections/:id', :controller => 'collections', :action => 'show'
+  
   
 end

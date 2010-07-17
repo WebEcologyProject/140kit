@@ -1,0 +1,15 @@
+<h2><%= submit.capitalize %> Jobs</h2>
+By selecting another machine to <%= submit == "restart" ? " restart these instances on " : " reassign these machines to "%>, all jobs are moved to that machine as a batch operation and evenly distributed amongst the machines. For more control, assign the jobs on a per-instance basis.
+<% if @instances.length == 0 -%>
+<p style="error">There is only one machine running, so you cannot batch move jobs to another machine.</p>
+<% else -%>
+  <% form_for :machine, :url => "/machines/#{instance_type}/#{slug}/#{submit}" do |f| -%>
+    <label>Machine</label><br />
+    <% if submit == "restart" -%>
+      <%= f.hidden_field :slug, :value => slug %>
+    <% else -%>
+      <%= f.select :slug, @instances.collect{|i| ["#{i.hostname}", i.slug]}.uniq, {:value => ["Select another instance to push work to", "Select another instance to push work to"]} %>
+    <% end -%>
+    <%= f.submit %>
+  <% end -%>
+<% end -%>

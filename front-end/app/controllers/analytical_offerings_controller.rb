@@ -2,7 +2,7 @@ class AnalyticalOfferingsController < ApplicationController
   layout "main"
   def curate
     @collection = Collection.find(params[:id])
-    @analytical_offerings = AnalyticalOffering.paginate :page => params[:page], :per_page => 10
+    @analytical_offerings = AnalyticalOffering.paginate :page => params[:page], :per_page => 2
     @added_functions = @collection.analysis_metadatas.collect{|am| am.function}
     # addable_condition = @collection.analysis_metadatas.collect{|am| " function != '#{am.function}' "}.join(" and ")
     # removeable_condition = @collection.analysis_metadatas.collect{|am| " function = '#{am.function}' "}.join(" or ")
@@ -20,6 +20,7 @@ class AnalyticalOfferingsController < ApplicationController
   end
   
   def manage
+    @page_title = "Analytical Offerings Management"
     @analytical_offerings = AnalyticalOffering.paginate :page => params[:page], :per_page => 10
   end
   
