@@ -8,29 +8,31 @@
 -%>
 <% logger.debug(@am.inspect) %>
 <% logger.debug((@am.finished && @edge_count == 0).inspect) %>
-<h4>Networks</h4>
-<% if !@graph_id.nil? -%>
-  <% if @am.finished -%>
-    <% if @edge_count == 0 -%>
-      Sorry, we ran the re-tweet algorithm on this <%= @collection.single_dataset ? "dataset" : "collection" %>, but could not find any re-tweets.
-    <% else -%>
-      <% if @edge_count > 1000 -%>
-  <%= link_to "Retweets", "/rgraph/#{@collection.id}/retweets" %>      
-  <!-- <%= link_to "Retweets", :controller => 'networks', :action => 'show', :collection_id => @collection.id, :style => 'retweets', :logic => "limit:1000" %> -->
+<h4 class="accordion_toggle">Networks</h4>
+<div class="accordion_content">
+  <% if !@graph_id.nil? -%>
+    <% if @am.finished -%>
+      <% if @edge_count == 0 -%>
+        Sorry, we ran the re-tweet algorithm on this <%= @collection.single_dataset ? "dataset" : "collection" %>, but could not find any re-tweets.
       <% else -%>
-  <%= link_to "Retweets", "/rgraph/#{@collection.id}/retweets" %>      
-  <!-- <%= link_to "Retweets", :controller => 'networks', :action => 'show', :collection_id => @collection.id, :style => 'retweets' %> -->
+        <% if @edge_count > 1000 -%>
+    <%= link_to "Retweets", "/rgraph/#{@collection.id}/retweets" %>      
+    <!-- <%= link_to "Retweets", :controller => 'networks', :action => 'show', :collection_id => @collection.id, :style => 'retweets', :logic => "limit:1000" %> -->
+        <% else -%>
+    <%= link_to "Retweets", "/rgraph/#{@collection.id}/retweets" %>      
+    <!-- <%= link_to "Retweets", :controller => 'networks', :action => 'show', :collection_id => @collection.id, :style => 'retweets' %> -->
+        <% end -%>
+    (<b><%= @edge_count %></b> re-tweets)
       <% end -%>
-  (<b><%= @edge_count %></b> re-tweets)
+    <% else -%>
+      The retweet graphing algorithm is still running. Check back later.
     <% end -%>
   <% else -%>
-    The retweet graphing algorithm is still running. Check back later.
-  <% end -%>
-<% else -%>
-  <% if @am.processing && !@am.finished -%>
-    Sorry, for some reason we don't have a retweet graph for this <%= @collection.single_dataset ? "dataset" : "collection" %>.
-  <% elsif !@am.processing && !@am.finished -%>
-    This Retweet Graph has not been picked up for analysis yet.
-  <% end -%>
+    <% if @am.processing && !@am.finished -%>
+      Sorry, for some reason we don't have a retweet graph for this <%= @collection.single_dataset ? "dataset" : "collection" %>.
+    <% elsif !@am.processing && !@am.finished -%>
+      This Retweet Graph has not been picked up for analysis yet.
+    <% end -%>
 
-<% end -%>
+  <% end -%>
+</div>

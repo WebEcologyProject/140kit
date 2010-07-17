@@ -1,0 +1,42 @@
+<div id="<%= "#{id_prefix}" if !id_prefix.blank? %>_dataset_<%= dataset.id %>" class="<%= dataset.class.to_s.underscore %> dataset">
+  <%debugger%>
+  <h4><%= link_to "#{dataset.name}", collection_url(dataset.researcher.user_name, dataset.primary_collection.id), :class => "big" %></h4>
+<% if !collection.blank? && !current_researcher.blank? && collection.researcher_id == current_researcher.id -%>
+    <%= render :partial => "datasets/associate_button", :locals => {:dataset => dataset, :collection => collection, :id_prefix => id_prefix} %>
+<% end -%>
+<% if display_user_header -%>
+  <h5>(From Collection: <%= link_to collection.name, collection_url(collection.primary_collection.id) %> by user: <%= collection.researcher.user_name %>)</h5>
+<% end -%>
+  <p>
+<% if dataset.metadata.term != "retweet" -%>
+      Term Searched for: <%= dataset.metadata.term %><br />
+<% else -%>
+      This is a retweet data set, and has no specific term searched for.<br />
+<% end -%>
+
+<% if false -%>
+<% if !dataset.scrape.nil? -%>
+    Number of tweets: <%= number_with_delimiter(dataset.tweets.count) %> 
+<% if dataset.name != "retweet" && dataset.tweets.count > 0 && dataset.scrape.tweets.count > 0 -%>
+      (<%= (dataset.tweets.count.to_f/dataset.scrape.tweets.count*100).round(2) %>% of total)           
+<% end -%><br />
+    Number of users: <%= dataset.users.count %> 
+<% if dataset.name != "retweet" && dataset.users.count > 0 && dataset.scrape.users.count > 0 -%>
+      (<%= (dataset.users.count.to_f/dataset.scrape.users.count*100).round(2) %>% of total)
+<% end -%><br />
+<% if dataset.name != "retweet" %>
+      Scrape duration: <%= dataset.scrape.humanized_length %><br />
+<% else -%>
+      This is a retweet data set, and has no specific time-frame of collection.<br />
+<% end -%>
+<% else -%>
+    This dataset's associated scrape is missing.
+<% end -%>
+<% else -%>
+  Number of tweets: <%= number_with_delimiter(dataset.tweets_count) %><br />
+<% end -%>
+    Created: <%=h distance_of_time_in_words(dataset.created_at, Time.now) %> ago 
+    (<%= dataset.created_at.strftime("%b %d, %Y, at %H:%M:%S %Z")%>)<br />
+    Last Updated: <%=h distance_of_time_in_words(dataset.created_at, Time.now) %> ago (<%= dataset.created_at.strftime("%b %d, %Y, at %H:%M:%S %Z")%>)<br />
+  </p>
+</div>

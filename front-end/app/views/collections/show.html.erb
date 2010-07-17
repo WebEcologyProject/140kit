@@ -16,6 +16,7 @@
 <% end -%>
 
 <% if @collection.finished -%>
+
   <% if !@collection.analyzed -%>
     <p><b>Warning:</b> Not all of the analysis functions have finished for this collection. We'll let you click around, but don't get mad if some things are missing.</p>
   <% end -%>
@@ -23,27 +24,34 @@
   <%= render :partial => "overview" %>
   <%= render :partial => "explore" %>
   <%= render :partial => "analytics" %>
-  <%= render :partial => "/layouts/search", :locals => {:conditions => "metadata_id:#{@collection.stream_metadata_ids.join(",")}"} %>
+  <div class="line"><%= render :partial => "/layouts/search", :locals => {:conditions => "metadata_id:#{@collection.stream_metadata_ids.join(",")}"} %></div>
 <% else -%>
+
   <% if logged_in? && current_researcher.id == @collection.researcher_id -%>
     <% if @collection.scraped_collection -%>
+      
       <% if !@collection.stream_metadatas.empty? -%>
         <% if !@collection.stream_metadatas.first.finished -%>
           We're still catching all your "<%= @collection.name %>" tweets. We'll stop in about <%= distance_of_time_in_words(Time.now, @collection.metadatas.first.scrape.run_ends) %>.
+        <% else -%>
+          We've captured all of your data for the term "<%= @collection.name %>", and are now flipping the collection over for analysis. It should start appearing momentarily.
         <% end -%>
       <% elsif !@collection.rest_metadatas.empty? -%>
         <% if !@collection.rest_metadatas.first.finished -%>
           We're still working through the "<%= @collection.name %>" user set. The Data being used in this collection is located in our filesystem <%= link_to "here", "#{@collection.rest_metadatas.first.source_data.gsub("public", "")}" %>.
+        <% else -%>
+          We've captured all of your data for your user set, and are now flipping the collection over for analysis. It should start appearing momentarily.
         <% end -%>
       <% end -%>
+      
     <% else -%>
-      <p>
-        <b>So here's what you do:</b><br />
-        <b>Add datasets</b> you like to your collection. Also <b>add analytical functions</b> you want to have run on your collection once it's frozen.<br />
-        When you're very happy with the datasets and analytics you've added, <b>freeze your collection</b>.<br />
-        When you freeze a collection, you won't be able to add any more datasets or analysis.<br />
-        As soon as your collection is frozen, the analytical functions you chose will be scheduled to run on it. Results will be available right here on this page when they're ready.
-      </p>
+      <b>So here's what you do:</b><br />
+      <b>Add datasets</b> you like to your collection. Also <b>add analytical functions</b> you want to have run on your collection 
+      once it's frozen.<br />
+      When you're very happy with the datasets and analytics you've added, <b>freeze your collection</b>.<br />
+      When you freeze a collection, you won't be able to add any more datasets or analysis.<br />
+      As soon as your collection is frozen, the analytical functions you chose will be scheduled to run on it. Results will be 
+      available right here on this page when they're ready.
       <%= render :partial => "/collections/unfrozen_collection_menu" %>
     <% end -%>
   <% else -%>
