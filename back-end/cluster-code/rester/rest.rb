@@ -2,7 +2,7 @@ class Rest
   
   require "#{ROOT_FOLDER}cluster-code/rester/rest_flow"
   
-  attr_accessor :type, :metadata, :users, :tweets, :temp_folder_name
+  attr_accessor :type, :metadata, :users, :tweets
   
   def initialize
     @metadatas = []

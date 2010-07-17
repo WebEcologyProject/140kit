@@ -21,7 +21,7 @@ def word_frequency(collection_id, save_path)
   mentions_graph_points = hashes_to_graph_points(mentions(frequency_listing), collection, mentions_graph)
   no_stop_words_graph_points = hashes_to_graph_points(no_stop_words(frequency_listing), collection, no_stop_words_graph)
   urls_graph_points = hashes_to_graph_points(urls(frequency_listing), collection, urls_graph)
-  Database.save_all({"graph_points" => hashtags_graph_points+mentions_graph_points+no_stop_words_graph_points+urls_graph_points})
+  Database.update_all({"graph_points" => hashtags_graph_points+mentions_graph_points+no_stop_words_graph_points+urls_graph_points})
   Database.update_attributes(:graphs, [hashtags_graph, mentions_graph, no_stop_words_graph, urls_graph], {:written => true})
   tmp_folder = FilePathing.tmp_folder(collection)
   graph_hashes = {"no_stop_words" => no_stop_words_graph_points, "urls" => urls_graph_points, "hashtags" => hashtags_graph_points, "mentions" => mentions_graph_points}

@@ -8,5 +8,5 @@ def mysql_dumper(collection_id, save_path)
   recipient = collection.researcher.email
   subject = "#{collection.researcher.user_name}, your raw data (SQL) for the #{collection.name} data set is complete."
   message_content = "Your SQL files are ready for download. You can grab them by clicking this link: <a href=\"http://140kit.com/files/raw_data/raw_sql/#{collection.folder_name}.zip\">http://140kit.com/files/raw_data/raw_sql/#{collection.folder_name}.zip</a>."
-  send_email(recipient, subject, message_content)
+  send_email(recipient, subject, message_content, collection)
 end

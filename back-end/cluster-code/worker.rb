@@ -4,8 +4,7 @@ class Worker
   require "#{ROOT_FOLDER}cluster-code/streamer/stream"
   require "#{ROOT_FOLDER}cluster-code/rester/rest"
     
-  attr_accessor :instance_id, :hostname, :db, :scrape, :metadata, :stream_instance, :run_type, :rest_allowed, :rest_instance, :instance_name, :pid, :last_count_check, :tmp_path
-  attr_accessor :session_hash
+  attr_accessor :instance_id, :hostname, :db, :scrape, :metadata, :stream_instance, :run_type, :rest_allowed, :rest_instance, :instance_name, :pid, :last_count_check, :tmp_path, :tmp_data, :killed
 
   def initialize(run_type)
     @db = Environment.db
@@ -14,17 +13,24 @@ class Worker
     @rest_allowed = Whitelisting.find({:hostname => @hostname}).nil? ? false : Whitelisting.find({:hostname => @hostname}).whitelisted
     @pid = Process.pid
     $w = self
+    @tmp_data = {}
   end
   
   def poll
     check_in(AnalyticalInstance)
     while true
-      # begin
-        AnalysisFlow.work
-      # rescue => e        
-      #   Failure.new({:message => "Error from Analytical instance #{$w.id} on machine #{@hostname} at #{Time.ntp}", :trace => "#{e}", :created_at => Time.ntp, :instance_id => $w.instance_id}).save
-      #   next
-      # end
+      killed = killed?(AnalyticalInstance)
+      if !killed
+        # begin
+          AnalysisFlow.work
+        # rescue => e        
+        #   Failure.new({:message => "Error from Analytical instance #{$w.id} on machine #{@hostname} at #{Time.ntp}", :trace => "#{e}", :created_at => Time.ntp, :instance_id => $w.instance_id}).save
+        #   next
+        # end
+      else
+        puts "I AM SLEEPING"
+        sleep(SLEEP_CONSTANT)
+      end
     end
     check_out(AnalyticalInstance)
   end
@@ -34,12 +40,18 @@ class Worker
     check_in(StreamInstance)
     assign_user_account
     while true
-      # begin
-        StreamFlow.stream
-      # rescue => e        
-      #   Failure.new({:message => "Error from Stream instance #{$w.id} on machine #{@hostname} at #{Time.ntp}", :trace => "#{e}", :created_at => Time.ntp, :instance_id => $w.instance_id}).save
-      #   next
-      # end
+      killed = killed?(StreamInstance)
+      if !killed
+        # begin
+          StreamFlow.stream
+        # rescue => e        
+        #   Failure.new({:message => "Error from Stream instance #{$w.id} on machine #{@hostname} at #{Time.ntp}", :trace => "#{e}", :created_at => Time.ntp, :instance_id => $w.instance_id}).save
+        #   next
+        # end
+      else
+        puts "I AM SLEEPING"
+        sleep(SLEEP_CONSTANT)
+      end
     end
     check_out(StreamInstance)
   end
@@ -49,14 +61,19 @@ class Worker
     @last_count_check = Time.now
     @rest_instance = Rest.new
     while true
-      # begin
-        RestFlow.rest
-      # rescue => e        
-      #   Failure.new({:message => "Error from Rest instance #{$w.id} on machine #{@hostname} at #{Time.ntp}", :trace => "#{e}", :created_at => Time.ntp, :instance_id => $w.instance_id}).save
-      #   next
-      # end
+      killed = killed?(RestInstance)
+      if !killed
+        # begin
+          RestFlow.rest
+        # rescue => e        
+        #   Failure.new({:message => "Error from Rest instance #{$w.id} on machine #{@hostname} at #{Time.ntp}", :trace => "#{e}", :created_at => Time.ntp, :instance_id => $w.instance_id}).save
+        #   next
+        # end
+      else
+        puts "I AM SLEEPING"
+        sleep(SLEEP_CONSTANT)
+      end
     end
-    check_out(RestInstance)
   end
   
   def check_in(instance_type)
@@ -66,13 +83,18 @@ class Worker
       w.created_at = Time.ntp
       w.updated_at = Time.ntp
       w.pid = Process.pid
+      w.slug = self.hostname.gsub(/[\.]/, "-")
       w.save
     else
       self.instance_id = Digest::SHA1.hexdigest(Time.ntp.to_s+rand(100000).to_s)
-      w = instance_type.new({:instance_id => self.instance_id, :created_at => Time.ntp, :hostname => self.hostname, :instance_name => self.instance_name, :pid => Process.pid})
+      w = instance_type.new({:instance_id => self.instance_id, :created_at => Time.ntp, :hostname => self.hostname, :instance_name => self.instance_name, :killed => false, :pid => Process.pid, :slug => self.hostname.gsub(/[\.]/, "-")})
       w.save
     end
     initialize_logged_session
+  end
+  
+  def killed?(instance_type)
+    instance_type.find({:hostname => self.hostname, :instance_name => self.instance_name}).killed
   end
   
   def check_out

@@ -76,12 +76,8 @@ class Database
       end
     end
   
-  def self.update(object, hash)
-    self.write_db(SQLParser.update(object, hash))
-  end
-  
-  def self.update(object, hash)
-    self.write_db(SQLParser.update(object, hash))
+  def self.update(objects)
+    Database.update_all(objects)
   end
   
   def self.update_all(objects)
@@ -101,35 +97,22 @@ class Database
   end
   
   def self.update_attributes(object_class, objects, attribute_set)
+    new_attrs = {}
+    attribute_set.each_pair do |k,v|
+      new_attrs[k.to_s] = v
+    end
     replaced = {object_class => []}
     objects.each do |object|
       obj_attrs = object.attributes
       obj_attrs.each_pair do |obj_attr, value|
-        if !attribute_set[obj_attr].nil?
-          obj_attrs[obj_attr] = attribute_set[obj_attr]
+        if !new_attrs[obj_attr].nil?
+          obj_attrs[obj_attr] = new_attrs[obj_attr]
         end
       end
       replaced[object_class] << obj_attrs
     end
     self.update_all(replaced)
   end
-  
-  def self.update_attributes(object_class, objects, attribute_set)
-    replaced = {object_class => []}
-    objects.each do |object|
-      ## check for nil objects here?
-      obj_attrs = object.attributes
-      obj_attrs.each_pair do |obj_attr, value|
-        if !attribute_set[obj_attr].nil?
-          obj_attrs[obj_attr] = attribute_set[obj_attr]
-        end
-      end
-      replaced[object_class] << obj_attrs
-    end
-    self.update_all(replaced)
-  end
-
-###DATA PREP METHODS###
 
 ###DATA PREP METHODS###
 
@@ -193,6 +176,19 @@ class Database
       return false
     end
   end  
+
+  def self.spooled_result(query)
+    puts query
+    connection = Environment.db
+    connection.query_with_result = false
+    sync = connection.real_query(query)
+    return sync.use_result
+  end
+  
+  def self.terminate_spooling
+    connection = Environment.db    
+    connection.query_with_result = true
+  end
 
   def self.result(query)
     puts query

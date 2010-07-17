@@ -51,10 +51,10 @@ def retweet_graph(collection_id)
   if retweet_index.keys.length > 0
     retweet_metadata = collection.metadatas.select {|m| m.term == "retweet"}.first
     if retweet_metadata.nil?
-      retweet_metadata = StreamMetadata.new({:finished => false, :term => 'retweet', :researcher_id => collection.researcher_id, :created_at => Time.ntp, :updated_at => Time.ntp, :collection_id => collection_id}).save
-      cm = CollectionsStreamMetadata.new({:collection_id => collection_id, :stream_metadata_id => retweet_metadata.id}).save
+      retweet_metadata = StreamMetadata.new({:finished => false, :term => 'retweet', :researcher_id => collection.researcher_id, :created_at => Time.ntp, :updated_at => Time.ntp, :collection_id => collection_id}).update
+      cm = CollectionsStreamMetadata.new({:collection_id => collection_id, :stream_metadata_id => retweet_metadata.id}).update
     end
-    graph = generate_graph("retweet", "Network Map", collection_id)    
+    graph = generate_graph("retweet", "Network Map", collection_id)
     edges = []
     users = []
     tweets = []
@@ -86,9 +86,9 @@ def retweet_graph(collection_id)
         users = users.uniq.compact; tweets = tweets.uniq.compact; edges = edges.uniq.compact
         users_count += users.length
         tweets_count += tweets.length
-        Database.save_all({"users" => users})
-        Database.save_all({"tweets" => tweets})
-        Database.save_all({"edges" => edges})
+        Database.update_all({"users" => users})
+        Database.update_all({"tweets" => tweets})
+        Database.update_all({"edges" => edges})
         users.clear; tweets.clear; edges.clear
         counter = 0
       end
@@ -96,13 +96,13 @@ def retweet_graph(collection_id)
     users = users.uniq.compact; tweets = tweets.uniq.compact; edges = edges.uniq.compact
     users_count += users.length
     tweets_count += tweets.length
-    Database.save_all({"users" => users})
-    Database.save_all({"tweets" => tweets})
-    Database.save_all({"edges" => edges})
+    Database.update_all({"users" => users})
+    Database.update_all({"tweets" => tweets})
+    Database.update_all({"edges" => edges})
     Database.update_attributes(:graphs, [retweet_graph], {:written => true})
     retweet_metadata.tweets_count = tweets_count
     retweet_metadata.users_count = users_count
-    retweet_metadata.save
+    retweet_metadata.update
   end
 end
 
@@ -145,7 +145,7 @@ end
 def generate_graph(style, title, collection_id)
   graph = Graph.find(:style => style, :title => title, :collection_id => collection_id)
   if graph.nil?
-    graph = Graph.new({:style => style, :title => title, :collection_id => collection_id}).save
+    graph = Graph.new({:style => style, :title => title, :collection_id => collection_id}).update
   end
   return graph
 end

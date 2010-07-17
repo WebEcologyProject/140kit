@@ -60,6 +60,21 @@ class String
     return Object.const_defined?(self) ? Object.const_get(self) : Object.const_missing(self)
   end
   
+  def super_strip
+    #This regexp is used in place of \W to allow for # and @ signs.
+     if self.include?("#") || self.include?("@")
+       return self
+     elsif self.include?("http")
+       return self
+     else
+       return self.strip.downcase.gsub(/[!$%\*&:.\;{}\[\]\(\)\-\_+=\'\"\|<>,\/?~`]/, "")
+     end
+  end
+  
+  def super_split(split_char)
+    #This regexp is used in place of \W to allow for # and @ signs.
+    return self.gsub(/[!$%\*\;{}\[\]\(\)\+=\'\"\|<>,~`]/, " ").split(split_char)
+  end
 end
 
 class Hash

@@ -210,10 +210,8 @@ module AnalysisFlow
   end
   
   def self.route(metadata)
-    $w.session_hash = Digest::SHA1.hexdigest(Time.ntp.to_s+rand(100000).to_s)
     puts "#{metadata.function}(#{metadata.collection_id}, \"#{metadata.save_path}\")"
     eval("#{metadata.function}(#{metadata.collection_id}, \"#{metadata.save_path}\")")
-    $w.session_hash = nil
   end
   
   def self.grow_branch(scrape, term)

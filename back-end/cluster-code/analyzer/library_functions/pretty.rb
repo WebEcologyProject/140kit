@@ -1,6 +1,30 @@
 class Pretty
     def self.pretty_up_labels(graph_title, graphs)
     case graph_title
+    when "tweet_location"
+      new_graphs = []
+      graphs.each{|g|
+        case g["label"]
+        when "ÜT:"
+          if new_graphs.select{|g| g["label"] == "iPhone Geo Location"}.compact.length == 0
+            g["label"] = "iPhone Geo Location" 
+          else 
+            new_graphs.select{|g| g["label"] == "iPhone Geo Location"}.first["value"] += g["value"]
+            graphs = graphs-[g]
+          end
+        when "iPhone:"
+          if new_graphs.select{|g| g["label"] == "iPhone Geo Location"}.compact.length == 0
+            g["label"] = "iPhone Geo Location" 
+          else 
+            new_graphs.select{|g| g["label"] == "iPhone Geo Location"}.first["value"] += g["value"]
+            graphs = graphs-[g]
+          end
+        when "Pre:"
+          g["label"] = "Palm Pre Geo Location"
+        end
+        new_graphs << g
+      }
+      return new_graphs.uniq
     when "tweet_language"
       graphs.collect{|graph| graph["label"] = Pretty.language(graph["label"])}
     when "tweet_created_at"
