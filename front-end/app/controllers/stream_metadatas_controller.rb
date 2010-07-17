@@ -31,9 +31,13 @@ class StreamMetadatasController < ApplicationController
   def curate
     per_page = 5
     @collection = Collection.find(params[:id])
-    @addable_stream_datasets = Collection.paginate :page => params[:addable_stream_page], :per_page => per_page, :conditions => {:finished => true, :single_dataset => true, :scrape_method => "Stream"}#, :conditions => "term != 'retweet' and scrape_id != 0"
-    @addable_rest_datasets = Collection.paginate :page => params[:addable_rest_page], :per_page => per_page, :conditions => {:finished => true, :single_dataset => true, :scrape_method => "REST"}#, :conditions => "scrape_id != 0"
+    @addable_stream_datasets = Collection.find(:all, :conditions => {:finished => true, :single_dataset => true, :scrape_method => "Stream"})#, :conditions => "term != 'retweet' and scrape_id != 0"
+    @addable_rest_datasets = Collection.find(:all, :conditions => {:finished => true, :single_dataset => true, :scrape_method => "REST"})#, :conditions => "scrape_id != 0"
     @removeable_datasets = @collection.datasets.paginate :page => params[:removeable_page], :per_page => per_page
+    @addable_stream_datasets = @addable_stream_datasets-@removeable_datasets
+    @addable_rest_datasets = @addable_rest_datasets-@removeable_datasets
+    @addable_stream_datasets = @addable_stream_datasets.paginate :page => params[:addable_stream_page], :per_page => per_page
+    @addable_rest_datasets = @addable_rest_datasets.paginate :page => params[:addable_rest_page], :per_page => per_page
     respond_to do |format|
       format.html
       format.js {
@@ -72,7 +76,7 @@ class StreamMetadatasController < ApplicationController
     return unless request.xhr?
     render :update do |page|
       page.replace "unfrozenCollectionMenu", :partial => "collections/unfrozen_collection_menu"
-      page.replace "addable_#{@metadata.class.to_s.underscore}_#{@metadata.id}_associate_button", :partial => "metadatas/associate_button", :locals => {:metadata => @metadata, :collection => @collection, :id_prefix => "addable"}
+      page.visual_effect :fade, "addable_metadata_#{@metadata.id}", :duration => 0.4
       page.replace_html "removeableMetadatas", :partial => "/metadatas/metadatas_associate", :locals => {:collection => @collection, :metadatas => @removeable_metadatas, :page_param => "removeable_page", :id_prefix => "removeable"}
     end
   end
@@ -96,7 +100,6 @@ class StreamMetadatasController < ApplicationController
       page.replace "unfrozenCollectionMenu", :partial => "collections/unfrozen_collection_menu"
       page.visual_effect :fade, "removeable_metadata_#{@metadata.id}", :duration => 0.4
       page.replace "addable_#{@metadata.class.to_s.underscore}_#{@metadata.id}_associate_button", :partial => "metadatas/associate_button", :locals => {:metadata => @metadata, :collection => @collection, :id_prefix => "addable"}
-      page.replace_html "removeableMetadatas", :partial => "/metadatas/metadatas_associate", :locals => {:collection => @collection, :metadatas => @removeable_metadatas, :page_param => "removeable_page", :id_prefix => "removeable"}
     end
   end
   

@@ -2,7 +2,6 @@
 <% element_id = element_id || nil -%>
 <% partial = partial || nil -%>
 <div id="search" class="<%= controller.controller_name %>">
-<h3>Search:</h3>
   <span class="input">
     <% form_tag( search_url, :id => 'search_form', :controller => 'application', :action => 'search') do -%>
 <% if model.nil? -%>
@@ -42,6 +41,8 @@
       		:autocomplete => 'off'
     ) %>
     <%= hidden_field("conditions", "#{conditions}") %>
+    <%= hidden_field("collection_id", "#{collection_id}") %>
+
     <% end -%>
   </span>
 </div>

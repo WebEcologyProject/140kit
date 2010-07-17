@@ -61,10 +61,15 @@ class CollectionsController < ApplicationController
   end
   
   def freeze
+    debugger
     @collection = Collection.find(params[:id])
     if @collection.scrape && !@collection.scrape.finished
       flash[:notice] = "Can't Freeze Dataset while still in process of collection"
     else
+      if @collection.scrape_method == "Curate"
+        @collection.tweets_count = @collection.datasets.collect{|t| t.tweets_count}.sum
+        @collection.users_count = @collection.datasets.collect{|t| t.users_count}.sum
+      end
       @collection.finished = true
       @collection.save
     end

@@ -349,3 +349,21 @@ div#search.collections span{
 	margin-left:2.5%;
 	margin-right:2.5%;
 }
+
+span.curateSearch div#search.stream_metadatas span.input form#search_form{
+	top:-4px;
+	position:absolute;
+	background:red;
+}
+span.curateSearch div#search.rest_metadatas span.input form#search_form{
+	top:-4px;
+	position:absolute;
+	background:red;
+}
+
+div#streamDatasets{
+	position:relative;
+}
+div#restDatasets{
+	position:relative;
+}

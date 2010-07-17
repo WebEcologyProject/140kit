@@ -1,17 +1,30 @@
-<div id="dataDisplay">
 <% if @items.first.class.to_s == "Tweet" -%>
-  <% @tweets = @items -%>
-  <h1>Listing tweets</h1>
+<div id="dataDisplay">
+    <% @tweets = @items -%>
+    <h1>Listing tweets</h1>
+
 <% for tweet in @tweets -%>
   <%= render :partial => "/tweets/tweet", :locals => {:tweet => tweet} %>
 <% end -%>
   <%= will_paginate @tweets, :class => 'pagination ajax' %>
+</div>
 <% elsif @items.first.class.to_s == "User" -%>
+<div id="dataDisplay">
 <% @users = @items -%>
   <h1>Listing users</h1>
 <% for user in @users -%>
   <%= render :partial => "/users/user", :locals => {:user => user} %>
 <% end -%>
   <%= will_paginate @users, :class => 'pagination ajax' %>
-<% end -%>
 </div>
+<% elsif @items.first.class.to_s == "RestMetadata" -%>
+<div id="restDatasets">
+  <% for item in @items %>
+  <%= render :partial => "/datasets/datasets_associate", :locals => {:collection => @collection, :datasets => @items.collect{|i| i.collection}.paginate, :page_param => "addable_rest_page", :id_prefix => "addable"} %>
+  <% end %>
+</div>
+<% elsif @items.first.class.to_s == "StreamMetadata" -%>
+<div id="streamDatasets">
+  <%= render :partial => "/datasets/datasets_associate", :locals => {:collection => @collection, :datasets => @items.collect{|i| i.collection}.paginate, :page_param => "addable_stream_page", :id_prefix => "addable"} %>
+</div>
+<% end -%>

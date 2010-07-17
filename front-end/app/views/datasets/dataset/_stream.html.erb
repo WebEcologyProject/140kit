@@ -1,6 +1,5 @@
-<div id="<%= "#{id_prefix}" if !id_prefix.blank? %>_dataset_<%= dataset.id %>" class="<%= dataset.class.to_s.underscore %> dataset">
-  <%debugger%>
-  <h4><%= link_to "#{dataset.name}", collection_url(dataset.researcher.user_name, dataset.primary_collection.id), :class => "big" %></h4>
+<div id="<%= "#{id_prefix}" if !id_prefix.blank? %>_metadata_<%= dataset.metadata.id %>" class="<%= dataset.class.to_s.underscore %> dataset">
+  <h4><%= link_to dataset.name, collection_url(dataset.researcher.user_name, dataset.primary_collection.id), :class => "big" %></h4>
 <% if !collection.blank? && !current_researcher.blank? && collection.researcher_id == current_researcher.id -%>
     <%= render :partial => "datasets/associate_button", :locals => {:dataset => dataset, :collection => collection, :id_prefix => id_prefix} %>
 <% end -%>

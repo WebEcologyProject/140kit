@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   before_filter :login_required, :except => [:show, :index, :search, :welcome]
 
   def search
+    @collection = Collection.find(params[:collection_id].to_s) if params[:collection_id]
     model = params[:model].class == Array ? params[:model].first : params[:model].first.first
   	query = params[:query] != 'Search' ? params[:query] : ''
   	partial = params[:partial].nil? ? '/layouts/search_results' : params[:partial].first.first
