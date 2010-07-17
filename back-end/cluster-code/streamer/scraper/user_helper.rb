@@ -11,6 +11,7 @@ class UserHelper
   end
   
   def self.hash_user(raw_user)
+    disallowed_keys = ["profile_use_background_image", "follow_request_sent"]
     user = {}
       user["screen_name"] = raw_user["screen_name"]
       raw_user.delete_if {|k, v| k == "following" || k == "status"}
@@ -24,7 +25,7 @@ class UserHelper
         elsif key == "location"
           user["location"] = value
         else
-          user[key] = value if key != "profile_use_background_image"
+          user[key] = value if !disallowed_keys.include?(key)
         end
       end
       # puts "Hashed user: #{raw_user["screen_name"]}"

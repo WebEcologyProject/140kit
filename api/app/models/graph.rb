@@ -4,63 +4,122 @@ class Graph < ActiveRecord::Base
   has_many :graph_points
   has_many :edges
 
-###GOOGLE PARSING
-  def self.to_google_json(graph_data)
-    if graph_data.class == Graph
-      return Rails.cache.read("graphs_#{graph_data.id}_#{graph_data.title}_#{graph_data.style}_graph_data")
+###DATA FETCHING
+def self.to_google_json(graph_data, params)
+  result = ""
+  if graph_data.class == Graph
+    result = Rails.cache.read(graph_data.get_cached("graphs", params[:format], params[:logic]))
+  else
+    graph = Graph.find(graph_data["id"])
+    if graph.collection.finished && graph.collection.analyzed
+      result = Rails.cache.fetch(graph.get_cached("graphs", params[:format], params[:logic])) { Graph.fetch_google_json(graph_data)}
     else
-      graph = Graph.find(graph_data["id"])
-      if graph.collection.finished && graph.collection.analyzed
-        return Rails.cache.fetch("graphs_#{graph.id}_#{graph.title}_#{graph.style}_graph_data") { Graph.fetch_google_json(graph_data)}
-      else
-        return Graph.fetch_google_json(graph_data)
-      end      
+      return Graph.fetch_google_json(graph_data)
+    end      
+  end
+  #GSUB to change out reqid for pre-cached data - reqid must match in order for graphs to work.
+  return result.gsub(/version:0.1,status:'ok',reqId:\d*,table:/, "version:0.1,status:'ok',"+params["tqx"]+",table:")
+end
+
+def self.fetch_google_json(graph_data)
+  attribute = graph_data["style"]+"_"+graph_data["title"]
+  case attribute
+  when "histogram_tweet_location"
+    attribute = "Region Reported"
+  when "significant_words"
+    attribute = "Significant words (words not included in <a href=\"/pages/stop-words\">The stop word list</a>)"
+  when "urls"
+    attribute = "URLs"
+  when "mentions"
+    attribute = "User Mentioned"
+  end
+  header = "google.visualization.Query.setResponse({version:0.1,status:'ok',#{graph_data["reqid"]},table:{cols:[{id:\"#{attribute}\",label:\"#{attribute}\",type:'string'},{id:'Frequency',label:'Frequency',type:'number'}],"
+  data_set = header+"rows:["
+  graphs = graph_data["results"]
+  graphs = Graph.data_sort(graph_data["title"], graphs)
+  debugger
+  graphs.each do |graph|
+    data_set = data_set+"{c:[{v:\"#{graph.label.gsub("\n", "")}\"},{v:#{graph.value}}]},"      
+  end
+  data_set = data_set.chop
+  data_set = data_set+"]}})"
+end
+
+def self.to_rgraph_json(graph_data, params)
+  if graph_data.class == Graph
+    return Rails.cache.read(get_cached(cache_file, "networks", params[:format], params[:logic]))
+  else
+    graph = Graph.find(graph_data.first.graph_id)
+    if graph.collection.finished && graph.collection.analyzed
+      return Rails.cache.fetch(get_cached(cache_file, "networks", params[:format], params[:logic])) { Graph.fetch_rgraph_json(graph_data, params)}
+    else
+      return fetch_rgraph_json(graph_data, params[:logic])
+    end      
+  end
+end
+
+def self.fetch_rgraph_json(graph_data, logic_params)
+  node_index = {}
+  for edge in graph_data
+    edge = edge["edge"] if edge["edge"].class == Edge
+    if node_index[edge.start_node].nil?
+      node_index[edge.start_node] = [edge.end_node]
+    else
+      node_index[edge.start_node] << edge.end_node
+      node_index[edge.start_node].uniq!
+    end
+    if node_index[edge.end_node].nil?
+      node_index[edge.end_node] = [edge.start_node]
+    else
+      node_index[edge.end_node] << edge.start_node
+      node_index[edge.end_node].uniq!
     end
   end
-  
-  def self.fetch_google_json(graph_data)
-    attribute = graph_data["style"]+"_"+graph_data["title"]
-    # case attribute
-    # when "histogram_tweet_location"
-    #   attribute = "City"
-    # end
-    header = "google.visualization.Query.setResponse({version:0.1,status:'ok',#{graph_data["reqid"]},table:{cols:[{id:\"#{attribute}\",label:\"#{attribute}\",type:'string'},{id:'Frequency',label:'Frequency',type:'number'}],"
-    data_set = header+"rows:["
-    graphs = graph_data["results"]
-    graphs = Graph.data_sort(graph_data["title"], graphs)
-    graphs.each do |graph|
-      data_set = data_set+"{c:[{v:\"#{graph.label.gsub("\n", "")}\"},{v:#{graph.value}}]},"      
-    end
-    data_set = data_set.chop
-    data_set = data_set+"]}})"
+  # if edge["edge"].class == Edge
+  #   verbose_index = {}
+  #   for edge in edges
+  #     
+  json = "["
+  nodes = node_index.to_a.sort {|x,y| node_index[y[0]].length <=> node_index[x[0]].length }
+  for node_and_adjacencies in nodes
+    node = node_and_adjacencies[0]
+    adjacencies = node_and_adjacencies[1]
+    json += "{\"id\":\"#{node}\","
+    json += "\"name\":\"#{node}\","
+    json += "\"data\":{\"relation\" : \"<a href=\\\"http://twitter.com/#{node}\\\" target=\\\"_blank\\\">#{node}'s profile</a>\"},"
+    json += "\"adjacencies\":#{adjacencies.inspect}},"
   end
+  json += "]"
+  return json
+end
+
+def self.to_graphml(graph_data, params)
+  if graph_data.class == Graph
+    return Rails.cache.read(graph_data.get_cached("networks", params[:format], params[:logic]))
+  else
+    graph = Graph.find(graph_data.first.graph_id)
+    if graph.collection.finished && graph.collection.analyzed
+      return Rails.cache.fetch(graph.get_cached("networks", params[:format], params[:logic])) { Graph.fetch_graphml(graph_data)}
+    else
+      return fetch_graphml(graph_data, params)
+    end      
+  end
+end
+
+def self.fetch_graphml(graph_data)
+  graphml = Graph.graphml_header(Time.now.to_i.to_s)
+  graphml = graphml+Graph.graphml_attribute_declares(graph_data.first)
+  graphml = graphml+Graph.graphml_write_data(graph_data)+Graph.graphml_footer
+  return graphml
+end
+
+###GOOGLE PARSING
   
   def self.data_sort(title, graphs)
     case title
     when "tweet_location"
-      new_graphs = []
-      graphs.each{|g|
-        case g.label
-        when "ÜT:"
-          if new_graphs.select{|g| g.label == "iPhone Geo Location"}.compact.length == 0
-            g.label = "iPhone Geo Location" 
-          else 
-            new_graphs.select{|g| g.label == "iPhone Geo Location"}.first.value += g.value
-            graphs = graphs-[g]
-          end
-        when "iPhone:"
-          if new_graphs.select{|g| g.label == "iPhone Geo Location"}.compact.length == 0
-            g.label = "iPhone Geo Location" 
-          else 
-            new_graphs.select{|g| g.label == "iPhone Geo Location"}.first.value += g.value
-            graphs = graphs-[g]
-          end
-        when "Pre:"
-          g.label = "Palm Pre Geo Location"
-        end
-        new_graphs << g
-      }
-      return new_graphs.uniq
+      graphs.collect{|graph| graph.label = "<a href='http://maps.google.com/maps?q=#{graph.label}' target='_blank'>#{graph.label}</a>"}
+      return graphs
     when "tweet_language"
       return graphs
     when "tweet_created_at"
@@ -87,80 +146,25 @@ class Graph < ActiveRecord::Base
       return graphs
     when "user_geo_enabled"
       return graphs
+    when "hashtags"
+      graphs.collect{|g| g.label = "<a href='http://search.twitter.com/search?q=#{CGI::escape(g.label)}' target='_blank'>#{g.label}</a>"}
+      return graphs
+    when "mentions"
+      graphs.collect{|g| g.label = "<a href='http://twitter.com/#{g.label.gsub("@", "")}' target='_blank'>#{g.label}</a>"}
+      return graphs
+    when "significant_words"
+      return graphs
+    when "urls"
+      graphs.collect{|g| g.label = "<a href='#{g.label}' target='_blank'>#{g.label}</a>"}
+      return graphs
     end
   end
   
 ###JSON PARSING FOR JS RGRAPH
 
-  def self.to_rgraph_json(graph_data, logic_params)
-    if graph_data.class == Graph
-      return Rails.cache.read("graphs_#{graph_data.id}_#{graph_data.title}_#{graph_data.style}_graph_data_json_#{logic_params}")
-    else
-      graph = Graph.find(graph_data.first.graph_id)
-      if graph.collection.finished && graph.collection.analyzed
-        return Rails.cache.fetch("graphs_#{graph.id}_#{graph.title}_#{graph.style}_graph_data_json_#{logic_params}") { Graph.fetch_rgraph_json(graph_data, logic_params)}
-      else
-        return fetch_rgraph_json(params, logic_params)
-      end      
-    end
-  end
-  
-  def self.fetch_rgraph_json(graph_data, logic_params)
-    node_index = {}
-    for edge in graph_data
-      edge = edge["edge"] if edge["edge"].class == Edge
-      if node_index[edge.start_node].nil?
-        node_index[edge.start_node] = [edge.end_node]
-      else
-        node_index[edge.start_node] << edge.end_node
-        node_index[edge.start_node].uniq!
-      end
-      if node_index[edge.end_node].nil?
-        node_index[edge.end_node] = [edge.start_node]
-      else
-        node_index[edge.end_node] << edge.start_node
-        node_index[edge.end_node].uniq!
-      end
-    end
-    # if edge["edge"].class == Edge
-    #   verbose_index = {}
-    #   for edge in edges
-    #     
-    json = "["
-    nodes = node_index.to_a.sort {|x,y| node_index[y[0]].length <=> node_index[x[0]].length }
-    for node_and_adjacencies in nodes
-      node = node_and_adjacencies[0]
-      adjacencies = node_and_adjacencies[1]
-      json += "{\"id\":\"#{node}\","
-      json += "\"name\":\"#{node}\","
-      json += "\"data\":{\"relation\" : \"<a href=\\\"http://twitter.com/#{node}\\\" target=\\\"_blank\\\">#{node}'s profile</a>\"},"
-      json += "\"adjacencies\":#{adjacencies.inspect}},"
-    end
-    json += "]"
-    return json
-  end
   
 ###GRAPHML PARSING
 
-  def self.to_graphml(graph_data)
-    if graph_data.class == Graph
-      return Rails.cache.read("graphs_#{graph_data.id}_#{graph_data.title}_#{graph_data.style}_graph_data_graphml_#{logic_params}")
-    else
-      graph = Graph.find(graph_data.first.graph_id)
-      if graph.collection.finished && graph.collection.analyzed
-        return Rails.cache.fetch("graphs_#{graph.id}_#{graph.title}_#{graph.style}_graph_data_graphml_#{logic_params}") { Graph.fetch_graphml(graph_data)}
-      else
-        return fetch_graphml(graph_data)
-      end      
-    end
-  end
-
-  def self.fetch_graphml(graph_data)
-    graphml = Graph.graphml_header(Time.now.to_i.to_s)
-    graphml = graphml+Graph.graphml_attribute_declares(graph_data.first)
-    graphml = graphml+Graph.graphml_write_data(graph_data)+Graph.graphml_footer
-    return graphml
-  end
   def self.graphml_header(key)
     return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" \nxsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">\n\t<graph 
 id=\"#{key}\" edgedefault=\"directed\">"
@@ -229,6 +233,14 @@ id=\"#{key}\" edgedefault=\"directed\">"
   def self.graphml_footer
     return "\t\n</graph>\n</graphml>"
   end
-
+  
+  ###CACHING
+  
+  def get_cached(graph_prefix, data_type, logic)
+    if logic.nil?
+      return "#{graph_prefix}_#{self.id}_#{self.title}_#{self.style}_#{data_type}"
+    else
+      return "#{graph_prefix}_#{self.id}_#{self.title}_#{self.style}_#{data_type}_#{logic.to_s.gsub(/[|:><]/, "_")}"
+    end
+  end
 end
-

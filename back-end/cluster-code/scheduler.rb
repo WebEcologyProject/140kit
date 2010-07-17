@@ -53,6 +53,15 @@ class Scheduler
     metadata = AnalysisMetadata.find({:finished => false, :instance_id => $w.instance_id})
     return [metadata] if !metadata.nil?
     collections = Collection.find_all({:finished => true, :analyzed => false})
+    result = Scheduler.analysis_metadata_from_collection(collections)
+    return result if !result.empty?
+    collections = Collection.find_all({:finished => true, :analyzed => true})
+    result = Scheduler.analysis_metadata_from_collection(collections)
+    return result if !result.empty?
+    return [nil]
+  end
+  
+  def self.analysis_metadata_from_collection(collections)
     collections.sort! {|a,b| a.created_at.to_i <=> b.created_at.to_i}
     for collection in collections
       if $w.rest_allowed
@@ -80,7 +89,6 @@ class Scheduler
         end
       end
     end
-    return [nil]
+    return []
   end
-  
 end

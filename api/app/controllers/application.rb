@@ -39,7 +39,7 @@ class ApplicationController < ActionController::Base
   
   def graph_query(params)
     graph = Graph.find(:first, :conditions => {:collection_id => params["collection_id"].to_i, :style => params["style"], :title => params["title"]})
-    if Rails.cache.read("graphs_#{graph.id}_#{graph.title}_#{graph.style}_graph_data_#{params["logic"]}").nil?
+    if Rails.cache.read(graph.get_cached("graphs", params["format"], params["logic"])).nil?
       params["graph_id"] = graph.id
       return fetch_graph_query(params)
     else
@@ -70,7 +70,7 @@ class ApplicationController < ActionController::Base
       graph = Graph.find(:first, :conditions => {:collection_id => params["collection_id"], :style => params["style"].singularize})
       params["graph_id"] = graph.id
     end
-    if Rails.cache.read("graphs_#{graph.id}_#{graph.title}_#{graph.style}_graph_data_#{params["format"]}_#{params["logic"].gsub(/[|:><]/, "_")}").nil?
+    if Rails.cache.read(graph.get_cached("graphs", "graph_data", params["logic"])).nil?
       params["graph_id"] = graph.id
       return fetch_network_query(params)
     else

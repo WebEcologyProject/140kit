@@ -41,15 +41,17 @@ module RestFlow
   end
   
   def self.create_temp_file
-    temp_folder_name = Digest::SHA1.hexdigest(Time.ntp.to_s+rand(100000).to_s)
-    $w.rest_instance.temp_folder_name = temp_folder_name
     `mkdir ../tmp_files/#{$w.instance_id}`
-    `mkdir ../tmp_files/#{$w.instance_id}/#{temp_folder_name}`
-    `rsync #{ROOT_ADDRESS}#{$w.rest_instance.metadata.source_data} ../tmp_files/#{$w.instance_id}/#{temp_folder_name}/source_data.txt`
-    f = File.open("../tmp_files/#{$w.instance_id}/#{temp_folder_name}/source_data.txt", "r")
+    case Environment.storage_type
+    when "local"
+      "mv ../../#{Environment.storage_path}/#{$w.rest_instance.metadata.source_data} ../tmp_files/#{$w.instance_id}/source_data.txt"
+    when "remote"
+      attempt = "rsync #{Environment.storage_ssh}:#{Environment.storage_path}/#{$w.rest_instance.metadata.source_data} ../tmp_files/#{$w.instance_id}/source_data.txt"
+    end
+    f = File.open("../tmp_files/#{$w.instance_id}/source_data.txt", "r")
     data = f.read.split(",").collect{|d| d.strip}
     f.close
-    return data, "../tmp_files/#{$w.instance_id}/#{temp_folder_name}/source_data.txt"
+    return data, "../tmp_files/#{$w.instance_id}/source_data.txt"
   end
   
   def self.unlock_metadata
@@ -63,7 +65,7 @@ module RestFlow
     flagged = User.count({:metadata_id => $w.rest_instance.metadata.id, :metadata_type => 'rest_metadata', :flagged => true})
     total = User.count({:metadata_id => $w.rest_instance.metadata.id, :metadata_type => 'rest_metadata'})
     if flagged == total
-      `rm -r ../tmp_files/#{$w.instance_id}/#{$w.rest_instance.temp_folder_name}`
+      `rm -r ../tmp_files/#{$w.instance_id}`
       metadata_collection = $w.rest_instance.metadata.collection
       full_collection = Collection.find({:single_dataset => false, :scrape_id => $w.rest_instance.metadata.scrape.id})
       scrape_tweets_count = Tweet.count({:scrape_id => $w.rest_instance.metadata.scrape.id})

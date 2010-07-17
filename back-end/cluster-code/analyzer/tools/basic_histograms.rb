@@ -23,8 +23,7 @@ def basic_histograms(collection_id, save_path)
   finished_graphs = []
   graph_hashes.each_pair do |k, v|
     t = Time.ntp
-    g = Graph.new({:title => "#{k}", :style => "histogram", :time_slice => t, :collection_id => collection.id}).save
-    g = Graph.find({:title => "#{k}", :style => "histogram", :collection_id => collection.id})
+    g = generate_graph("histogram", k, collection_id)
     ugly_graph_points = []
     v.each_pair do |l, w|
       graph_point = {}
@@ -42,7 +41,7 @@ def basic_histograms(collection_id, save_path)
     graph_points = graph_points+Pretty.pretty_up_labels(k, ugly_graph_points)
     finished_graphs << g
   end
-  Database.save_all({"graph_points" => graph_points})
+  Database.update_all({"graph_points" => graph_points})
   tmp_folder = FilePathing.tmp_folder(collection)
   graph_hashes.each_pair do |k,v|
     row_hashes = []

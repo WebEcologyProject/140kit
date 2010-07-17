@@ -192,16 +192,14 @@ class Analysis
   end
   
   def self.hashes_to_csv(hash_array, file_name, path=$w.tmp_path)
+    require 'fastercsv'
     raise "Temp Folder not declared" if $w.tmp_path.nil?
-    file = File.new(path+file_name, "w+")
-    iterator = 0
-    if !hash_array.empty?
+    FasterCSV.open(path+file_name, "w") do |csv|
       keys = hash_array.first.keys
-      file.write(keys.collect{|key| key+","}.to_s.chop+"\n")
-      hash_array.map do |row|
-        file.write(keys.collect{ |key| row[key].nil? ? '"",' : '"'+row[key].to_s.gsub('"', '""')+'",'}.to_s.chop+"\n")
+      csv << keys
+      hash_array.each do |row|
+        csv << keys.collect{|key| row[key]}
       end
     end
-    file.close
   end
 end

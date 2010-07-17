@@ -10,6 +10,29 @@ class SiteData < Database
       self.send("#{k}=", v)
     end
   end
+
+  def update
+    accepted_classes = [String, Time, Integer, Float, Fixnum, TrueClass, FalseClass]
+    obj_attrs = self.attributes
+    safe_attrs = {}
+    obj_attrs.each_pair do |k, v|
+      if accepted_classes.include?(obj_attrs[k].class)
+        safe_attrs[k] = v
+      elsif v.class == Array
+        if @@models.include?(obj_attrs[k].class.to_s.underscore.chop) && v.class != self.class
+          v.each do |val|
+            val.save
+          end
+        end
+      else
+        if @@models.include?(obj_attrs[k].class.to_s.underscore.chop) && v.class != self.class
+          v.save
+        end
+      end
+    end
+    Database.update({self.class.to_s.underscore => [safe_attrs]})
+    return self.class.find_all(SQLParser.prep_attributes(safe_attrs)).last
+  end
   
   def save
     accepted_classes = [String, Time, Integer, Float, Fixnum, TrueClass, FalseClass]
