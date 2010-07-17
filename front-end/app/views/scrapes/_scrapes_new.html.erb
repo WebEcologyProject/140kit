@@ -18,6 +18,7 @@ end
       <%= f.label :name, "Search Term (cannot contain spaces)" %><br />
       <%= f.text_field :name, :value => "" %>
     </p>
+    <% if logged_in? && current_researcher.admin? -%>
     <p>
       <%= f.label :scrape_type, "Search Type" %><br />
       <%= f.select(:scrape_type,
@@ -27,6 +28,9 @@ end
        ]
      ) %>
     </p>
+    <% else -%>
+      <%= f.hidden_field :scrape_type, :value => "Search" %>
+    <% end -%>
     <p>
       <%= f.label :run_ends, "Run this scrape until" %><br>
       <%= render :partial => "dumb_partial_for_datetime_select_within_a_specific_range", :locals => {:start_time => Time.now+10.minutes, :end_time => Time.now+1.week, :selected_time => Time.now+10.minutes} %>

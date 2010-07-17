@@ -4,7 +4,9 @@
 <ul>
   <li><%= link_to_remote("Curate a Collection", {:replace => 'main', :url => new_collection_url, :locals => {:errors => errors}}, :class => "big") %> from existing <%= link_to "datasets", datasets_url %>.</li>
   <li><%= link_to_remote("Search/Term scrape", {:replace => 'main', :url => new_scrape_url("stream"), :locals => {:errors => errors}}, :class => "big")  %> (collect Tweets and Users where the Tweets contain some term)</li>
-  <li><%= link_to_remote("User group scrape", {:replace => 'main', :url => new_scrape_url("rest"), :locals => {:errors => errors}}, :class => "big") %> (input usernames via CSV/Textbox, then collect all Tweets for those users)</li>
+  <% if logged_in? && current_researcher.admin? %>
+    <li><%= link_to_remote("User group scrape", {:replace => 'main', :url => new_scrape_url("rest"), :locals => {:errors => errors}}, :class => "big") %> (input usernames via CSV/Textbox, then collect all Tweets for those users)</li>
+  <% end -%>
 </ul>
 <br />
 <div id="main">
