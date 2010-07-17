@@ -314,6 +314,7 @@ ActiveRecord::Schema.define(:version => 20100716221216) do
   add_index "tweets", ["metadata_type", "scrape_id", "metadata_id", "screen_name"], :name => "tweets_twitter_id_scrape_id_metadata_id", :unique => true
   add_index "tweets", ["scrape_id"], :name => "index_tweets_on_scrape_id"
   add_index "tweets", ["screen_name"], :name => "index_tweets_on_screen_name"
+  add_index "tweets", ["text"], :name => "text"
 
   create_table "users", :force => true do |t|
     t.integer  "twitter_id"
