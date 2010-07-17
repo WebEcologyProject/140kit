@@ -1,5 +1,8 @@
 <% ams = @collection.analysis_metadatas -%>
-<h3>Analytics:</h3>
+<h3 class="line">Analytics:</h3>
 <% for am in ams -%>
-  <%= render :partial => "/analysis_metadatas/#{am.function}", :locals => {:collection => @collection, :am => am} %>
+  <div class="analytic">
+    <%= render :partial => "/analysis_metadatas/#{am.function}", :locals => {:collection => @collection, :am => am} %>
+  </div>
 <% end -%>
+<div class="clearFloat"></div>

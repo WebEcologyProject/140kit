@@ -342,3 +342,10 @@ div#search.collections span{
 	margin:10px;
 }
 
+.analytic{
+	float:left;
+	width:45%;
+	border-bottom:1px solid #999;
+	margin-left:2.5%;
+	margin-right:2.5%;
+}

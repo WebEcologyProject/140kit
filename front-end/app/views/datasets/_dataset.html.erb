@@ -1,0 +1,3 @@
+<% id_prefix ||= "" -%>
+<% display_user_header = display_user_header || false -%>
+<%= render :partial => "datasets/dataset/#{dataset.scrape_method.downcase}", :locals => {:dataset => dataset, :collection => collection, :id_prefix => id_prefix, :display_user_header => display_user_header} %>

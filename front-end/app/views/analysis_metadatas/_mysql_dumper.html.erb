@@ -1,4 +1,6 @@
 <% @collection = collection || @collection -%>
 <% @am = am || @am -%>
-<h4>Export SQL:</h4>
-<%=link_to "Download the raw SQL zip (Users/Tweets)", "http://#{FILE_URL}/files#{@am.save_path}#{@collection.folder_name}.zip" %>
+<h4 class="accordion_toggle">Export SQL:</h4>
+<div class="accordion_content">
+  <%=link_to "Download the raw SQL zip (Users/Tweets)", "http://#{FILE_URL}/files#{@am.save_path}#{@collection.folder_name}.zip" %>
+</div>

@@ -19,6 +19,7 @@ ActionController::Routing::Routes.draw do |map|
   map.collection_remove_analytics '/collections/:collection_id/remove/analytics/:analytical_offering_id', :controller => 'collections', :action => 'remove_analytics'
   map.collection_mothball '/collections/:collection_id/mothball', :controller => 'collections', :action => 'mothball'
   map.collection_rollback '/collections/:collection_id/rollback', :controller => 'collections', :action => 'rollback'
+  map.collection_full_destroy '/collections/:collection_id/full_destroy', :controller => 'collections', :action => 'full_destroy'
   
   map.datasets '/datasets', :controller => 'collections', :action => 'index', :single_dataset => 'true'
   map.dataset '/datasets/:id', :controller => 'collections', :action => 'show'

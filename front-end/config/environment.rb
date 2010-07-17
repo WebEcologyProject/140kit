@@ -5,7 +5,7 @@ ENV['RAILS_ENV'] ||= 'production'
 RAILS_GEM_VERSION = '2.3.4' unless defined? RAILS_GEM_VERSION
 
 API_URL = "127.0.0.1:3001"
-FILE_URL = "127.0.0.1:3000"
+FILE_URL = "www.filedump.devingaffney.com"
 SITE_URL = "127.0.0.1:3000"
 
 DEFAULT_IMAGE_URL = "/images/default.gif"

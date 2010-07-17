@@ -8,7 +8,7 @@ class Graph < ActiveRecord::Base
     when "tweet_location"
       # return "PieChart", "title: 'Tweet Locations'" + universals
       # return "GeoMap", "region: 'world', colors: [0xFF8747, 0xFFB581, 0xc06000], dataMode: 'markers', showLegend: false"
-      return "Table", "pageSize: 100, page: 'enable', showRowNumber: true, startPage: 0, allowHtml: true, title: 'User Geo Enabled?'" + universals
+      return "Table", "pageSize: 100, page: 'enable', showRowNumber: true, startPage: 0, allowHtml: true, title: 'Tweet Locations'" + universals
     when "tweet_language"
       return "PieChart", "pieMinimalAngle: 1, title: 'Tweet Language'" + universals
     when "tweet_created_at"
@@ -27,6 +27,8 @@ class Graph < ActiveRecord::Base
       return "PieChart", "pieMinimalAngle: 1,is3D: true, title: 'User Time Zones'" + universals
     when "user_lang"
       return "PieChart", "pieMinimalAngle: 1, title: 'User Languages'" + universals
+    when "user_geo_enabled"
+      return "PieChart", "pieMinimalAngle: 1, title: 'User Geo Enabled?'" + universals
     when "hashtags"
       return "Table", "pageSize: 100, page: 'enable', showRowNumber: true, startPage: 0, allowHtml: true, title: 'Hashtag Frequency'" + universals
     when "mentions"

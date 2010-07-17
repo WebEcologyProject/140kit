@@ -126,4 +126,31 @@ class CollectionsController < ApplicationController
     redirect_to(request.referrer)
   end
   
+  def full_destroy
+    @collection = Collection.find(params[:collection_id])
+    ActiveRecord::Base.connection.execute("delete from graphs where collection_id = #{@collection.id}")
+    ActiveRecord::Base.connection.execute("delete from graph_points where collection_id = #{@collection.id}")
+    ActiveRecord::Base.connection.execute("delete from analysis_metadatas where collection_id = #{@collection.id}")
+    ActiveRecord::Base.connection.execute("delete from stream_metadatas where collection_id = #{@collection.id}")
+    ActiveRecord::Base.connection.execute("delete from rest_metadatas where collection_id = #{@collection.id}")
+    if @collection.scrape
+      scrape = @collection.scrape
+      if !@collection.single_dataset
+        single_collections = Collection.find(:all, :conditions => {:scrape_id => scrape.id, :single_dataset => true})
+        single_collections.each do |collection|
+          ActiveRecord::Base.connection.execute("delete from graphs where collection_id = #{collection.id}")
+          ActiveRecord::Base.connection.execute("delete from graph_points where collection_id = #{collection.id}")
+          ActiveRecord::Base.connection.execute("delete from analysis_metadatas where collection_id = #{collection.id}")
+          collection.finished = false
+          collection.analyzed = false
+          collection.save
+        end
+      end
+      scrape.save
+    end
+    @collection.destroy
+    flash[:notice] = "This collection has been successfully destroyed."
+    redirect_to(request.referrer)
+  end
+  
 end

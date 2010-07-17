@@ -31,14 +31,14 @@ class StreamMetadatasController < ApplicationController
   def curate
     per_page = 5
     @collection = Collection.find(params[:id])
-    @addable_stream_metadatas = StreamMetadata.paginate :page => params[:addable_stream_page], :per_page => per_page, :conditions => {:finished => true}#, :conditions => "term != 'retweet' and scrape_id != 0"
-    @addable_rest_metadatas = RestMetadata.paginate :page => params[:addable_rest_page], :per_page => per_page, :conditions => {:finished => true}#, :conditions => "scrape_id != 0"
-    @removeable_metadatas = @collection.metadatas.paginate :page => params[:removeable_page], :per_page => per_page
+    @addable_stream_datasets = Collection.paginate :page => params[:addable_stream_page], :per_page => per_page, :conditions => {:finished => true, :single_dataset => true, :scrape_method => "Stream"}#, :conditions => "term != 'retweet' and scrape_id != 0"
+    @addable_rest_datasets = Collection.paginate :page => params[:addable_rest_page], :per_page => per_page, :conditions => {:finished => true, :single_dataset => true, :scrape_method => "REST"}#, :conditions => "scrape_id != 0"
+    @removeable_datasets = @collection.datasets.paginate :page => params[:removeable_page], :per_page => per_page
     respond_to do |format|
       format.html
       format.js {
         render :update do |page|
-          page.replace_html 'dataDisplay', :partial => "/metadatas/metadatas_curate"
+          page.replace_html 'dataDisplay', :partial => "/datasets/datasets_curate"
         end
       }
     end

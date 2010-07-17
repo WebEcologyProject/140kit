@@ -7,7 +7,7 @@
 -%>
 
 <% if @collection.scraped_collection -%>
-<h3>Overview:</h3>
+<h3 class="line">Overview:</h3>
 <ul>
   <li>Collection: <%= @collection.scrape_method.capitalize %></li>
   <li>Number of Tweets: <%= number_with_delimiter(@collection.tweets_count) %></li>
@@ -19,7 +19,7 @@
   <li>Last Updated: <%=h distance_of_time_in_words(@collection.created_at, Time.now) %> ago (<%= @collection.created_at.strftime("%b %d, %Y, at %H:%M:%S %Z")%>)</li>
 </ul>
 <% elsif @collection.finished -%>
-<h3>Overview:</h3>
+<h3 class="line">Overview:</h3>
 <ul>
   <li>Type: Search</li>
   <li>Number of Tweets: <%= number_with_delimiter(@collection.tweets_count) %></li>

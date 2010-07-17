@@ -1,4 +1,4 @@
-<h3>Explore:</h3>
+<h3 class="line">Explore:</h3>
 <% if !@collection.single_dataset -%><%= link_to_remote("Data Sets Employed",  :replace => 'dataDisplay', :url => "/metadatas/collection_paginate/#{@collection.id}") %> | <% end -%>
 <%= link_to_remote("Tweets",  :replace => 'dataDisplay', :url => tweets_collection_paginate_url(@collection.id)) %> | 
 <%= link_to_remote("Users",  :replace => 'dataDisplay', :url => users_collection_paginate_url(@collection.id)) %>

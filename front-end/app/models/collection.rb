@@ -42,4 +42,12 @@ class Collection < ActiveRecord::Base
     end
     return metadata
   end
+  
+  def datasets
+    return self.metadatas.collect{|m| m.class.find(m.id).collection}
+  end
+  
+  def primary_collection
+    return self.scrape.collection
+  end
 end

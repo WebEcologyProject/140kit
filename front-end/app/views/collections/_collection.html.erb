@@ -44,6 +44,9 @@
       <% else %>
         <%= link_to "Mothball?", collection_mothball_url(collection) %>
       <% end %>
+      <% if logged_in? && current_researcher.admin? -%>
+        <%= link_to "Destroy?", collection_full_destroy_url(collection.id), :confirm => "Warning, this will destroy all analytical results and force a refresh of all the data - reverts back to phase before frozen. Still want to proceed?" %>
+      <% end -%>
     <% end %>
     </td>
   </tr>
