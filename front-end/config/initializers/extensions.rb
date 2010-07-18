@@ -9,6 +9,12 @@ class String
       return nil
     end
   end
+  
+  def to_url
+    stripped_url = self.match(/^(https?:\/\/)?(www\.)?(.*)$/i)[3]
+    s = self[0,8] == "https://" ? "s" : ""
+    return "http#{s}://#{stripped_url}"
+  end
 end
 
 class TrueClass
