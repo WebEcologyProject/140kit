@@ -38,8 +38,6 @@ def basic_histograms(collection_id, save_path)
       graph_point["collection_id"] = collection.id
       ugly_graph_points << graph_point
     end
-    puts "k: #{k.inspect}"
-    puts "\nugly_graph_points: #{ugly_graph_points.inspect}"
     graph_points = graph_points+Pretty.pretty_up_labels(k, ugly_graph_points)
     finished_graphs << g
   end
