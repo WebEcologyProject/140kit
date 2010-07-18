@@ -6,24 +6,7 @@ class CollectionsController < ApplicationController
     @page_title = params[:single_dataset].to_bool ? "All Datasets" : "All Collections"
     super({:single_dataset => params[:single_dataset].to_bool, :order_by => "finished desc, analyzed desc, created_at desc"}, per_page, element_id)
   end
-  
-  # def index(conditions={}, per_page=10, element_id='main')
-  #   sort = case params['sort']
-  #          when "name" then "name"
-  #          when "tweets"  then "tweets_count"
-  #          when "users"   then "users_count"
-  #          when "updated_at" then "created_at"
-  #          when "name" then "name DESC"
-  #          when "tweets"  then "tweets_count DESC"
-  #          when "users"   then "users_count DESC"
-  #          when "updated_at" then "created_at DESC"
-  #          end
-  #   @collections = Collection.paginate :order => sort, :conditions => conditions, :page => params[:page], :per_page => per_page
-  #   if request.xml_http_request?
-  #     render :partial => element_id, :layout => false
-  #   end
-  # end
-  
+
   def show
     model = params[:controller].classify.constantize
     inst_var = instance_variable_set("@#{params[:controller].singularize}", model.find(params[:id]))

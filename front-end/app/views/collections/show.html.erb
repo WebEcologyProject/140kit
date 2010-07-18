@@ -27,7 +27,7 @@
   <div class="line"><%= render :partial => "/layouts/search", :locals => {:conditions => "metadata_id:#{@collection.stream_metadata_ids.join(",")}"} %></div>
 <% else -%>
 
-  <% if logged_in? && current_researcher.id == @collection.researcher_id -%>
+  <% if (logged_in? && current_researcher.id == @collection.researcher_id) || (logged_in? && current_researcher.admin?)-%>
     <% if @collection.scraped_collection -%>
       
       <% if !@collection.stream_metadatas.empty? -%>

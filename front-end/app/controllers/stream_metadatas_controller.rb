@@ -34,8 +34,8 @@ class StreamMetadatasController < ApplicationController
     @addable_stream_datasets = Collection.find(:all, :conditions => {:finished => true, :single_dataset => true, :scrape_method => "Stream"})#, :conditions => "term != 'retweet' and scrape_id != 0"
     @addable_rest_datasets = Collection.find(:all, :conditions => {:finished => true, :single_dataset => true, :scrape_method => "REST"})#, :conditions => "scrape_id != 0"
     @removeable_datasets = @collection.datasets.paginate :page => params[:removeable_page], :per_page => per_page
-    @addable_stream_datasets = @addable_stream_datasets-@removeable_datasets
-    @addable_rest_datasets = @addable_rest_datasets-@removeable_datasets
+    @addable_stream_datasets = (@addable_stream_datasets-@removeable_datasets).select{|d| !d.metadata.nil?}
+    @addable_rest_datasets = (@addable_rest_datasets-@removeable_datasets).select{|d| !d.metadata.nil?}
     @addable_stream_datasets = @addable_stream_datasets.paginate :page => params[:addable_stream_page], :per_page => per_page
     @addable_rest_datasets = @addable_rest_datasets.paginate :page => params[:addable_rest_page], :per_page => per_page
     respond_to do |format|
