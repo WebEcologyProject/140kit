@@ -16,9 +16,11 @@
     }
     google.load(graphData());
   </script>
-  <div id="graphDraw" class="roundedEdge shadow"></div>
+  <div id="graphDraw" class="roundedEdge shadow">
+    <div style="text-align:center;"><img src="/images/loading.gif" /></div>
+  </div>
   <h4>Embed code to your site:</h4>
-  <textarea>
+  <textarea id="embed_gode" onclick="$('embed_gode').focus();$('embed_gode').select();">
 &lt;script type=&quot;text/javascript&quot; src=&quot;http://www.google.com/jsapi&quot;&gt;&lt;/script&gt;
 &lt;script type=&quot;text/javascript&quot;&gt;
   google.load('visualization', '1', {packages: ['table','barchart','columnchart','linechart','piechart','geomap']});

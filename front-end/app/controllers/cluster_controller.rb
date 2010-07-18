@@ -1,4 +1,7 @@
 class ClusterController < ApplicationController
+  
+  before_filter :admin_required
+  
   def manage
     @page_title = "Cluster Management"
     per_page = 10

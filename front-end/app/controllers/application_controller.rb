@@ -122,5 +122,13 @@ class ApplicationController < ActionController::Base
       format.xml  { head :ok }
     end
   end
-
+  
+  private
+  
+  def admin_required
+    if !logged_in? || (logged_in? && !current_researcher.admin?)
+      redirect_to root_url
+    end
+  end
+  
 end

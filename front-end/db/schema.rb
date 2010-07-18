@@ -306,13 +306,13 @@ ActiveRecord::Schema.define(:version => 20100716221216) do
     t.boolean  "flagged",                              :default => false,              :null => false
   end
 
-  add_index "tweets", ["metadata_id", "metadata_type"], :name => "metadata_id_type"
-  add_index "tweets", ["metadata_id", "scrape_id"], :name => "tweet_metadata_id_scrape_id"
-  add_index "tweets", ["metadata_id"], :name => "tweet_metadata_id"
-  add_index "tweets", ["scrape_id"], :name => "scrape_id"
-  add_index "tweets", ["screen_name"], :name => "screen_name"
-  add_index "tweets", ["twitter_id", "scrape_id", "metadata_id", "metadata_type"], :name => "tweets_twitter_id_scrape_id_metadata_id_metadata_type", :unique => true
-  add_index "tweets", ["twitter_id", "scrape_id", "metadata_id"], :name => "tweets_twitter_id_scrape_id_metadata_id", :unique => true
+  add_index "tweets", ["metadata_id", "metadata_type"], :name => "index_tweets_on_metadata_id_and_metadata_type"
+  add_index "tweets", ["metadata_id", "scrape_id"], :name => "index_tweets_on_metadata_id_and_scrape_id"
+  add_index "tweets", ["metadata_id"], :name => "index_tweets_on_metadata_id"
+  add_index "tweets", ["metadata_type", "scrape_id", "metadata_id", "screen_name"], :name => "tweets_twitter_id_scrape_id_metadata_id", :unique => true
+  add_index "tweets", ["scrape_id"], :name => "index_tweets_on_scrape_id"
+  add_index "tweets", ["screen_name"], :name => "index_tweets_on_screen_name"
+  add_index "tweets", ["text"], :name => "text"
 
   create_table "users", :force => true do |t|
     t.integer  "twitter_id",                   :default => 0,                  :null => false

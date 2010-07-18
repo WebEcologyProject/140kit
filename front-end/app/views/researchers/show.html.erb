@@ -14,7 +14,7 @@
     <strong>E-mail:</strong> <%= @researcher.email %><br />
    <% end %>
   <% if !@researcher.website_url.nil? %>
-    <%= link_to @researcher.website_url, @researcher.website_url %><br />
+    <%= link_to @researcher.website_url.to_url, @researcher.website_url.to_url %><br />
   <% end %>
     <strong>Joined:</strong> about <%= distance_of_time_in_words(@researcher.join_date, Time.now) %> ago
   </p>

@@ -117,7 +117,7 @@ div#header {
 	padding-left:30px;
 }
 
-#navigation li a {
+#navigation li a, div#adminNavigation li a {
   font-size:12px;
   font-family: 'Helvetica Neue',helvetica,arial,sans-serif;
 }
@@ -151,6 +151,10 @@ div#logo {
 #logo a {
   text-decoration:none;
 	color:#fe6201;
+}
+
+div#adminNavigation {
+  background:#eee;
 }
 
 div#navigation, div#adminNavigation {

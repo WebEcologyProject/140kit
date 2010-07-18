@@ -1,4 +1,6 @@
 class AnalyticalOfferingsController < ApplicationController
+  before_filter :admin_required, :except => [:curate]
+  
   layout "main"
   def curate
     @collection = Collection.find(params[:id])

@@ -1,6 +1,7 @@
 class AuthUsersController < ApplicationController
   layout "main"
-  before_filter :login_required
+  before_filter :admin_required
+  
   def index(conditions={}, per_page=10, element_id='main')
     @page_title = "Twitter Accounts Management"
     if current_researcher.admin?
