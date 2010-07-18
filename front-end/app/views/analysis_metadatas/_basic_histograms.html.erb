@@ -6,11 +6,7 @@ google.load('visualization', '1', {packages: ['table','barchart','columnchart','
 </script>
 <h4 class="accordion_toggle">Histograms</h4>
 <div class="accordion_content">
-  <% if @am.finished -%>
-  <% else -%>
-    The Basic Histograms for this dataset are not yet complete
-  <% end -%>
-  
+  <% if @am.finished -%>  
   <%=link_to "Download the CSV of Basic Histogram Data", "http://#{FILE_URL}/files#{@am.save_path}#{@collection.folder_name}.zip" %><br />
   <ul>
     <li><%= link_to_remote("Tweet Location",  :replace => 'dataDisplay', :url => google_graph_url(@collection.id, "histogram", "tweet_location")) %></li>
@@ -25,4 +21,7 @@ google.load('visualization', '1', {packages: ['table','barchart','columnchart','
     <li><%= link_to_remote("User Language",  :replace => 'dataDisplay', :url => google_graph_url(@collection.id, "histogram","user_lang")) %>
     <li><%= link_to_remote("User Geo Enabled?",  :replace => 'dataDisplay', :url => google_graph_url(@collection.id, "histogram", "user_geo_enabled")) %></li>
   </ul>
+  <% else -%>
+    The Basic Histograms for this dataset are not yet complete
+  <% end -%>
 </div>
