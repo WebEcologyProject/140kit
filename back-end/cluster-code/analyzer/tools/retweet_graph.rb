@@ -1,4 +1,4 @@
-def retweet_graph(collection_id)
+def retweet_graph(collection_id, save_path)
   collection = Collection.find({:id => collection_id})
   if collection.single_dataset
     m_ids = [collection.metadata.id]
