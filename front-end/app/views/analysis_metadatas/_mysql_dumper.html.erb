@@ -2,5 +2,9 @@
 <% @am = am || @am -%>
 <h4 class="accordion_toggle">Export SQL:</h4>
 <div class="accordion_content">
-  <%=link_to "Download the raw SQL zip (Users/Tweets)", "http://#{FILE_URL}/files#{@am.save_path}#{@collection.folder_name}.zip" %>
+  <% if @am.finished -%>
+    <%=link_to "Download the raw SQL zip (Users/Tweets)", "http://#{FILE_URL}/files#{@am.save_path}#{@collection.folder_name}.zip" %>
+  <% else -%>
+    The MySQL dump for this dataset has not been compiled yet.
+  <% end -%>  
 </div>
