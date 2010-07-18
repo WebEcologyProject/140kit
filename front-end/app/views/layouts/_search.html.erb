@@ -29,17 +29,17 @@
 <%= text_field_tag(
       "query", 
       params['query'], 
-      :value => "Search", 
+      # :value => "Search", 
       :id => 'search_query', 
       :class => 'fluid',
-      :size => 20, 
+      :size => 20,
       :onkeypress => 'return disableEnterKey(event);',
       :onkeyup => "clearTimeout(search_timeout); 
       		search_timeout = setTimeout(\"" + remote_function(:url => search_url,  
-      		:loading => "$('spinner').show()", 
-      		:complete => "$('spinner').hide()", 
-      		:submit => 'search_form') + "\",500);", 
-      		:autocomplete => 'off'
+      :loading => "$('spinner').show()", 
+      :complete => "$('spinner').hide()", 
+      :submit => 'search_form') + "\",500);", 
+      :autocomplete => 'off'
     ) %>
     <%= hidden_field("conditions", "#{conditions}") %>
     <% end -%>
