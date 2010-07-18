@@ -1,7 +1,7 @@
 class NewsController < ApplicationController
   layout "main"
   before_filter :login_from_cookie
-  before_filter :login_required, :except => [:show, :index]
+  before_filter :admin_required, :except => [:show, :index]
 
   require "redcloth"
   

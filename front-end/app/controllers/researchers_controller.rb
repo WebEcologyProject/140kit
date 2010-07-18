@@ -1,4 +1,7 @@
 class ResearchersController < ApplicationController
+  
+  before_filter :admin_required, :only => [:promote, :suspend, :manage]
+  
   layout "main"
   
   def index
