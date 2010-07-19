@@ -2,7 +2,7 @@ class Collection < SiteData
   attr_accessor :id, :researcher_id, :created_at, :name, :updated_at, :scrape_id, :metadata, :scrape_method
   attr_accessor :updated_at, :finished, :analyzed, :notified, :folder_name, :instance_id, :flagged, :single_dataset
   attr_accessor :metadatas, :pending_email, :edges, :graph_points, :scraped_collection, :tweets_count, :users_count, :mothballed
-  attr_accessor :graphs, :analysis_metadatas, :researcher
+  attr_accessor :graphs, :analysis_metadatas, :researcher, :scrape
 
 
   ###############Relation methods
@@ -106,6 +106,14 @@ class Collection < SiteData
       @researcher = Researcher.find({:id => @researcher_id})
     else
       return @researcher
+    end
+  end
+  
+  def scrape
+    if @scrape.nil?
+      @scrape = Scrape.find({:id => @scrape_id})
+    else
+      return @scrape
     end
   end
 

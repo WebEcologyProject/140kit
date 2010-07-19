@@ -191,6 +191,22 @@ class Analysis
     return " where "+conditional
   end
   
+  def self.remove_broken_collections(collection)
+    if collection.scraped_collection
+      if collection.scrape.tweets.length == 0 && collection.scrape.users.length == 0
+        AnalysisMetadata.find_all({:collection_id => collection.id}).each {|x| x.destroy}
+        collection.metadatas.collect{|x| x.destroy}
+        collection.scrape.destroy
+        collection.destroy
+      end  
+    else
+      if collection.metadatas.collect{|m| m.tweets_count}.sum == 0 && collection.metadatas.collect{|m| m.tweets_count}.sum == 0
+        AnalysisMetadata.find_all({:collection_id => collection.id}).each {|x| x.destroy}
+        collection.destroy
+      end
+    end
+  end
+  
   def self.hashes_to_csv(hash_array, file_name, path=$w.tmp_path)
     require 'fastercsv'
     raise "Temp Folder not declared" if $w.tmp_path.nil?
