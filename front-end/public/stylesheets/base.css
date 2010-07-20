@@ -76,6 +76,7 @@ a {
     margin:0 auto;
     background-color:#1a1a1a;
     color:#ccc;
+    cursor:move;
 }
 
 .text {
