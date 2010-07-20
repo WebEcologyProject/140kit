@@ -29,12 +29,16 @@ ActionController::Routing::Routes.draw do |map|
   map.login '/login', :controller => 'account', :action => 'login'
   map.logout '/logout', :controller => 'account', :action => 'logout'
   
-  map.rgraph '/rgraph/:collection_id/:style', :controller => 'networks', :action => 'rgraph'
-  map.rgraph_with_logic '/rgraph/:collection_id/:style/:logic', :controller => 'networks', :action => 'rgraph'
+  
+  map.dgraph '/dgraph/:collection_id/:style', :controller => 'networks', :action => 'dgraph'
+  map.dgraph_with_logic '/dgraph/:collection_id/:style/:logic', :controller => 'networks', :action => 'dgraph'
 
   map.networks '/networks', :controller => 'networks', :action => 'index'
-  map.network '/networks/:collection_id/:style', :controller => 'networks', :action => 'show'
-  map.network_with_logic '/networks/:collection_id/:style/:logic', :controller => 'networks', :action => 'show'
+  map.rgraph '/networks/:collection_id/:style', :controller => 'networks', :action => 'show'
+  map.rgraph_with_logic '/networks/:collection_id/:style/:logic', :controller => 'networks', :action => 'show'
+  
+  map.flare '/networks/:collection_id/:style', :controller => 'networks', :action => 'flare'
+  map.flare_with_logic '/networks/:collection_id/:style/:logic', :controller => 'networks', :action => 'flare'
   
   map.netwerk '/netwerks/:collection_id/:style', :controller => 'networks', :action => 'sh0w'
   map.netwerk_with_logic '/netwerks/:collection_id/:style/:logic', :controller => 'networks', :action => 'sh0w'

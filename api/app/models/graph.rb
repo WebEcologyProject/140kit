@@ -47,11 +47,11 @@ end
 
 def self.to_rgraph_json(graph_data, params)
   if graph_data.class == Graph
-    return Rails.cache.read(get_cached(cache_file, "networks", params[:format], params[:logic]))
+    return Rails.cache.read(graph_data.get_cached("networks", params[:format], params[:logic]))
   else
     graph = Graph.find(graph_data.first.graph_id)
     if graph.collection.finished && graph.collection.analyzed
-      return Rails.cache.fetch(get_cached(cache_file, "networks", params[:format], params[:logic])) { Graph.fetch_rgraph_json(graph_data, params)}
+      return Rails.cache.fetch(graph.get_cached("networks", params[:format], params[:logic])) { Graph.fetch_rgraph_json(graph_data, params)}
     else
       return fetch_rgraph_json(graph_data, params[:logic])
     end      

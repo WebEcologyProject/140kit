@@ -13,30 +13,31 @@ class NetworksController < ApplicationController
     end
   end
   
-  def rgraph
+  def show
     @collection = Collection.find(params[:collection_id])
     # @api_url = "http://#{API_URL}/networks/#{params[:collection_id]}/#{params[:style]}.graphml"
-    @api_url = "http://#{API_URL}/networks/#{params[:collection_id]}/#{params[:style]}.json"
+    api_suffix = "/networks/#{params[:collection_id]}/#{params[:style]}.json"
     logger.debug(params.inspect)
     if params[:logic].nil?
       params[:logic] = "conn_comp:0"
     elsif !params[:logic].include?("conn_comp:")
       params[:logic] += "|conn_comp:0"
     end
-    @api_url += "?logic="
-    @api_url += "conn_comp:0|" if !params[:logic].include?("conn_comp:")
-    @api_url += "#{params[:logic]}"
+    api_suffix += "?logic="
+    api_suffix += "conn_comp:0|" if !params[:logic].include?("conn_comp:")
+    api_suffix += "#{params[:logic]}"
     for param in params[:logic].split('|')
       kv = param.split(':')
       params[kv[0]] = kv[1]
     end
     logger.debug(params.inspect)
-    
-    logger.debug("\napi_url: #{URI.parse(URI.encode(@api_url))}")
-    @json = open(URI.parse(URI.encode(@api_url))).read
+    internal_call = "http://#{API_URL}#{api_suffix}"
+    @api_url = "http://api.140kit.com#{api_suffix}"
+    logger.debug("\napi_url: #{URI.parse(URI.encode(internal_call))}")
+    @json = open(URI.parse(URI.encode(internal_call))).read
   end
   
-  def show
+  def flare
     @collection = Collection.find(params[:collection_id])
     @api_url = "http://#{API_URL}/networks/#{params[:collection_id]}/#{params[:style]}.graphml"
     if !params[:logic].nil?
@@ -100,7 +101,7 @@ class NetworksController < ApplicationController
     end
     logic.chop!.chop!.chop! if !logic.empty?
     respond_to do |format|
-      format.html { redirect_to "/rgraph/#{collection_id}/#{style}/#{logic}" }
+      format.html { redirect_to "/networks/#{collection_id}/#{style}/#{logic}" }
     end
   end
   

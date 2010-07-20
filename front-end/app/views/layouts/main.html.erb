@@ -7,12 +7,12 @@
   <title>140kit : <%= @page_title.nil? ? controller.controller_name+" : "+controller.action_name : @page_title %></title>
   <link rel="shortcut icon" href="/favicon.gif" />
   <% if controller.controller_name == "networks" -%>
-    <% if controller.action_name == "rgraph" -%>
+    <% if controller.action_name == "show" -%>
       <%= stylesheet_link_tag 'base' %>
       <%= stylesheet_link_tag 'rgraph' %>
       <!--[if IE]><script language="javascript" type="text/javascript" src="../../Extras/excanvas.js"></script><![endif]-->
       <%= javascript_include_tag 'jit' %>
-      <%= javascript_include_tag 'example1' %>
+      <%= javascript_include_tag 'rgraph' %>
     <% else -%>
       <%= javascript_include_tag 'swfobject' %>
     <% end -%>
