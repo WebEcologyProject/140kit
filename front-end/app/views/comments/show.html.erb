@@ -1,9 +1,11 @@
 <% researcher = @comment.researcher -%>
 <h1>Ticket #<%= @comment.id %></h1>
 <p>
-  <b>From:</b>
-  <%= link_to researcher.user_name, researcher %>
-  (<%= link_to researcher.email, "mailto:#{researcher.email}" %>)
+  <% if researcher -%>
+    <b>From:</b>
+    <%= link_to researcher.user_name, researcher %>
+    (<%= link_to researcher.email, "mailto:#{researcher.email}" %>)
+  <% end -%>
 </p>
 <p>
   <b>Problem:</b>

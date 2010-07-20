@@ -17,7 +17,7 @@ class FilePathing
     `zip -r -9 -j #{folder} #{folder}`
     final_path = "#{Environment.storage_path}/#{sub_dir}/".gsub("//", "/")
     FilePathing.make_directories(sub_dir)
-    FilePathing.submit_file(folder, final_path)
+    FilePathing.submit_file(folder+".zip", final_path)
     FilePathing.remove_folder(parent_dir)
   end
   
@@ -28,11 +28,11 @@ class FilePathing
     attempt = ""
     case Environment.storage_type
     when "local"
-      attempt = "mv #{folder}.zip ../../#{final_path}"
+      attempt = "mv #{folder} ../../#{final_path}"
       exception_message = "mkdir for #{attempt} failed after #{attempts+1} tries."
     when "remote"
       #This check actually fails since return of rsync message is ALWAYS empty string?
-      attempt = "rsync -r #{folder}.zip #{Environment.storage_ssh}:#{final_path}"
+      attempt = "rsync -r #{folder} #{Environment.storage_ssh}:#{final_path}"
       exception_message = "rsync for #{attempt} failed after #{attempts+1} tries."
     end
     while !sent

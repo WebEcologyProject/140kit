@@ -54,6 +54,15 @@ class ResearchersController < ApplicationController
     @researcher = Researcher.find_by_user_name(params[:user_name])
     @page_title = "#{@researcher.user_name}'s page"
     @collections = Collection.paginate :page => params[:page], :conditions => {:researcher_id => @researcher.id, :single_dataset => false}, :per_page => 10
+    respond_to do |format|
+      format.html
+      format.xml  { render :xml => inst_var }
+      format.js {
+        render :update do |page|
+          page.replace_html 'main', :partial => "/collections/collections_index"
+        end
+      }
+    end
   end
 
   def promote

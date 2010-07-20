@@ -9,7 +9,6 @@ module AnalysisFlow
     self.check_like_terms
     self.check_trends
     self.tweet_user_count
-
     self.do_analysis_work
   end
     
@@ -210,8 +209,12 @@ module AnalysisFlow
   end
   
   def self.route(metadata)
-    puts "#{metadata.function}(#{metadata.collection_id}, \"#{metadata.save_path}\")"
-    eval("#{metadata.function}(#{metadata.collection_id}, \"#{metadata.save_path}\")")
+    if Analysis.conditional(metadata.collection) != " where "
+      puts "#{metadata.function}(#{metadata.collection_id}, \"#{metadata.save_path}\")"
+      eval("#{metadata.function}(#{metadata.collection_id}, \"#{metadata.save_path}\")")
+    else
+      Analysis.remove_broken_collections(metadata.collection)
+    end
   end
   
   def self.grow_branch(scrape, term)
