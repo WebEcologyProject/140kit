@@ -66,8 +66,10 @@ if !run_type.nil?
     $w.poll
   end
 else
+  debugger
+  
   Environment.load_production
-  Environment.load_testing
+  Environment.load_test
   Environment.load_development
   Environment.set_db(Environment.pro_db)
   puts "--Runtime Environment Loaded in IRB--\n"

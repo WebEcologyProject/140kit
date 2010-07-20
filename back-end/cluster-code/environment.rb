@@ -49,8 +49,8 @@ class Environment
     Environment.read_from_config("production", :@@pro_db)
   end
   
-  def self.load_testing
-    settings = Environment.read_from_config("testing", :@@test_db)
+  def self.load_test
+    settings = Environment.read_from_config("test", :@@test_db)
   end
   
   def self.load_development
