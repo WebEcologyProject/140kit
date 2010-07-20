@@ -17,7 +17,7 @@
     <th>Status</th>
   </tr>
 <% for collection in @collections -%>
-  <% if !collection.mothballed || (logged_in? && (collection.mothballed && collection.researcher == current_researcher)) %>
+  <% if !collection.mothballed || (logged_in? && (collection.mothballed && (collection.researcher == current_researcher || current_researcher.admin?))) %>
     <%= render :partial => "/collections/collection", :locals => {:collection => collection, :show_researchers => show_researchers} %>
   <% end -%>    
 <% end -%>
