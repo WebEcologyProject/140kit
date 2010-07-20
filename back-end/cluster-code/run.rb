@@ -66,8 +66,6 @@ if !run_type.nil?
     $w.poll
   end
 else
-  debugger
-  
   Environment.load_production
   Environment.load_test
   Environment.load_development

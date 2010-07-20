@@ -5,7 +5,6 @@ def retweet_graph(collection_id, save_path)
   last_id = 0
   num = 0
   finished = false
-  debugger
   while !finished
     query = "select screen_name,twitter_id,in_reply_to_status_id,created_at,in_reply_to_screen_name from tweets"+Analysis.conditional(collection)+" and in_reply_to_screen_name != '' and twitter_id > #{last_id} order by twitter_id asc limit #{MAX_ROW_COUNT_PER_BATCH}"
     edges = []
