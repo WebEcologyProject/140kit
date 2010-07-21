@@ -38,7 +38,7 @@ def basic_histograms(collection_id, save_path)
       graph_point["collection_id"] = collection.id
       ugly_graph_points << graph_point
     end
-    graph_points = graph_points+Pretty.pretty_up_labels(k, ugly_graph_points) if !ugly_graph_points.blank?
+    graph_points = graph_points+Pretty.pretty_up_labels(k, ugly_graph_points) if !ugly_graph_points.nil? && !ugly_graph_points.empty?
     finished_graphs << g
   end
   Database.update_all({"graph_points" => graph_points})
