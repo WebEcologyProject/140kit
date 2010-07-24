@@ -16,10 +16,10 @@
         Sorry, we ran the re-tweet algorithm on this <%= @collection.single_dataset ? "dataset" : "collection" %>, but could not find any re-tweets.
       <% else -%>
         <% if @edge_count > 1000 -%>
-    <%= link_to "Retweets", "/rgraph/#{@collection.id}/retweets" %>      
+    <%= link_to "Retweets", "/networks/#{@collection.id}/retweets" %>      
     <!-- <%= link_to "Retweets", :controller => 'networks', :action => 'show', :collection_id => @collection.id, :style => 'retweets', :logic => "limit:1000" %> -->
         <% else -%>
-    <%= link_to "Retweets", "/rgraph/#{@collection.id}/retweets" %>      
+    <%= link_to "Retweets", "/networks/#{@collection.id}/retweets" %>      
     <!-- <%= link_to "Retweets", :controller => 'networks', :action => 'show', :collection_id => @collection.id, :style => 'retweets' %> -->
         <% end -%>
     (<b><%= @edge_count %></b> re-tweets)
