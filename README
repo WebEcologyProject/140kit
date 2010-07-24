@@ -4,9 +4,7 @@ Setting up the front end:
 
 			api/config/database.yml
 			front-end/config/database.yml
-			back-end/config/production.txt
-			back-end/config/development.txt
-			back-end/config/test.txt
+			back-end/config/config.yml
 		
 	 You will find examples of each file in the same directory as the file to be created. Sorry we have so many config files, we're planning to centralize them soon. 	
 	
@@ -29,7 +27,9 @@ Collecting and analyzing your first dataset:
 
 3. 140kit needs at least one Twitter Account to use for streaming data collection. To specify an account, click on "Twitter Accounts Management" and create a new auth_user with an existing Twitter account and password. For testing and such, you can probably just use your personal twitter account (you ARE on Twitter, right??)
 
-4. Now you need to create a new streaming instance on your machine--streaming instances continuously run, checking for data collection jobs ('scrapes') that need to be completed. To create an instance: 
+4. Now you need to create a new streaming instance on your machine--streaming instances continuously run, checking for data collection and analysis jobs ('scrapes') that need to be completed. To create an instance: 
+
+		a) 
 
 	
 		
