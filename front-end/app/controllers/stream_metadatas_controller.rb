@@ -1,11 +1,5 @@
 class StreamMetadatasController < ApplicationController
-  
-  def collection_paginate
-    @collection = Collection.find(params[:id])
-    sm_ids = @collection.stream_metadata_ids
-    index({:id => sm_ids}, 10, 'dataDisplay')
-  end
-  
+    
   def index(conditions={}, per_page=10, element_id='main')
     if params[:id].nil?
       psmid = params[:previous_sm_id].nil? ? 0 : params[:previous_sm_id]

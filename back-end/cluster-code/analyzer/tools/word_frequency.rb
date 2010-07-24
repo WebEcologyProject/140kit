@@ -13,10 +13,10 @@ def word_frequency(collection_id, save_path)
   end
   objects.free
   Database.terminate_spooling
-  hashtags_graph = generate_graph("word_frequency", "hashtags", collection_id)
-  mentions_graph = generate_graph("word_frequency", "mentions", collection_id)
-  no_stop_words_graph = generate_graph("word_frequency", "significant_words", collection_id)
-  urls_graph = generate_graph("word_frequency", "urls", collection_id)
+  hashtags_graph = generate_graph({:style => "word_frequency", :title => "hashtags", :collection_id => collection_id})
+  mentions_graph = generate_graph({:style => "word_frequency", :title => "mentions", :collection_id => collection_id})
+  no_stop_words_graph = generate_graph({:style => "word_frequency", :title => "significant_words", :collection_id => collection_id})
+  urls_graph = generate_graph({:style => "word_frequency", :title => "urls", :collection_id => collection_id})
   hashtags_graph_points = hashes_to_graph_points(hashtags(frequency_listing), collection, hashtags_graph)
   mentions_graph_points = hashes_to_graph_points(mentions(frequency_listing), collection, mentions_graph)
   no_stop_words_graph_points = hashes_to_graph_points(no_stop_words(frequency_listing), collection, no_stop_words_graph)
@@ -33,7 +33,7 @@ def word_frequency(collection_id, save_path)
   FilePathing.push_tmp_folder(save_path)
   recipient = collection.researcher.email
   subject = "#{collection.researcher.user_name}, your word frequency charts for the \"#{collection.name}\" data set is complete."
-  message_content = "Your CSV files are ready for download. You can grab them by clicking this link: <a href=\"http://140kit.com/files/raw_data/graph_points/#{collection.folder_name}.zip\">http://140kit.com/files/raw_data/graph_points/#{collection.folder_name}.zip</a>."
+  message_content = "Your CSV files are ready for download. You can grab them by visiting the collection's page: <a href=\"http://140kit.com/#{collection.researcher.user_name}/collections/#{collection.id}\">http://140kit.com/#{collection.researcher.user_name}/collections/#{collection.id}</a>."
   send_email(recipient, subject, message_content, collection)
 end
 

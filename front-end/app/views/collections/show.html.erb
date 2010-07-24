@@ -1,6 +1,6 @@
 <% case @collection.scrape_method -%>
 <% when "Stream" -%>
-  <h1>Collection for term "<%= @collection.name %>"</h1>
+  <h1>Collection for term "<%= @collection.name %>"<% if @collection.single_dataset %>(Term: "<%= @collection.metadata.term %>")<% end %></h1>
 <% when "REST" -%>
   <h1>Collection for user group "<%= @collection.name %>"</h1>
 <% when "Curate" -%>
@@ -17,9 +17,6 @@
 
 <% if @collection.finished -%>
 
-  <% if !@collection.analyzed -%>
-    <p><b>Warning:</b> Not all of the analysis functions have finished for this collection. We'll let you click around, but don't get mad if some things are missing.</p>
-  <% end -%>
   <%= render :partial => "management" %>
   <%= render :partial => "overview" %>
   <%= render :partial => "explore" %>
@@ -38,7 +35,7 @@
         <% end -%>
       <% elsif !@collection.rest_metadatas.empty? -%>
         <% if !@collection.rest_metadatas.first.finished -%>
-          We're still working through the "<%= @collection.name %>" user set. The Data being used in this collection is located in our filesystem <%= link_to "here", "#{@collection.rest_metadatas.first.source_data.gsub("public", "")}" %>.
+          We're still working through the "<%= @collection.name %>" user set. The Data being used in this collection is located in our filesystem <%= link_to "here", "/files/#{@collection.rest_metadatas.first.source_data}" %>.
         <% else -%>
           We've captured all of your data for your user set, and are now flipping the collection over for analysis. It should start appearing momentarily.
         <% end -%>

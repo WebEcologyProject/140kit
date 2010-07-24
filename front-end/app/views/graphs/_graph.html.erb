@@ -1,10 +1,10 @@
 <div id="dataDisplay">
-  <h1>Analytics: <%= title.split("_").collect{|k| k.capitalize }.join(" ") %></h1>
+  <h1>Analytics: <%= title.split("_").collect{|k| k.capitalize }.join(" ") %><% if subtitle %>, <%= subtitle %><% end %></h1>
   <script type="text/javascript">
     function graphData() {
       var query;
       query = new google.visualization.Query(
-        "http://<%= API_URL %>/graphs/<%= collection_id %>/<%= style %>/<%= title %>.json"
+        "http://<%= API_URL %>/graphs/google/<%= graph_id %>.json"
       );
       query.send(graphDataHandler);
     }
@@ -33,7 +33,7 @@
   function graphData() {
       var query;
       query = new google.visualization.Query(
-        &quot;http://<%= API_URL %>/graphs/<%= collection_id %>/<%= style %>/<%= title %>.json&quot;
+        &quot;http://<%= API_URL %>/graphs/google/<%= title %>.json&quot;
       );
       query.send(graphDataHandler);
   }

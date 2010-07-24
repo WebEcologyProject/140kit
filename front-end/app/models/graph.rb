@@ -19,6 +19,8 @@ class Graph < ActiveRecord::Base
       return "LineChart", "title: 'Account Creation', titleX: 'Date of Account Creation', titleY: 'Number of Users Created'" + universals
     when "user_favourites_count"
       return "LineChart", "title: 'User Favourites Counts', titleX: '# of Users with Y favourites', titleY: '# of favourites'" + universals
+    when "user_statuses_count"
+      return "LineChart", "title: 'User Statuses Counts', titleX: '# of Users with Y statuses', titleY: '# of statuses'" + universals
     when "user_followers_count"
       return "LineChart", "title: 'User Follower Counts', titleX: '# of Users with Y followers', titleY: '# of followers'" + universals
     when "user_friends_count"

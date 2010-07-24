@@ -38,6 +38,7 @@ class Analysis
       query += parameters
     end
     query += " group by #{attribute} order by count(*) desc;"
+    puts query
     result = Environment.db.query(query)
     hash = {}
     1.upto(result.num_rows) do |iii|

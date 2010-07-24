@@ -132,7 +132,8 @@ class Database
                 k.each do |key|
                   conditional += " and ("
                   v.each do |val|
-                    conditional += " #{key} = '#{SQLParser.prep_attribute(val)}' or "
+                    vv = SQLParser.prep_attribute(val)
+                    conditional += vv == "NULL" ? " #{key} is NULL or " : " #{key} = #{vv} or "
                   end
                   conditional.chop!.chop!.chop!.chop!
                   conditional += ")"
@@ -140,7 +141,8 @@ class Database
               else
                 conditional = " and ("
                 k.each do |key|
-                  conditional += " #{key} = '#{SQLParser.prep_attribute(v)}' or "
+                  vv = SQLParser.prep_attribute(v)
+                  conditional += vv == "NULL" ? " #{key} is NULL or " : " #{key} = #{vv} or "
                 end
                 conditional.chop!.chop!.chop!.chop!
                 conditional += ")"
@@ -149,12 +151,14 @@ class Database
               if v.class == Array && v.length > 1
                 conditional += " and ("
                 v.each do |val|
-                  conditional += " #{k} = '#{SQLParser.prep_attribute(val)}' or "
+                  vv = SQLParser.prep_attribute(val)
+                  conditional += vv == "NULL" ? " #{k} is NULL or " : " #{k} = #{vv} or "
                 end
                 conditional.chop!.chop!.chop!.chop!
                 conditional += ")"
               else
-                conditional += " and #{k} = '#{SQLParser.prep_attribute(v)}' "
+                vv = SQLParser.prep_attribute(v)
+                conditional += vv == "NULL" ? " and #{k} is NULL " : " and #{k} = #{vv} "
               end
             end
           }
@@ -217,13 +221,12 @@ class Database
     while query_result == false && Time.now.to_i-t <= TIMEOUT_MAX
       begin
         if retry_step
-          puts "Retrying query; failed with exception: #{e}"
+          puts "Retrying query; failed with exception: #{error}"
         end
         query_result = connection.query(query)
       rescue => e
         error = e.to_s
         retry_step = true
-        retry
       end
     end
     if query_result == false

@@ -1,0 +1,27 @@
+<% @collection = collection || @collection -%>
+<% @am = am || @am -%>
+<h4 class="accordion_toggle">Time Based Summary</h4>
+<div id="time_based_summary_menu">
+  <% for year in @am.gather_years %>
+    <% months = @am.gather_months(year) %>
+      <span id="<%= year %>">
+        <% other_functions = (@am.gather_years-[year]).collect{|y|"$('#{y}MonthsUnselectable').hide()\;$('#{y}MonthsSelectable').show()\;"} %>
+        <span id="<%= year %>MonthsSelectable"><%= link_to_remote(year, :replace => "finalMenu", :url => show_year_report_url(@collection.id, year), :complete => "$('#{year}MonthsSelectable').hide();$('#{year}MonthsUnselectable').show();#{other_functions}") %></span>
+        <span id="<%= year %>MonthsUnselectable" style="display:none;"><%= year %></span>
+        <% if !months.empty? %>
+        <% other_functions = (@am.gather_years-[year]).collect{|y|"$('#{y}MonthsContract').hide()\;$('#{y}MonthsExpand').show()\;"} %>
+          <span id="<%= year %>MonthsExpand"><%= link_to_remote("+",  :replace => year, :url => month_report_menu_url(@collection.id, "months", year), :complete => "$('#{year}MonthsExpand').hide();$('#{year}MonthsContract').show();#{other_functions}") %></span>
+          <span id="<%= year %>MonthsContract" style="display:none;">-</span>
+        <% end %>
+        <% if @am.gather_years.last != year %>
+           |
+        <% else %>
+          <br />
+        <% end %>
+      </span>
+  <% end %> 
+</div>
+<div id="months"></div>
+<div id="dates"></div>
+<div id="hours"></div>
+<div id="finalMenu"></div>

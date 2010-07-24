@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100716221216) do
+ActiveRecord::Schema.define(:version => 20100723233840) do
 
   create_table "analysis_metadatas", :force => true do |t|
     t.boolean "finished",      :default => false, :null => false
@@ -142,16 +142,21 @@ ActiveRecord::Schema.define(:version => 20100716221216) do
     t.string   "title",                            :null => false
     t.string   "style",                            :null => false
     t.integer  "collection_id", :default => 0,     :null => false
-    t.string   "hour",                             :null => false
-    t.string   "minute",                           :null => false
-    t.string   "date",                             :null => false
+    t.integer  "month"
+    t.integer  "year"
     t.boolean  "written",       :default => false, :null => false
     t.string   "lock",                             :null => false
     t.boolean  "flagged",       :default => false, :null => false
     t.datetime "time_slice"
+    t.integer  "hour"
+    t.integer  "date"
   end
 
-  add_index "graphs", ["title", "style", "collection_id"], :name => "title_style_collection", :unique => true
+  add_index "graphs", ["hour"], :name => "hour"
+  add_index "graphs", ["month", "year", "hour"], :name => "day_2"
+  add_index "graphs", ["month"], :name => "month"
+  add_index "graphs", ["title", "style", "collection_id", "time_slice", "year", "month", "date", "hour"], :name => "unique_graph", :unique => true
+  add_index "graphs", ["year"], :name => "year"
 
   create_table "images", :force => true do |t|
     t.string  "parent_id"
@@ -291,28 +296,29 @@ ActiveRecord::Schema.define(:version => 20100716221216) do
     t.integer  "user_id",                 :limit => 8, :default => 0,                  :null => false
     t.integer  "scrape_id",                            :default => 0,                  :null => false
     t.string   "screen_name",                                                          :null => false
-    t.string   "location",                                                             :null => false
-    t.integer  "in_reply_to_status_id",   :limit => 8, :default => 0,                  :null => false
-    t.integer  "in_reply_to_user_id",     :limit => 8, :default => 0,                  :null => false
+    t.string   "location"
+    t.integer  "in_reply_to_status_id",   :limit => 8, :default => 0
+    t.integer  "in_reply_to_user_id",     :limit => 8, :default => 0
     t.string   "favorited",                                                            :null => false
     t.string   "truncated",                                                            :null => false
-    t.string   "in_reply_to_screen_name",                                              :null => false
+    t.string   "in_reply_to_screen_name"
     t.datetime "created_at"
-    t.string   "lat",                                                                  :null => false
-    t.string   "lon",                                                                  :null => false
+    t.string   "lat"
+    t.string   "lon"
     t.integer  "metadata_id",                          :default => 0,                  :null => false
     t.string   "metadata_type",                        :default => "stream_metadatas", :null => false
     t.string   "instance_id"
     t.boolean  "flagged",                              :default => false,              :null => false
   end
 
-  add_index "tweets", ["metadata_id", "metadata_type"], :name => "index_tweets_on_metadata_id_and_metadata_type"
-  add_index "tweets", ["metadata_id", "scrape_id"], :name => "index_tweets_on_metadata_id_and_scrape_id"
-  add_index "tweets", ["metadata_id"], :name => "index_tweets_on_metadata_id"
-  add_index "tweets", ["metadata_type", "scrape_id", "metadata_id", "screen_name"], :name => "tweets_twitter_id_scrape_id_metadata_id", :unique => true
-  add_index "tweets", ["scrape_id"], :name => "index_tweets_on_scrape_id"
-  add_index "tweets", ["screen_name"], :name => "index_tweets_on_screen_name"
-  add_index "tweets", ["text"], :name => "text"
+  add_index "tweets", ["created_at"], :name => "created_at"
+  add_index "tweets", ["metadata_id", "metadata_type"], :name => "metadata_id_type"
+  add_index "tweets", ["metadata_id", "scrape_id"], :name => "tweet_metadata_id_scrape_id"
+  add_index "tweets", ["metadata_id"], :name => "tweet_metadata_id"
+  add_index "tweets", ["scrape_id"], :name => "scrape_id"
+  add_index "tweets", ["screen_name"], :name => "screen_name"
+  add_index "tweets", ["twitter_id", "scrape_id", "metadata_id", "metadata_type"], :name => "tweets_twitter_id_scrape_id_metadata_id_metadata_type", :unique => true
+  add_index "tweets", ["twitter_id", "scrape_id", "metadata_id"], :name => "tweets_twitter_id_scrape_id_metadata_id", :unique => true
 
   create_table "users", :force => true do |t|
     t.integer  "twitter_id",                   :default => 0,                  :null => false
@@ -348,8 +354,10 @@ ActiveRecord::Schema.define(:version => 20100716221216) do
     t.string   "metadata_type",                :default => "stream_metadatas", :null => false
     t.string   "instance_id",                                                  :null => false
     t.boolean  "flagged",                      :default => false
+    t.integer  "listed_count"
   end
 
+  add_index "users", ["created_at"], :name => "created_at"
   add_index "users", ["metadata_id", "metadata_type"], :name => "metadata_id_type"
   add_index "users", ["metadata_id", "scrape_id"], :name => "user_metadata_id_scrape_id"
   add_index "users", ["metadata_id"], :name => "user_metadata_id"

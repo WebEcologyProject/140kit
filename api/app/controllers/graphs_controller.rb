@@ -31,6 +31,14 @@ class GraphsController < ApplicationController
       format.json  { render :json => @graphs.to_json }
     end
   end
+
+  def google_graph_query
+    @graph = Graph.find(params[:id])
+    respond_to do |format|
+      format.xml  { render :xml => Graph.to_google_xml(@graph, params) }
+      format.json  { render :json => Graph.to_google_json(@graph, params) }
+    end    
+  end
   
   def graph_query
     original_params = params.dup
@@ -43,11 +51,11 @@ class GraphsController < ApplicationController
   
   def network_query
     original_params = params.dup
-    @graphs = super(params)
+    results = super(params)
     respond_to do |format|
-      format.xml  { render :xml => Graph.to_graphml(@graphs, original_params) }
-      format.json  { render :json => Graph.to_rgraph_json(@graphs, original_params) }
-      format.graphml  { render :xml => Graph.to_graphml(@graphs, original_params) }
+      format.xml  { render :xml => results }
+      format.json  { render :json => results }
+      format.graphml  { render :graphml => results }
     end    
   end
   

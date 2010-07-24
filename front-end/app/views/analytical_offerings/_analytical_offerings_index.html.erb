@@ -5,7 +5,6 @@
   <h2>Analytical Offerings</h2>
   <% if !(@collection.analysis_metadatas.length == @analytical_offerings.length) -%>
     <% for analytical_offering in @analytical_offerings -%>
-      <% debugger %>
       <% if !@collection.analysis_metadatas.collect{|am| am.function }.include?(analytical_offering.function) && analytical_offering.enabled -%>
         <%= render :partial => "/analytical_offerings/analytical_offering", :locals => {:analytical_offering => analytical_offering, :collection => @collection} %>
       <% else -%>
@@ -13,8 +12,7 @@
       <% end -%>
     <% end -%>
 <% else -%>
-  You have added all possible jobs. It's probably time to <%= link_to "freeze your collection.", collection_freeze_url(@collection.id), :confirm => "Warning, you can't add any more analysis to this job if you press OK. Still want to proceed?" %>
-
+  You have added all possible jobs.
 <% end -%>
   <%= will_paginate @analytical_offerings, :class => 'pagination ajax' %>
 <% end -%>

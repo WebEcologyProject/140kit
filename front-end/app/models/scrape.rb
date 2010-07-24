@@ -5,7 +5,7 @@ class Scrape < ActiveRecord::Base
   has_many :stream_metadatas
   belongs_to :collection, :foreign_key => 'primary_collection_id'
   before_save :derive_length
-  before_save :generate_humanized_length
+  before_create :generate_humanized_length
   after_create :fill_out_secondary_data
   
   def validate_on_create
@@ -65,7 +65,7 @@ class Scrape < ActiveRecord::Base
       errors.add("Source Data: " " Your data was of a bad type: #{params[:scrape][:uploaded_data]}")
     end
     params[:scrape].delete(:uploaded_data)
-    params[:scrape][:ref_data] = "public/files/source_data/#{researcher.user_name}/#{params[:scrape][:scrape_type].downcase.gsub(" ", "_")}/#{folder_name}/source_data.txt"
+    params[:scrape][:ref_data] = "/files/source_data/#{researcher.user_name}/#{params[:scrape][:scrape_type].downcase.gsub(" ", "_")}/#{folder_name}/source_data.txt"
     return params
   end
   
@@ -172,11 +172,17 @@ class Scrape < ActiveRecord::Base
     end
     self.humanized_length.chop!.chop! if !self.humanized_length.empty? && !self.humanized_length.nil?
   end
+  
   def self.valid(temp_data)
-    if temp_data.split(",").length > 1 || temp_data.split("\n").length > 1 || temp_data.split("\t").length > 1
+    if temp_data.split(/[,\t\n]/).length > 1
       return true
     else
-      return false
+      begin
+        result = JSON.parse(open("http://api.twitter.com/1/statuses/user_timeline.json?screen_name=#{temp_data.split(/[,\t\n]/)}&count=1").read)
+      rescue OpenURI::HTTPError
+        return false
+      end
+      return result.first["user"]["screen_name"].downcase == temp_data.split(",").first
     end
   end
 end

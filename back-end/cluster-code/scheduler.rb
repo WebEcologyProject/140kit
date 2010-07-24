@@ -72,7 +72,7 @@ class Scheduler
       if metadatas.length == 0
         finished_metadatas = AnalysisMetadata.find_all({:collection_id => collection.id, :finished => true})
         total_metadatas = AnalysisMetadata.find_all({:collection_id => collection.id})
-        if finished_metadatas.length == total_metadatas.length
+        if finished_metadatas.length == AnalyticalOffering.count({:enabled => true}) && !collection.analyzed
           collection.analyzed = true
           collection.save
         end
