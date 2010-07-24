@@ -142,18 +142,21 @@ ActiveRecord::Schema.define(:version => 20100723233840) do
     t.string   "title",                            :null => false
     t.string   "style",                            :null => false
     t.integer  "collection_id", :default => 0,     :null => false
-    t.integer  "month"
-    t.integer  "year"
+    t.integer  "month",                            :null => false
+    t.integer  "year",                             :null => false
     t.boolean  "written",       :default => false, :null => false
     t.string   "lock",                             :null => false
     t.boolean  "flagged",       :default => false, :null => false
     t.datetime "time_slice"
-    t.integer  "hour"
+    t.integer  "hour",                             :null => false
     t.integer  "date"
   end
 
   add_index "graphs", ["hour"], :name => "hour"
   add_index "graphs", ["month", "year", "hour"], :name => "day_2"
+  add_index "graphs", ["month", "year", "hour"], :name => "month_2"
+  add_index "graphs", ["month", "year"], :name => "month_3"
+  add_index "graphs", ["month", "year"], :name => "month_4"
   add_index "graphs", ["month"], :name => "month"
   add_index "graphs", ["title", "style", "collection_id", "time_slice", "year", "month", "date", "hour"], :name => "unique_graph", :unique => true
   add_index "graphs", ["year"], :name => "year"
@@ -296,22 +299,21 @@ ActiveRecord::Schema.define(:version => 20100723233840) do
     t.integer  "user_id",                 :limit => 8, :default => 0,                  :null => false
     t.integer  "scrape_id",                            :default => 0,                  :null => false
     t.string   "screen_name",                                                          :null => false
-    t.string   "location"
-    t.integer  "in_reply_to_status_id",   :limit => 8, :default => 0
-    t.integer  "in_reply_to_user_id",     :limit => 8, :default => 0
+    t.string   "location",                                                             :null => false
+    t.integer  "in_reply_to_status_id",   :limit => 8, :default => 0,                  :null => false
+    t.integer  "in_reply_to_user_id",     :limit => 8, :default => 0,                  :null => false
     t.string   "favorited",                                                            :null => false
     t.string   "truncated",                                                            :null => false
-    t.string   "in_reply_to_screen_name"
+    t.string   "in_reply_to_screen_name",                                              :null => false
     t.datetime "created_at"
-    t.string   "lat"
-    t.string   "lon"
+    t.string   "lat",                                                                  :null => false
+    t.string   "lon",                                                                  :null => false
     t.integer  "metadata_id",                          :default => 0,                  :null => false
     t.string   "metadata_type",                        :default => "stream_metadatas", :null => false
     t.string   "instance_id"
     t.boolean  "flagged",                              :default => false,              :null => false
   end
 
-  add_index "tweets", ["created_at"], :name => "created_at"
   add_index "tweets", ["metadata_id", "metadata_type"], :name => "metadata_id_type"
   add_index "tweets", ["metadata_id", "scrape_id"], :name => "tweet_metadata_id_scrape_id"
   add_index "tweets", ["metadata_id"], :name => "tweet_metadata_id"
@@ -357,7 +359,6 @@ ActiveRecord::Schema.define(:version => 20100723233840) do
     t.integer  "listed_count"
   end
 
-  add_index "users", ["created_at"], :name => "created_at"
   add_index "users", ["metadata_id", "metadata_type"], :name => "metadata_id_type"
   add_index "users", ["metadata_id", "scrape_id"], :name => "user_metadata_id_scrape_id"
   add_index "users", ["metadata_id"], :name => "user_metadata_id"

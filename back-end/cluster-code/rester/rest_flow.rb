@@ -41,7 +41,6 @@ module RestFlow
   end
   
   def self.create_temp_file
-    debugger
     `mkdir ../tmp_files/#{$w.instance_id}`
     source_data = `curl #{SITE_URL}#{$w.rest_instance.metadata.source_data}`
     f = File.open("../tmp_files/#{$w.instance_id}/source_data.txt", "w")

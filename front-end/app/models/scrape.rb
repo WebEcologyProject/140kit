@@ -137,6 +137,8 @@ class Scrape < ActiveRecord::Base
   end
   
   def derive_length
+    #PATCH
+    self.branching = false if self.scrape_type == "User Source Scrape"
     self.length = run_ends.to_i-Time.now.to_i
     self.last_branch_check = Time.now
     self.folder_name = "#{self.name.downcase.gsub(".", "").gsub(" ", "_").gsub(/\W/, "")}-#{Time.now.strftime("%Y-%m-%d__%H:%M:%S")}"
