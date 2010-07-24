@@ -1,0 +1,39 @@
+<% if selection == "months" %>
+  <% for month in @items %>
+    <% dates = @am.gather_dates(year, month) %>
+    <% other_functions = (@am.gather_months(year)-[month]).collect{|m| "$('#{m}DatesUnselectable').hide()\;$('#{m}DatesSelectable').show()\;"} %>
+    <span id="<%= month %>DatesSelectable"><%= link_to_remote(number_to_month(month), :replace => "finalMenu", :url => show_month_report_url(collection_id, year, month), :complete => "$('#{month}DatesSelectable').hide();$('#{month}DatesUnselectable').show();#{other_functions}") %></span>
+    <span id="<%= month %>DatesUnselectable" style="display:none;"><%= month %></span>
+    <% if !dates.empty? %>
+    <% other_functions = (@am.gather_months(year)-[month]).collect{|m| "$('#{m}DatesContract').hide()\;$('#{m}DatesExpand').show()\;"} %>
+      <span id="<%= month %>DatesExpand"><%= link_to_remote("+",  :replace => "dates", :url => date_report_menu_url(collection_id, "dates", year, month), :complete => "$('#{month}DatesExpand').hide();$('#{month}DatesContract').show();#{other_functions}") %></span>
+      <span id="<%= month %>DatesContract" style="display:none;">-</span>
+    <% end %>
+    <% if @items.last != month %>
+     | 
+    <% end %>
+  <% end %>
+<% elsif selection == "dates" %>
+  <% for date in @items %>
+    <% hours = @am.gather_hours(year, month, date) %>
+    <% other_functions = (@am.gather_dates(month, year)-[date]).collect{|d| "$('#{d}HoursUnselectable').hide()\;$('#{d}HoursSelectable').show()\;"} %>
+      <span id="<%= date %>HoursSelectable"><%= link_to_remote("+",  :replace => "hours", :url => hour_report_menu_url(collection_id, "dates", year, month, date), :complete => "$('#{date}HoursExpand').hide();$('#{date}HoursContract').show();#{other_functions}") %></span>
+      <span id="<%= date %>HoursUnselectable" style="display:none;"><%= date %></span>  
+    <%= link_to_remote(date, :replace => "finalMenu", :url => show_date_report_url(collection_id, year, month, date)) %>
+    <% if !hours.empty? %>
+    <% other_functions = (@am.gather_dates(month, year)-[date]).collect{|d| "$('#{d}HoursContract').hide()\;$('#{d}HoursExpand').show()\;"} %>
+      <span id="<%= date %>HoursExpand"><%= link_to_remote("+",  :replace => "hours", :url => hour_report_menu_url(collection_id, "dates", year, month, date), :complete => "$('#{date}HoursExpand').hide();$('#{date}HoursContract').show();#{other_functions}") %></span>
+      <span id="<%= date %>HoursContract" style="display:none;">-</span>
+    <% end %>
+    <% if @items.last != date %>
+     | 
+    <% end %>
+  <% end %>
+<% elsif selection == "hours" %>
+  <% for hour in @items %>
+      <%= link_to_remote(hour, :replace => "finalMenu", :url => show_hour_report_url(collection_id, year, month)) %>
+    <% if @items.last != hour %>
+     | 
+    <% end %>
+  <% end %>
+<% end %>

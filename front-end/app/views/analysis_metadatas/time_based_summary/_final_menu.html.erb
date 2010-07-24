@@ -1,0 +1,5 @@
+<ul>
+<% for graph in @graphs %>
+  <li><%= link_to_remote(graph.title.split("_").collect{|t| t.capitalize}.join(" "),  :replace => 'dataDisplay', :url => google_graph_url(graph.id)) %></li>
+<% end %>
+</ul>
