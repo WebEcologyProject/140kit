@@ -9,10 +9,9 @@ google.load('visualization', '1', {packages: ['table','barchart','columnchart','
   <% if @am.finished -%>
     <%=link_to "Download the CSV of Word Frequency Data", "http://#{FILE_URL}/files#{@am.save_path}#{@collection.folder_name}.zip" %><br />
     <ul>
-      <li><%= link_to_remote("Hashtags",  :replace => 'dataDisplay', :url => google_graph_url(@collection.id, "word_frequency", "hashtags")) %></li>
-      <li><%= link_to_remote("User Mentions",  :replace => 'dataDisplay', :url => google_graph_url(@collection.id, "word_frequency", "mentions")) %></li>
-      <li><%= link_to_remote("URLs",  :replace => 'dataDisplay', :url => google_graph_url(@collection.id, "word_frequency", "urls")) %></li>
-      <li><%= link_to_remote("Significant Words",  :replace => 'dataDisplay', :url => google_graph_url(@collection.id, "word_frequency", "significant_words")) %></li>
+      <% for graph in @am.graphs %>
+        <li><%= link_to_remote(graph.title.split("_").collect{|t| t.capitalize}.join(" "),  :replace => 'dataDisplay', :url => google_graph_url(graph.id)) %></li>
+      <% end %>
     </ul>
   <% else -%>  
     The Word Frequency charts for this dataset are not yet complete
