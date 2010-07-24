@@ -8,6 +8,14 @@ class Array
   def to_f
     self.collect{|x| x.to_i}
   end
+  def frequencies
+    new_val = {}
+    self.each do |s|
+      elem = s.to_s
+      new_val[elem].nil? ? new_val[elem]=1 : new_val[elem]+=1
+    end
+    return new_val
+  end
 end
 
 class String
@@ -92,6 +100,16 @@ class Hash
     hh = {}
     self.to_enum(:flat_each).collect { |k,v| [k.join("-"),v] }.collect {|attrib| hh[attrib[0]] = attrib[1]}
     return hh
+  end
+  
+  def highest
+    high_pair = self.max {|a,b| a[1] <=> b[1]}
+    return {high_pair[0] => high_pair[1]}
+  end
+  
+  def lowest
+    low_pair = self.min {|a,b| a[1] <=> b[1]}
+    return {low_pair[0] => low_pair[1]}
   end
   
 end

@@ -1,9 +1,9 @@
 class Pretty
-    def self.pretty_up_labels(graph_title, graphs)
-    case graph_title
-    when "tweet_location"
-      new_graphs = []
-      graphs.each{|g|
+    def self.pretty_up_labels(graph_style, graph_title, graphs)
+      case graph_title
+      when "tweet_location"
+        new_graphs = []
+        graphs.each{|g|
         case g["label"]
         when "ÜT:"
           if new_graphs.select{|g| g["label"] == "iPhone Geo Location"}.compact.length == 0
@@ -25,21 +25,23 @@ class Pretty
         new_graphs << g
       }
       return new_graphs.uniq
-    when "tweet_language"
-      graphs.collect{|graph| graph["label"] = Pretty.language(graph["label"])}
-    when "tweet_created_at"
-      graphs = Pretty.time_generalize(graphs)
-    when "tweet_source"
-      graphs.collect{|graph| graph["label"] = Pretty.source(graph["label"])}
-    when "user_lang"
-      graphs.collect{|graph| graph["label"] = Pretty.language(graph["label"])}
-    when "user_geo_enabled"
-      graphs.collect{|graph| graph["label"] = Pretty.boolean_fix(graph["label"])}
-    when "user_created_at"
-      graphs = Pretty.time_generalize(graphs)
+      when "tweet_language"
+        graphs.collect{|graph| graph["label"] = Pretty.language(graph["label"])}
+      when "tweet_created_at"
+        graphs = Pretty.time_generalize(graphs)
+      when "tweet_source"
+        graphs.collect{|graph| graph["label"] = Pretty.source(graph["label"])}
+      when "user_lang"
+        graphs.collect{|graph| graph["label"] = Pretty.language(graph["label"])}
+      when "user_geo_enabled"
+        graphs.collect{|graph| graph["label"] = Pretty.boolean_fix(graph["label"])}
+      when "user_created_at"
+        # if graph_style != "time_based_histogram"
+          graphs = Pretty.time_generalize(graphs)
+        # end
+      end
+      return graphs
     end
-    return graphs
-  end
   
   def self.language(language)
     language_map = {"en" => "English", "ja" => "Japanese", "it" => "Italian", "de" => "German", "fr" => "French", "kr" => "Korean", "es" => "Spanish"}
@@ -71,8 +73,10 @@ class Pretty
       new_graphs = Pretty.time_rounder("minute", graphs)      
     elsif length < 86400
       new_graphs = Pretty.time_rounder("hour", graphs)
-    else 
+    elsif length < 11536000 #31536000
       new_graphs = Pretty.time_rounder("day", graphs)
+    else 
+      new_graphs = Pretty.time_rounder("month", graphs)
     end
   end
   
@@ -83,26 +87,34 @@ class Pretty
       return graphs
     when "minute"
       graphs.each do |graph|
-        if new_graphs[Time.parse(graph["label"].to_s.gsub(/:\d\d .*/, "").gsub(" ", ", ")).to_i.to_s].nil?
-          new_graphs[Time.parse(graph["label"].to_s.gsub(/:\d\d .*/, "").gsub(" ", ", ")).to_i.to_s] = {"label" => graph["label"].to_s.gsub(/:\d\d .*/, "").gsub(" ", ", "), "value" => graph["value"].to_i, "collection_id" => graph["collection_id"], "graph_id" => graph["graph_id"]}
+        if new_graphs[graph["label"].strftime("%b %d, %Y, %H:%m")].nil?
+          new_graphs[graph["label"].strftime("%b %d, %Y, %H:%m")] = {"label" => graph["label"].strftime("%b %d, %Y, %H:%m"), "value" => graph["value"].to_i, "collection_id" => graph["collection_id"], "graph_id" => graph["graph_id"]}
         else
-          new_graphs[Time.parse(graph["label"].to_s.gsub(/:\d\d .*/, "").gsub(" ", ", ")).to_i.to_s]["value"] += graph["value"].to_i
+          new_graphs[graph["label"].strftime("%b %d, %Y, %H:%m")]["value"] += graph["value"].to_i
         end
       end
     when "hour"
       graphs.each do |graph|
-        if new_graphs[Time.parse(graph["label"].to_s.gsub(/:\d\d:\d\d .*/, "").gsub(" ", ", ")).to_i.to_s].nil?
-          new_graphs[Time.parse(graph["label"].to_s.gsub(/:\d\d:\d\d .*/, "").gsub(" ", ", ")).to_i.to_s] = {"label" => graph["label"].to_s.gsub(/:\d\d:\d\d .*/, "").gsub(" ", ", "), "value" => graph["value"].to_i, "collection_id" => graph["collection_id"], "graph_id" => graph["graph_id"]}
+        if new_graphs[graph["label"].strftime("%b %d, %Y, %H")].nil?
+          new_graphs[graph["label"].strftime("%b %d, %Y, %H")] = {"label" => graph["label"].strftime("%b %d, %Y, %H"), "value" => graph["value"].to_i, "collection_id" => graph["collection_id"], "graph_id" => graph["graph_id"]}
         else
-          new_graphs[Time.parse(graph["label"].to_s.gsub(/:\d\d:\d\d .*/, "").gsub(" ", ", ")).to_i.to_s]["value"] += graph["value"].to_i
+          new_graphs[graph["label"].strftime("%b %d, %Y, %H")]["value"] += graph["value"].to_i
         end
       end
     when "day"
       graphs.each do |graph|
-        if new_graphs[Time.parse(graph["label"].to_s.gsub(/\d\d:\d\d:\d\d( | -)\d\d\d\d/, "")).to_i.to_s].nil?
-          new_graphs[Time.parse(graph["label"].to_s.gsub(/\d\d:\d\d:\d\d( | -)\d\d\d\d/, "")).to_i.to_s] = {"label" => graph["label"].to_s.gsub(/\d\d:\d\d:\d\d( | -)\d\d\d\d/, ""), "value" => graph["value"].to_i, "collection_id" => graph["collection_id"], "graph_id" => graph["graph_id"]}
+        if new_graphs[graph["label"].strftime("%b %d, %Y")].nil?
+          new_graphs[graph["label"].strftime("%b %d, %Y")] = {"label" => graph["label"].strftime("%b %d, %Y"), "value" => graph["value"].to_i, "collection_id" => graph["collection_id"], "graph_id" => graph["graph_id"]}
         else
-          new_graphs[Time.parse(graph["label"].to_s.gsub(/\d\d:\d\d:\d\d( | -)\d\d\d\d/, "")).to_i.to_s]["value"] += graph["value"].to_i
+          new_graphs[graph["label"].strftime("%b %d, %Y")]["value"] += graph["value"].to_i
+        end
+      end
+    when "month"
+      graphs.each do |graph|
+        if new_graphs[graph["label"].strftime("%b %Y")].nil?
+          new_graphs[graph["label"].strftime("%b %Y")] = {"label" => graph["label"].strftime("%b %Y"), "value" => graph["value"].to_i, "collection_id" => graph["collection_id"], "graph_id" => graph["graph_id"]}
+        else
+          new_graphs[graph["label"].strftime("%b %Y")]["value"] += graph["value"].to_i
         end
       end
     end

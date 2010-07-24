@@ -196,7 +196,7 @@ module AnalysisFlow
     end
   end
   
-  def self.do_analysis_work
+  def self.do_analysis_work    
     metadata = Scheduler.decide_analysis_metadata.first
     if !metadata.nil?
       metadata.processing = true
@@ -216,7 +216,7 @@ module AnalysisFlow
       Analysis.remove_broken_collections(metadata.collection)
     end
   end
-  
+    
   def self.grow_branch(scrape, term)
     if scrape.branching
       branching = true
@@ -279,19 +279,19 @@ module AnalysisFlow
     end
   end
   
-  def self.create_singular_analysis_metadatas(collection)
-    analytical_offerings = AnalyticalOffering.find_all({:enabled => true})
-    new_analysis_metadatas = []
-    analytical_offerings.each do |ao|
-      new_am = {}
-      new_am["function"] = ao.function
-      new_am["save_path"] = ao.save_path
-      new_am["collection_id"] = collection.id
-      new_am["rest"] = ao.rest
-      new_analysis_metadatas << new_am
+    def self.create_singular_analysis_metadatas(collection)
+      analytical_offerings = AnalyticalOffering.find_all({:enabled => true})
+      new_analysis_metadatas = []
+      analytical_offerings.each do |ao|
+        new_am = {}
+        new_am["function"] = ao.function
+        new_am["save_path"] = ao.save_path
+        new_am["collection_id"] = collection.id
+        new_am["rest"] = ao.rest
+        new_analysis_metadatas << new_am
+      end
+      Database.save_all({:analysis_metadatas => new_analysis_metadatas})
     end
-    Database.save_all({:analysis_metadatas => new_analysis_metadatas})
-  end
   
   def self.update_time
     si = AnalyticalInstance.find({:instance_id => $w.instance_id})

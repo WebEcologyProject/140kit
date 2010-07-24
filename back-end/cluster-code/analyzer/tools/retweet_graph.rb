@@ -1,6 +1,6 @@
 def retweet_graph(collection_id, save_path)
   collection = Collection.find({:id => collection_id})
-  retweet_graph = generate_graph("retweet", "Network Map", collection_id)
+  retweet_graph = generate_graph({:style => "retweet", :title => "Network Map", :collection_id => collection_id})
   overall_last_id = Database.result("select twitter_id from tweets"+Analysis.conditional(collection)+" and in_reply_to_screen_name != '' order by twitter_id desc limit 1").first.values.first
   last_id = 0
   num = 0
@@ -23,7 +23,6 @@ def retweet_graph(collection_id, save_path)
       edge["time"] = row["created_at"]
       edge["graph_id"] = retweet_graph.id
       edge["collection_id"] = collection_id
-      puts edge
       edges << edge
       last_id = edge["edge_id"]
       if last_id.to_i == overall_last_id
@@ -37,10 +36,10 @@ def retweet_graph(collection_id, save_path)
   end
 end
 
-def generate_graph(style, title, collection_id)
-  graph = Graph.find({:style => style, :title => title, :collection_id => collection_id})
+def generate_graph(attribute_hash)
+  graph = Graph.find(attribute_hash)
   if graph.nil?
-    graph = Graph.new({:style => style, :title => title, :collection_id => collection_id}).update
+    graph = Graph.new(attribute_hash).update
   end
   return graph
 end

@@ -15,8 +15,11 @@
     <% for column in extra_columns -%>
       <td><%= column %></td>
     <% end -%>
-
-      <td><b><%= link_to collection.name, collection_url(collection.researcher.user_name, collection.id) %></b></td>
+      <% if collection.single_dataset %>
+        <td><b><%= link_to collection.metadata.term, collection_url(collection.researcher.user_name, collection.id) %></b></td>
+      <% else %>
+        <td><b><%= link_to collection.name, collection_url(collection.researcher.user_name, collection.id) %></b></td>
+      <% end %>
     <% if show_researchers -%>
       <td><%= link_to collection.researcher.user_name, researcher_page_url(collection.researcher.user_name) %></td>
     <% end -%>
@@ -29,10 +32,8 @@
         <% if current_researcher == collection.researcher -%>  
           <%= link_to "Freeze?", collection_freeze_url(collection.id), :confirm => "Warning, you can't add any more analysis to this job if you press OK. Still want to proceed?" %>
         <% else -%>
-          Unfrozen
+          In Process
         <% end -%>
-      <% elsif !collection.analyzed -%>
-        In process
       <% else %>
         Done
       <% end -%>

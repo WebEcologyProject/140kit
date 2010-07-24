@@ -29,7 +29,7 @@ class SQLParser < Database
           if k != data_set.first.keys.last
             sql_declarative_statement << "`#{k}`, "
           else
-            sql_declarative_statement << "`#{k}`) VALUES\n"
+            sql_declarative_statement << "`#{k}`) values\n"
           end
         end
         data_set.compact.each do |object|
@@ -38,14 +38,14 @@ class SQLParser < Database
             clean_attribute = SQLParser.prep_attribute(object[key])
             if first_value
               if key_list.length > 1
-                sql_values_statement << "(\'#{clean_attribute}\', "
+                sql_values_statement << "(#{clean_attribute}, "
               else
-                sql_values_statement << "(\'#{clean_attribute}\'),\n"
+                sql_values_statement << "(#{clean_attribute}),\n"
               end
             elsif key == key_list.last
-              sql_values_statement << "\'#{clean_attribute}\'),\n"
+              sql_values_statement << "#{clean_attribute}),\n"
             else
-              sql_values_statement << "\'#{clean_attribute}\', "
+              sql_values_statement << "#{clean_attribute}, "
             end
             first_value = false
           end
@@ -63,15 +63,19 @@ class SQLParser < Database
       if map_hash[k] == 1
         final_row[k] = v.class == nil ? nil : v.to_bool
       elsif map_hash[k] == 3 || map_hash[k] == 8
-        final_row[k] = v.to_i
+        final_row[k] = v.nil? ? nil : v.to_i
       elsif map_hash[k] == 246 || map_hash[k] == 5
-        final_row[k] = v.to_f
+        final_row[k] = v.nil? ? nil : v.to_f
       elsif map_hash[k] == 12
         if !v.nil?
           time_attr = Time.at(0)
           begin
-            year,mon,day,hour,min,sec = v.scan(/(\d\d\d\d)-(\d\d)-(\d\d) (\d\d):(\d\d):(\d\d)/).flatten
-            time_attr = Time.gm(year,mon,day,hour,min,sec).localtime
+            if v == "0000-00-00 00:00:00"
+              time_attr = nil
+            else
+              year,mon,day,hour,min,sec = v.scan(/(\d\d\d\d)-(\d\d)-(\d\d) (\d\d):(\d\d):(\d\d)/).flatten
+              time_attr = Time.gm(year,mon,day,hour,min,sec).localtime
+            end
           rescue ArgumentError => e
             puts "Attempted to save weird time; #{e}, logging this issue and reporting to db."
             Failure.new({:message => "Bad Time Attribute when trying to add in time from a query result in SQL Parser.", :trace => " Error Type: ArgumentError. Trace: #{e}. Value: #{v}. Value Class: #{v.class}", :created_at => Time.ntp, :instance_id => $w.instance_id}).save
@@ -106,8 +110,10 @@ class SQLParser < Database
       attribute = "0"
     elsif attribute.class == TrueClass
       attribute = "1"
+    elsif attribute.class == NilClass
+      attribute = "NULL"
     end
-    attribute = "#{attribute}"
+    attribute = "'#{attribute}'" if attribute != "NULL"
     if attribute.class == String && ["''", "'\n'", "'\n    '"].include?(attribute.gsub(" ", ""))
       attribute = "NULL"
     end

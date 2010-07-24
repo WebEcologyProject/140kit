@@ -1,6 +1,14 @@
 <%= @instance.instance_id %> is running on <%= @instance.hostname %> as <%= @instance.instance_name %>
   <h2>Unfinished Jobs</h2>
+  <% if !@unfinished_jobs.empty?%>
   <%= render :partial => "/instances/#{@partial_path}/index", :locals => {:jobs => @unfinished_jobs, :elem_id => "unfinished", :page_param => "uf_page", :partial_path => @partial_path} %>
+  <% else %>
+    No jobs have a record of being run on this instance
+  <% end %>
   <h2>Finished Jobs</h2>
+  <% if !@finished_jobs.empty?%>
   <%= render :partial => "/instances/#{@partial_path}/index", :locals => {:jobs => @finished_jobs, :elem_id => "finished", :page_param => "f_page", :partial_path => @partial_path} %>
+  <% else %>
+    No jobs are currently being run on this instance
+  <% end %>
 <div id="main"></div>

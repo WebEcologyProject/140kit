@@ -2,7 +2,10 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :collections
 
   map.resources :pending_emails
-
+  #Internal Routes
+  map.connect '/graphs/google/:id.:format', :controller => 'graphs', :action => 'google_graph_query'
+  
+  #External Routes
   map.connect '/scrapes/:scrape_id/:controller.:format', :action => 'api_query'
   map.connect '/users/:twitter_id/:controller.:format', :action => 'api_query'
   map.connect '/networks/:style.graphml', :controller => 'graphs', :action => 'network_query'

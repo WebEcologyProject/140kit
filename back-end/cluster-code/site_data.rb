@@ -31,7 +31,7 @@ class SiteData < Database
       end
     end
     Database.update({self.class.to_s.underscore => [safe_attrs]})
-    return self.class.find_all(SQLParser.prep_attributes(safe_attrs)).last
+    return self.class.find_all(safe_attrs).last
   end
   
   def save
@@ -54,7 +54,7 @@ class SiteData < Database
       end
     end
     Database.save({self.class.to_s.underscore => [safe_attrs]})
-    return self.class.find_all(SQLParser.prep_attributes(safe_attrs)).last
+    return self.class.find_all(safe_attrs).last
   end
   
   def self.save_all(parameters)
@@ -106,9 +106,9 @@ class SiteData < Database
       parameters.each_pair do |k,v|
         if v.class == Array
           vv = v.collect{|v| SQLParser.prep_attribute(v)}
-          conditional_statements <<  "#{k} = '#{vv.join("' or #{k} = '")}' "
+          conditional_statements <<  "#{k} = #{vv.join(" or #{k} = ")} "
         else
-          conditional_statements <<  "#{k} = '#{SQLParser.prep_attribute(v)}' "
+          conditional_statements <<  "#{k} = #{SQLParser.prep_attribute(v)} "
         end
       end
       condition = conditional_statements.join(" and ")

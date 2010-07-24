@@ -31,7 +31,6 @@ class NetworksController < ApplicationController
       params[kv[0]] = kv[1]
     end
     logger.debug(params.inspect)
-    
     logger.debug("\napi_url: #{URI.parse(URI.encode(@api_url))}")
     @json = open(URI.parse(URI.encode(@api_url))).read
   end

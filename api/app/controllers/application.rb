@@ -65,20 +65,17 @@ class ApplicationController < ActionController::Base
   end
   
   def network_query(params)
-    params["controller"] = "edges"
-    if !params["collection_id"].nil?
-      graph = Graph.find(:first, :conditions => {:collection_id => params["collection_id"], :style => params["style"].singularize})
-      params["graph_id"] = graph.id
-    end
-    if Rails.cache.read(graph.get_cached("graphs", "graph_data", params["logic"])).nil?
-      params["graph_id"] = graph.id
-      return fetch_network_query(params)
+    debugger
+    graph = Graph.find(:first, :conditions => {:collection_id => params["collection_id"], :style => params["style"].singularize})
+    if graph.written
+      return Rails.cache.fetch(graph.get_cached("networks", "retweets", params["logic"])) { fetch_network_query(graph, params) }
     else
-      return graph
+      return fetch_network_query(graph, params)
     end
   end
   
-  def fetch_network_query(params)
+  def fetch_network_query(graph, params)
+    params["controller"] = "edges"
     style = params.delete("style").singularize
     if params["logic"].class == String
       logic = hash_logic(params)
@@ -98,7 +95,12 @@ class ApplicationController < ActionController::Base
         results = retweet_verboser(results)
       end
     end
-    return results
+    case params["format"]
+    when "json"
+      return Graph.fetch_rgraph_json(results, params)
+    when "graphml"
+      return Graph.fetch_graphml(results, params)
+    end
   end
   
   def user_network_query(params)

@@ -24,7 +24,23 @@ ActionController::Routing::Routes.draw do |map|
   map.datasets '/datasets', :controller => 'collections', :action => 'index', :single_dataset => 'true'
   map.dataset '/datasets/:id', :controller => 'collections', :action => 'show'
   
-  map.google_graph '/graphs/:collection_id/:style/:title', :controller => 'graphs', :action => 'show'
+  #ANALYSIS ROUTES
+  
+  map.hour_report_menu '/graphs/:collection_id/timeline/selection/:selection/:year/:month/:date', :controller => 'analysis_metadatas', :action => 'reveal_menu'
+  map.date_report_menu '/graphs/:collection_id/timeline/selection/:selection/:year/:month', :controller => 'analysis_metadatas', :action => 'reveal_menu'
+  map.month_report_menu '/graphs/:collection_id/timeline/selection/:selection/:year', :controller => 'analysis_metadatas', :action => 'reveal_menu'
+
+  map.show_hour_report '/graphs/:collection_id/timeline/show/:year/:month/:date/:hour', :controller => 'analysis_metadatas', :action => 'timeline_menu'
+  map.show_date_report '/graphs/:collection_id/timeline/show/:year/:month/:date', :controller => 'analysis_metadatas', :action => 'timeline_menu'
+  map.show_month_report '/graphs/:collection_id/timeline/show/:year/:month', :controller => 'analysis_metadatas', :action => 'timeline_menu'
+  map.show_year_report '/graphs/:collection_id/timeline/show/:year', :controller => 'analysis_metadatas', :action => 'timeline_menu'
+
+  map.hour_report '/graphs/:collection_id/timeline/:year/:month/:date/:hour', :controller => 'graphs', :action => 'timeline'
+  map.date_report '/graphs/:collection_id/timeline/:year/:month/:date', :controller => 'graphs', :action => 'timeline'
+  map.month_report '/graphs/:collection_id/timeline/:year/:month', :controller => 'graphs', :action => 'timeline'
+  map.year_report '/graphs/:collection_id/timeline/:year', :controller => 'graphs', :action => 'timeline'
+  
+  map.google_graph '/graphs/google/:id', :controller => 'graphs', :action => 'show'
   
   map.login '/login', :controller => 'account', :action => 'login'
   map.logout '/logout', :controller => 'account', :action => 'logout'
@@ -89,7 +105,7 @@ ActionController::Routing::Routes.draw do |map|
   map.job_form '/jobs/form/:instance_type/:id/:submit_type', :controller => 'cluster', :action => 'job_form'
   map.restart_job '/jobs/:instance_type/:id/restart', :controller => 'cluster', :action => 'restart_job'
   map.reassign_job '/jobs/:instance_type/:id/reassign', :controller => 'cluster', :action => 'reassign_job'
-  map.metadatas_collection_paginate '/metadatas/collection_paginate/:id', :controller => 'stream_metadatas', :action => 'collection_paginate'
+  map.datasets_collection_paginate '/datasets/collection_paginate/:id', :controller => 'collections', :action => 'dataset_paginate'
   map.metadata '/metadatas/:metadata_type/:metadata_id', :controller => 'stream_metadatas', :action => 'show'
 
   map.resources :whitelistings

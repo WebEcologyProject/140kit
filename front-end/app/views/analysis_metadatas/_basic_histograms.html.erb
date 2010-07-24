@@ -1,4 +1,3 @@
-<% @collection = collection || @collection -%>
 <% @am = am || @am -%>
 <script type="text/javascript" src="http://www.google.com/jsapi"></script>
 <script type="text/javascript">
@@ -9,17 +8,9 @@ google.load('visualization', '1', {packages: ['table','barchart','columnchart','
   <% if @am.finished -%>  
   <%=link_to "Download the CSV of Basic Histogram Data", "http://#{FILE_URL}/files#{@am.save_path}#{@collection.folder_name}.zip" %><br />
   <ul>
-    <li><%= link_to_remote("Tweet Location",  :replace => 'dataDisplay', :url => google_graph_url(@collection.id, "histogram", "tweet_location")) %></li>
-    <li><%= link_to_remote("Tweet Language",  :replace => 'dataDisplay', :url => google_graph_url(@collection.id, "histogram","tweet_language")) %></li>
-    <li><%= link_to_remote("Tweet Created At",  :replace => 'dataDisplay', :url => google_graph_url(@collection.id, "histogram","tweet_created_at")) %></li>
-    <li><%= link_to_remote("Tweet Source",  :replace => 'dataDisplay', :url => google_graph_url(@collection.id, "histogram","tweet_source")) %></li>
-    <li><%= link_to_remote("User Created At",  :replace => 'dataDisplay', :url => google_graph_url(@collection.id, "histogram","user_created_at")) %></li>
-    <li><%= link_to_remote("User Favourites Count",  :replace => 'dataDisplay', :url => google_graph_url(@collection.id, "histogram","user_favourites_count")) %></li>
-    <li><%= link_to_remote("User Followers Count",  :replace => 'dataDisplay', :url => google_graph_url(@collection.id, "histogram","user_followers_count")) %></li>
-    <li><%= link_to_remote("User Friends Count",  :replace => 'dataDisplay', :url => google_graph_url(@collection.id, "histogram","user_friends_count")) %></li>
-    <li><%= link_to_remote("User Time Zones",  :replace => 'dataDisplay', :url => google_graph_url(@collection.id, "histogram","user_time_zone")) %>
-    <li><%= link_to_remote("User Language",  :replace => 'dataDisplay', :url => google_graph_url(@collection.id, "histogram","user_lang")) %>
-    <li><%= link_to_remote("User Geo Enabled?",  :replace => 'dataDisplay', :url => google_graph_url(@collection.id, "histogram", "user_geo_enabled")) %></li>
+    <% for graph in @am.graphs %>
+      <li><%= link_to_remote(graph.title.split("_").collect{|t| t.capitalize}.join(" "),  :replace => 'dataDisplay', :url => google_graph_url(graph.id)) %></li>
+    <% end %>
   </ul>
   <% else -%>
     The Basic Histograms for this dataset are not yet complete

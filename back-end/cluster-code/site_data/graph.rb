@@ -1,5 +1,5 @@
 class Graph < SiteData
-  attr_accessor :title, :format, :collection_id, :hour, :minute, :style, :month, :day, :year
+  attr_accessor :title, :format, :collection_id, :style, :hour, :date, :month, :year#, :minute, :hour, :day, :month, :year
   attr_accessor :written, :lock, :flagged, :id, :edges, :graph_points, :time_slice, :collection
   ###############Relation methods
 

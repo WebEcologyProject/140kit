@@ -3,8 +3,18 @@ class CollectionsController < ApplicationController
   before_filter :login_required, :except => [:show, :index, :search]
   
   def index(conditions={}, per_page=10, element_id='main')
-    @page_title = params[:single_dataset].to_bool ? "All Datasets" : "All Collections"
-    super({:single_dataset => params[:single_dataset].to_bool, :order_by => "finished desc, analyzed desc, created_at desc"}, per_page, element_id)
+    if params[:single_dataset]
+      @page_title = params[:single_dataset].to_bool ? "All Datasets" : "All Collections"
+      super({:single_dataset => params[:single_dataset].to_bool, :order_by => "finished desc, analyzed desc, created_at desc"}, per_page, element_id)
+    else
+      super(conditions, per_page, element_id)
+    end
+  end
+
+  def dataset_paginate
+    debugger
+    @collection = Collection.find(params[:id])
+    index({:id => @collection.datasets.collect{|d| d.id}}, 10, 'dataDisplay')
   end
 
   def show
@@ -95,7 +105,8 @@ class CollectionsController < ApplicationController
     ActiveRecord::Base.connection.execute("delete from graph_points where collection_id = #{@collection.id}")
     ActiveRecord::Base.connection.execute("delete from analysis_metadatas where collection_id = #{@collection.id}")
     if @collection.scrape
-      (scrape = @collection.scrape).finished = false
+      scrape = @collection.scrape
+      scrape.finished = false
       if !@collection.single_dataset
         single_collections = Collection.find(:all, :conditions => {:scrape_id => scrape.id, :single_dataset => true})
         single_collections.each do |collection|
@@ -129,6 +140,8 @@ class CollectionsController < ApplicationController
           ActiveRecord::Base.connection.execute("delete from graphs where collection_id = #{collection.id}")
           ActiveRecord::Base.connection.execute("delete from graph_points where collection_id = #{collection.id}")
           ActiveRecord::Base.connection.execute("delete from analysis_metadatas where collection_id = #{collection.id}")
+          ActiveRecord::Base.connection.execute("delete from stream_metadatas where collection_id = #{collection.id}")
+          ActiveRecord::Base.connection.execute("delete from rest_metadatas where collection_id = #{collection.id}")
           collection.finished = false
           collection.analyzed = false
           collection.save

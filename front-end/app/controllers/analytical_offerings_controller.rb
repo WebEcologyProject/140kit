@@ -1,5 +1,5 @@
 class AnalyticalOfferingsController < ApplicationController
-  before_filter :admin_required, :except => [:curate]
+  before_filter :admin_required, :except => [:index, :curate]
   
   layout "main"
   def curate

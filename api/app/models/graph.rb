@@ -5,24 +5,19 @@ class Graph < ActiveRecord::Base
   has_many :edges
 
 ###DATA FETCHING
-def self.to_google_json(graph_data, params)
+def self.to_google_json(graph, params)
   result = ""
-  if graph_data.class == Graph
-    result = Rails.cache.read(graph_data.get_cached("graphs", params[:format], params[:logic]))
+  if graph.written
+    result = Rails.cache.fetch(graph.get_cached("graphs", params[:format], params[:logic])) { Graph.fetch_google_json(graph, params)}
   else
-    graph = Graph.find(graph_data["id"])
-    if graph.collection.finished && graph.collection.analyzed
-      result = Rails.cache.fetch(graph.get_cached("graphs", params[:format], params[:logic])) { Graph.fetch_google_json(graph_data)}
-    else
-      return Graph.fetch_google_json(graph_data)
-    end      
-  end
+    return Graph.fetch_google_json(graph, params)
+  end      
   #GSUB to change out reqid for pre-cached data - reqid must match in order for graphs to work.
-  return result.gsub(/version:0.1,status:'ok',reqId:\d*,table:/, "version:0.1,status:'ok',"+params["tqx"]+",table:")
+  return params[:tqx].nil? ? result : result.gsub(/version:0.1,status:'ok',reqId:\d*,table:/, "version:0.1,status:'ok',"+params["tqx"]+",table:")
 end
 
-def self.fetch_google_json(graph_data)
-  attribute = graph_data["style"]+"_"+graph_data["title"]
+def self.fetch_google_json(graph, params)
+  attribute = graph.style+"_"+graph.title
   case attribute
   when "histogram_tweet_location"
     attribute = "Region Reported"
@@ -33,34 +28,25 @@ def self.fetch_google_json(graph_data)
   when "mentions"
     attribute = "User Mentioned"
   end
-  header = "google.visualization.Query.setResponse({version:0.1,status:'ok',#{graph_data["reqid"]},table:{cols:[{id:\"#{attribute}\",label:\"#{attribute}\",type:'string'},{id:'Frequency',label:'Frequency',type:'number'}],"
+  header = "google.visualization.Query.setResponse({version:0.1,status:'ok',#{params["tqx"]},table:{cols:[{id:\"#{attribute}\",label:\"#{attribute}\",type:'string'},{id:'Frequency',label:'Frequency',type:'number'}],"
   data_set = header+"rows:["
-  graphs = graph_data["results"]
-  graphs = Graph.data_sort(graph_data["title"], graphs)
-  debugger
-  graphs.each do |graph|
-    data_set = data_set+"{c:[{v:\"#{graph.label.gsub("\n", "")}\"},{v:#{graph.value}}]},"      
+  reversed_graphs = ["user_favourites_count", "user_followers_count", "user_friends_count", "user_statuses_count"]
+  unprocessed_graph_points = reversed_graphs.include?(graph.title) ? graph.graph_points.sort {|x,y| y.label.to_i <=> x.label.to_i } : graph.graph_points.sort {|x,y| y.value <=> x.value }
+  processed_graph_points = Graph.data_sort(graph.title, unprocessed_graph_points)
+  processed_graph_points.each do |graph_point|
+    if reversed_graphs.include?(graph.title)
+      data_set = data_set+"{c:[{v:#{graph_point.value}},{v:#{graph_point.label.gsub("\n", "")}}]},"
+    else
+      data_set = data_set+"{c:[{v:\"#{graph_point.label.gsub("\n", "")}\"},{v:#{graph_point.value}}]},"
+    end
   end
   data_set = data_set.chop
   data_set = data_set+"]}})"
 end
 
-def self.to_rgraph_json(graph_data, params)
-  if graph_data.class == Graph
-    return Rails.cache.read(get_cached(cache_file, "networks", params[:format], params[:logic]))
-  else
-    graph = Graph.find(graph_data.first.graph_id)
-    if graph.collection.finished && graph.collection.analyzed
-      return Rails.cache.fetch(get_cached(cache_file, "networks", params[:format], params[:logic])) { Graph.fetch_rgraph_json(graph_data, params)}
-    else
-      return fetch_rgraph_json(graph_data, params[:logic])
-    end      
-  end
-end
-
-def self.fetch_rgraph_json(graph_data, logic_params)
+def self.fetch_rgraph_json(edges, logic_params)
   node_index = {}
-  for edge in graph_data
+  for edge in edges
     edge = edge["edge"] if edge["edge"].class == Edge
     if node_index[edge.start_node].nil?
       node_index[edge.start_node] = [edge.end_node]
@@ -93,23 +79,10 @@ def self.fetch_rgraph_json(graph_data, logic_params)
   return json
 end
 
-def self.to_graphml(graph_data, params)
-  if graph_data.class == Graph
-    return Rails.cache.read(graph_data.get_cached("networks", params[:format], params[:logic]))
-  else
-    graph = Graph.find(graph_data.first.graph_id)
-    if graph.collection.finished && graph.collection.analyzed
-      return Rails.cache.fetch(graph.get_cached("networks", params[:format], params[:logic])) { Graph.fetch_graphml(graph_data)}
-    else
-      return fetch_graphml(graph_data, params)
-    end      
-  end
-end
-
-def self.fetch_graphml(graph_data)
+def self.fetch_graphml(edges)
   graphml = Graph.graphml_header(Time.now.to_i.to_s)
-  graphml = graphml+Graph.graphml_attribute_declares(graph_data.first)
-  graphml = graphml+Graph.graphml_write_data(graph_data)+Graph.graphml_footer
+  graphml = graphml+Graph.graphml_attribute_declares(edges.first)
+  graphml = graphml+Graph.graphml_write_data(edges)+Graph.graphml_footer
   return graphml
 end
 
@@ -123,17 +96,11 @@ end
     when "tweet_language"
       return graphs
     when "tweet_created_at"
-      new_graphs_index = {}
-      new_graphs = []
-      graphs.collect{|g| new_graphs_index[Time.parse(g.label).to_i] = g}
-      return new_graphs_index.keys.sort.collect{|k| new_graphs_index[k]}      
+      return self.graph_date_sort(graphs)
     when "tweet_source"
       return graphs      
     when "user_created_at"
-      new_graphs_index = {}
-      new_graphs = []
-      graphs.collect{|g| new_graphs_index[Time.parse(g.label).to_i] = g}
-      return new_graphs_index.keys.sort.collect{|k| new_graphs_index[k]}
+      return self.graph_date_sort(graphs)
     when "user_favourites_count"
       return graphs      
     when "user_friends_count"
@@ -143,6 +110,8 @@ end
     when "user_time_zone"
       return graphs
     when "user_lang"
+      return graphs
+    when "user_statuses_count"
       return graphs
     when "user_geo_enabled"
       return graphs
@@ -160,6 +129,17 @@ end
     end
   end
   
+  def self.graph_date_sort(graphs)
+    sample_graph = graphs.first
+    if !sample_graph.label.scan(/\w\w\w \d\d\d\d/).empty?
+      #Fake that its the first of the month so that time parsing can sort appropriately based on epoc
+      graphs = graphs.sort{|x,y| Time.parse(x.label.dup.insert(4, "01 ")).to_i <=> Time.parse(y.label.dup.insert(4, "01 ")).to_i}
+    elsif !sample_graph.label.scan(/\w\w\w \d*, \d\d\d\d, \d*$/).empty?
+      graphs = graphs.sort{|x,y| Time.parse(x.label+":00").to_i <=> Time.parse(y.label+":00").to_i}
+    else
+      graphs = graphs.sort{|x,y| Time.parse(x.label).to_i <=> Time.parse(y.label).to_i}
+    end
+  end
 ###JSON PARSING FOR JS RGRAPH
 
   

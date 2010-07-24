@@ -41,13 +41,12 @@ module RestFlow
   end
   
   def self.create_temp_file
+    debugger
     `mkdir ../tmp_files/#{$w.instance_id}`
-    case Environment.storage_type
-    when "local"
-      "mv ../../#{Environment.storage_path}/#{$w.rest_instance.metadata.source_data} ../tmp_files/#{$w.instance_id}/source_data.txt"
-    when "remote"
-      attempt = "rsync #{Environment.storage_ssh}:#{Environment.storage_path}/#{$w.rest_instance.metadata.source_data} ../tmp_files/#{$w.instance_id}/source_data.txt"
-    end
+    source_data = `curl #{SITE_URL}#{$w.rest_instance.metadata.source_data}`
+    f = File.open("../tmp_files/#{$w.instance_id}/source_data.txt", "w")
+    f.write(source_data)
+    f.close
     f = File.open("../tmp_files/#{$w.instance_id}/source_data.txt", "r")
     data = f.read.split(",").collect{|d| d.strip}
     f.close
