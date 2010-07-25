@@ -9,7 +9,7 @@
   <h1>Collection: <%= @collection.name.capitalize %></h1>
 <% end -%>
 
-<% if logged_in? && (current_researcher.id == @collection.researcher_id || current_researcher.admin?) -%>
+<% if logged_in? && (current_researcher.id == @collection.researcher_id) -%>
   <h3>This is your collection.</h3>
 <% else -%>
   <h3>Originally collected by <%= link_to @collection.researcher.user_name, researcher_page_url(@collection.researcher.user_name) %></h3>

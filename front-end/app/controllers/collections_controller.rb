@@ -5,7 +5,7 @@ class CollectionsController < ApplicationController
   def index(conditions={}, per_page=10, element_id='main')
     if params[:single_dataset]
       @page_title = params[:single_dataset].to_bool ? "All Datasets" : "All Collections"
-      super({:single_dataset => params[:single_dataset].to_bool, :order_by => "finished desc, created_at desc"}, per_page, element_id)
+      super({:single_dataset => params[:single_dataset].to_bool, :order_by => "finished desc, tweets_count desc, created_at desc"}, per_page, element_id)
     else
       super(conditions, per_page, element_id)
     end
