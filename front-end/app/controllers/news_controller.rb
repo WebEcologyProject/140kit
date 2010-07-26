@@ -13,6 +13,7 @@ class NewsController < ApplicationController
     elsif params[:id] && !params[:slug]
       @news = News.find(params[:id])
     end
+    @page_title = @news.headline
     respond_to do |format|
       format.html
       format.xml  { render :xml => inst_var }
