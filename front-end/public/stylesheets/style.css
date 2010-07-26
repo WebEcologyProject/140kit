@@ -326,6 +326,13 @@ div.clearFloat{
 	float:left;
 }
 
+.newsItem.col-2{
+	width:480px;
+	margin:12px;
+	padding:12px;
+	float:left;
+}
+
 .newsItem div a img{
 	border:none;
 }
