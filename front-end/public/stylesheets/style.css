@@ -335,6 +335,8 @@ div.clearFloat{
 
 .newsItem div a img{
 	border:none;
+	float:left;
+	margin:6px;
 }
 a img{
 	border:none;
