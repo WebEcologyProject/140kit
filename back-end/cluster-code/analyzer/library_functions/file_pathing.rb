@@ -1,8 +1,8 @@
 class FilePathing
-  def self.tmp_folder(collection)
+  def self.tmp_folder(collection, sub_folder="")
     $w.tmp_path = "../tmp_files/#{$w.instance_id}/#{collection.folder_name}/"
-    `mkdir ../tmp_files/#{$w.instance_id}/`
-    `mkdir ../tmp_files/#{$w.instance_id}/#{collection.folder_name}/`
+    FilePathing.make_directories("#{$w.instance_id}/#{collection.folder_name}/#{sub_folder}", "local", "back-end/tmp_files")
+    return "../tmp_files/#{$w.instance_id}/#{collection.folder_name}/#{sub_folder}"
   end
 
   def self.mysqldump(model, conditional, collection)
@@ -14,7 +14,7 @@ class FilePathing
     folder = folder.chop if folder.split("").last == "/"
     sub_dir = sub_dir.chop if sub_dir.split("").last == "/"
     parent_dir, direct_dir = FilePathing.resolve_path_zip_name(folder)
-    `zip -r -9 -j #{folder} #{folder}`
+    `cd #{parent_dir};zip -r -9 #{direct_dir} #{direct_dir}`
     final_path = "#{Environment.storage_path}/#{sub_dir}/".gsub("//", "/")
     FilePathing.make_directories(sub_dir)
     FilePathing.submit_file(folder+".zip", final_path)
@@ -57,16 +57,16 @@ class FilePathing
     return parent_dir, direct_dir
   end
   
-  def self.make_directories(dir_listing, storage_type=Environment.storage_type)
+  def self.make_directories(dir_listing, storage_type=Environment.storage_type, root_path=Environment.storage_path)
     dirs = []
     dir_listing.split("/").each do |dir|
       attempts = 0
       made = false
       case storage_type
       when "local"
-        attempt = "mkdir ../../#{Environment.storage_path}/#{dirs.join("/")+"/"+dir}"
+        attempt = "mkdir ../../#{root_path}/#{dirs.join("/")+"/"+dir}"
       when "remote"
-        attempt = "ssh #{Environment.storage_ssh} 'mkdir #{Environment.storage_path}/#{dirs.join("/")+"/"+dir}'"          
+        attempt = "ssh #{Environment.storage_ssh} 'mkdir #{root_path}/#{dirs.join("/")+"/"+dir}'"          
       end
       while !made
         result = `#{attempt}`
@@ -84,6 +84,9 @@ class FilePathing
   end
   
   def self.line_count(file_name, path=$w.tmp_path)
-    return File.open(path+file_name).lines.count
+    f = File.open(path+file_name)
+    count = f.lines.count
+    f.close
+    return count
   end
 end

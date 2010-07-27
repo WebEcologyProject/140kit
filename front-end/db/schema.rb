@@ -142,13 +142,13 @@ ActiveRecord::Schema.define(:version => 20100723233840) do
     t.string   "title",                            :null => false
     t.string   "style",                            :null => false
     t.integer  "collection_id", :default => 0,     :null => false
-    t.integer  "month",                            :null => false
-    t.integer  "year",                             :null => false
+    t.integer  "month"
+    t.integer  "year"
     t.boolean  "written",       :default => false, :null => false
-    t.string   "lock",                             :null => false
+    t.string   "lock"
     t.boolean  "flagged",       :default => false, :null => false
     t.datetime "time_slice"
-    t.integer  "hour",                             :null => false
+    t.integer  "hour"
     t.integer  "date"
   end
 

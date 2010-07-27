@@ -33,12 +33,13 @@ def basic_histograms(collection_id, save_path)
   ]
   tweet_graph_points, tweet_graphs = graph_point_creator(tweet_hashes)
   user_graph_points, user_graphs = graph_point_creator(user_hashes)
+  Database.update_attributes(:graphs, tweet_graphs+user_graphs, {:written => true})
+  Database.update_all({:graph_points => tweet_graph_points+user_graph_points})
+  graph_writer((tweet_graphs+user_graphs).flatten.collect{|g| g.id}, save_path, collection)
   recipient = collection.researcher.email
   subject = "#{collection.researcher.user_name}, the raw Graph data for the basic histograms in the \"#{collection.name}\" data set is complete."
   message_content = "Your CSV files are ready for download. You can grab them by visiting the collection's page: <a href=\"http://140kit.com/#{collection.researcher.user_name}/collections/#{collection.id}\">http://140kit.com/#{collection.researcher.user_name}/collections/#{collection.id}</a>."
-  send_email(recipient, subject, message_content, collection)
-  Database.update_attributes(:graphs, tweet_graphs+user_graphs, {:written => true})
-  Database.update_all({:graph_points => tweet_graph_points+user_graph_points})
+  send_email(recipient, subject, message_content, collection)  
 end
 
 def send_email(recipient, subject, message_content, collection)
@@ -52,33 +53,7 @@ def graph_point_creator(graph_hashes)
   graphs = []
   finished_graphs = []
   graph_hashes.each do |k|
-    time = k["time_slice"]
-    case k["granularity"]
-    when "hour"
-      time = Time.parse(time)
-      hour = time.hour
-      date = time.day
-      month = time.month
-      year = time.year
-    when "date"
-      time = Time.parse(time)
-      hour = ""
-      date = time.day
-      month = time.month
-      year = time.year
-    when "month"
-      time = Time.parse("#{time}-01")
-      hour = ""
-      date = ""
-      month = time.month
-      year = time.year
-    when "year"
-      time = Time.parse("#{time}-01-01")
-      hour = ""
-      date = ""
-      month = ""
-      year = time.year
-    end
+    time, hour, date, month, year = resolve_time(k["granularity"], k["time_slice"])
     g = generate_graph({:style => k["style"], :title => k["title"], :collection_id => k["collection"].id, :time_slice => time, :hour => hour, :date => date, :month => month, :year => year})
     ugly_graph_points = []
     k["graph_points"].each_pair do |l, w|
@@ -100,13 +75,26 @@ def graph_point_creator(graph_hashes)
   return graph_points, graphs
 end
 
-def graph_points_to_csv(graph_points, additional_folder)
-  Database.update_all({"graph_points" => graph_points})
-  tmp_folder = FilePathing.tmp_folder(collection)
-  graph_hashes.each_pair do |k,v|
-    row_hashes = []
-    v.collect{|l,w| row_hashes << {"label" => l, "value" => w}}
-    Analysis.hashes_to_csv(row_hashes, "#{k}.csv")
+def graph_writer(graph_ids, save_path, collection, granularity="", format="csv")
+  require 'fastercsv'
+  graph_ids.each do |graph_id|
+    graph = Graph.find({:id => graph_id})
+    sub_folder = [graph.year, graph.month, graph.date, graph.hour].join("/")
+    tmp_folder = FilePathing.tmp_folder(collection, sub_folder)
+    objects = Database.spooled_result("select * from graph_points where graph_id = #{graph.id}")
+    case format
+    when "csv"
+      keys = ["label", "value"]
+      FasterCSV.open(tmp_folder+graph.title, "w") do |csv|
+        csv << keys
+        num=1
+        while row = objects.fetch_hash do
+          num+=1
+          csv << keys.collect{|key| row[key]}
+        end
+      end
+    end
+    objects.free
+    Database.terminate_spooling
   end
-  FilePathing.push_tmp_folder(save_path)
 end

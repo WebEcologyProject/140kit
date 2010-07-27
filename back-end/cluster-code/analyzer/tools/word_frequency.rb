@@ -42,7 +42,16 @@ def hashtags(frequency_listing)
 end
 
 def mentions(frequency_listing)
-  frequency_listing.reject{|k,v| !k.match(/^@/)}
+  new_listing = {}
+  frequency_listing.reject{|k,v| !k.match(/^@/)}.each_pair do |k,v|
+    new_k = k.gsub(/[.?*!:]/, "")
+    if new_listing[new_k]
+      new_listing[new_k] += v
+    else
+      new_listing[new_k] = v
+    end
+  end
+  return new_listing
 end
 
 def no_stop_words(frequency_listing)
