@@ -1,3 +1,3 @@
 load "run.rb"
-$w = Worker.new("worker-17")
-raw_csv(998, "/raw_data/raw_csv/")
+$w = Worker.new("worker-3")
+retweet_graph(47, "/raw_data/retweet_graphs/")

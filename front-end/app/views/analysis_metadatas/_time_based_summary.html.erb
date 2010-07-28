@@ -1,5 +1,9 @@
 <% @collection = collection || @collection -%>
 <% @am = am || @am -%>
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<script type="text/javascript">
+google.load('visualization', '1', {packages: ['table','barchart','columnchart','linechart','piechart','geomap']});
+</script>
 <h4 class="accordion_toggle">Time Based Summary</h4>
 <div id="time_based_summary_menu">
   <% for year in @am.gather_years %>

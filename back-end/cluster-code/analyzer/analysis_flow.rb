@@ -241,6 +241,7 @@ module AnalysisFlow
       :created_at => Time.ntp,
       :scrape_method => "Stream",
       :scrape_id => scrape.id,
+      :scraped_collection => true,
       :single_dataset => true
     })
     collection = collection.save
