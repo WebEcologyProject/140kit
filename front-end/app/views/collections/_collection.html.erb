@@ -16,7 +16,11 @@
       <td><%= column %></td>
     <% end -%>
       <% if collection.single_dataset %>
-        <td><b><%= link_to collection.metadata.term, collection_url(collection.researcher.user_name, collection.id) %></b></td>
+        <% if collection.metadata %>
+          <td><b><%= link_to collection.metadata.term, collection_url(collection.researcher.user_name, collection.id) %></b></td>
+        <% else %>
+          <td><b><%= link_to collection.name, collection_url(collection.researcher.user_name, collection.id) %></b></td>
+        <% end %>
       <% else %>
         <td><b><%= link_to collection.name, collection_url(collection.researcher.user_name, collection.id) %></b></td>
       <% end %>

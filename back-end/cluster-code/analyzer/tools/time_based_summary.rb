@@ -1,5 +1,5 @@
 def time_based_summary(collection_id, save_path)
-  granularity = "hour"
+  granularity = "year"
   time_queries = resolve_time_query(granularity)
   time_queries.each_pair do |time_granularity,time_query|
     collection = Collection.find({:id => collection_id})
@@ -8,7 +8,6 @@ def time_based_summary(collection_id, save_path)
     time_based_analytics("tweets", time_query, tweet_timeline, collection, time_granularity, save_path)
     time_based_analytics("users", time_query, user_timeline, collection, time_granularity, save_path)
   end
-  debugger
   FilePathing.push_tmp_folder(save_path)
 end
 
