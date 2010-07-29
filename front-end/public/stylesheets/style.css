@@ -363,3 +363,27 @@ div#search.collections span{
 	margin-right:2.5%;
 }
 
+div.announcement {
+	background-color: #FFA166;
+	width:60%;
+	text-align:center;
+	padding-top:10px;
+	padding-bottom:10px;
+	font-family: 'Helvetica Neue',helvetica,arial,sans-serif;
+	font-size:21px;
+	float:right;
+	position:relative;
+	bottom:15px;
+	left:15px;
+	border:1px solid #FFA166;
+}
+
+
+
+a#announce {
+	text-decoration:none;
+}
+
+div.announcement:hover {
+	border:1px dashed black;
+}
