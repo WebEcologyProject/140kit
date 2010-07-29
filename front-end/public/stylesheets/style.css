@@ -364,7 +364,8 @@ div#search.collections span{
 }
 
 div.announcement {
-	background-color: #FFA166;
+	background-color: #496bbe;
+	color: #fff;
 	width:60%;
 	text-align:center;
 	padding-top:10px;
@@ -375,15 +376,13 @@ div.announcement {
 	position:relative;
 	bottom:15px;
 	left:15px;
-	border:1px solid #FFA166;
+	-moz-border-radius: 0 0 0 4px;
+	-moz-box-shadow: 0px 2px 4px rgba(51,51,51,.3);
+	-webkit-border-radius:0 0 0 4px; 
 }
 
 
 
 a#announce {
 	text-decoration:none;
-}
-
-div.announcement:hover {
-	border:1px dashed black;
 }
