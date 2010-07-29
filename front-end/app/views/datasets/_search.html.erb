@@ -3,22 +3,7 @@
 <% partial = partial || nil -%>
 <div id="search" class="<%= controller.controller_name %>">
   <span class="input">
-    <% form_tag( search_url, :id => 'search_form', :controller => 'application', :action => 'search') do -%>
-<% if model.nil? -%>
-    <%= select(
-      "model",
-      params['model'],
-      [ 	
-      	['Tweets', 'Tweet'],
-      	['Users', 'User'],
-      	['Researchers', 'Researcher'],
-      	['Graphs', 'Graph'],
-      	['Collections', 'Collection']
-    	]
-  	) %>
-<% else -%>
-    <%= hidden_field("model", "#{model}") %>
-<% end -%>
+    <% form_tag(dataset_search_url, :id => 'search_form', :controller => 'collections', :action => 'search') do -%>
 <% if !element_id.nil? -%>
     <%= hidden_field("element_id", "#{element_id}") %>
 <% end -%>
@@ -31,12 +16,12 @@
       :value => "Search", 
       :id => 'search_query', 
       :class => 'fluid',
-      :size => 20, 
+      :size => 20,
       :onkeypress => 'return disableEnterKey(event);',
       :onkeyup => "clearTimeout(search_timeout); 
-      		search_timeout = setTimeout(\"" + remote_function(:url => search_url,  
+      		search_timeout = setTimeout(\"" + remote_function(:url => dataset_search_url,  
       		:loading => "$('spinner').show()", 
-      		:complete => "$('spinner').hide()", 
+      		:complete => "$('spinner').hide();$('refresh').show()", 
       		:submit => 'search_form') + "\",500);", 
       		:autocomplete => 'off'
     ) %>
@@ -45,5 +30,8 @@
 
     <% end -%>
   </span>
+  <span id="spinner" style="text-align:center;display:none;"><img src="/images/loading.gif" /></span>
+  <span id="refresh" style="text-align:center;display:none;"><%= link_to_remote("Full list", {:replace => 'dataDisplay', :url => datasets_curate_url(@collection.id)}, {:class => "big"})%></span>
+  
 </div>
 <div class="clearFloat"></div>

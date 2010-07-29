@@ -1,33 +1,15 @@
-<%= link_to_function "Stream Datasets" do |page|
-    page.hide "restDatasets"
-    page.show "streamDatasets"
-  end %> | 
-<%= link_to_function "Rest Datasets" do |page|
-    page.hide "streamDatasets"
-    page.show "restDatasets"
-  end %>
+<span class="curateSearch"><%= render :partial => "/datasets/search", :locals => {:conditions => "single_dataset:1|scrape_method:Stream,REST", :element_id => "datasetDataDisplay", :partial => "/layouts/search_results", :collection_id => @collection.id} %></span>
+<div class="clearFloat"></div>
 <table id="dataset_curation">
   <tr>
     <td>
-      <div id="streamDatasets">
-        <h3>Stream Datasets</h3>
-        <span class="curateSearch"><%= render :partial => "/datasets/search", :locals => {:conditions => "single_dataset:1|scrape_method:Stream", :model => "StreamMetadata", :element_id => "datasetDataDisplay", :partial => "/layouts/search_results", :collection_id => @collection.id} %></span>
-        <div id="clearFloat"></div>
-        <div id="addableStreamMetadatas">
-          <% if @addable_stream_datasets.empty? -%>
-            You've already added all available Streaming datasets, sorry.
+      <div id="datasets">
+        <h3>Datasets</h3>
+        <div id="addableDatasets">
+          <% if @addable_datasets.empty? -%>
+            You've already added all available datasets, sorry.
           <% end -%>
-          <%= render :partial => "/datasets/datasets_associate", :locals => {:collection => @collection, :datasets => @addable_stream_datasets, :page_param => "addable_stream_page", :id_prefix => "addable"} %>
-        </div>
-      </div>
-      <div id="restDatasets" style="display:none;">
-        <h3>Rest Datasets</h3>
-        <span class="curateSearch"><%= render :partial => "/datasets/search", :locals => {:conditions => "single_dataset:1|scrape_method:REST", :model => "RestMetadata", :element_id => "datasetDataDisplay", :partial => "/layouts/search_results", :collection_id => @collection.id} %></span>
-        <div id="addableRestMetadatas">
-          <% if @addable_rest_datasets.empty? -%>
-            You've already added all available REST datasets, sorry.
-          <% end -%>
-          <%= render :partial => "/datasets/datasets_associate", :locals => {:collection => @collection, :datasets => @addable_rest_datasets, :page_param => "addable_rest_page", :id_prefix => "addable"} %>
+          <%= render :partial => "/datasets/datasets_associate", :locals => {:collection => @collection, :datasets => @addable_datasets, :page_param => "addable_page", :id_prefix => "addable"} %>
         </div>
       </div>
     </td>

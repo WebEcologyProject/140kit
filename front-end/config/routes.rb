@@ -74,14 +74,15 @@ ActionController::Routing::Routes.draw do |map|
 
   map.new_scrape '/scrapes/new/:scrape_type', :controller => 'scrapes', :action => 'new'
   
+  map.dataset_search '/search/datasets', :controller => 'collections', :action => 'search'
   map.search '/search', :controller => 'application', :action => 'search'
   
   map.settings '/settings/:id', :controller => 'researchers', :action => 'edit'
   map.signup '/signup', :controller => 'account', :action => 'signup'
     
-  map.metadatas_curate '/collections/:id/metadatas', :controller => 'stream_metadatas', :action => 'curate'
-  map.metadatas_associate '/metadatas/:metadata_id/:metadata_type/associate/:collection_id', :controller => 'stream_metadatas', :action => 'associate'
-  map.metadatas_dissociate '/metadatas/:metadata_id/:metadata_type/dissociate/:collection_id', :controller => 'stream_metadatas', :action => 'dissociate'
+  map.datasets_curate '/collections/:id/metadatas', :controller => 'collections', :action => 'curate'
+  map.datasets_associate '/metadatas/:metadata_id/:metadata_type/associate/:collection_id', :controller => 'collections', :action => 'associate'
+  map.datasets_dissociate '/metadatas/:metadata_id/:metadata_type/dissociate/:collection_id', :controller => 'collections', :action => 'dissociate'
   
   map.tweets_collection_paginate '/tweets/collection_paginate/:id', :controller => 'tweets', :action => 'collection_paginate'
   map.tweets_collection_paginate_dataset '/tweets/collection_paginate/dataset/:metadata_type/:id', :controller => 'tweets', :action => 'collection_paginate_dataset'

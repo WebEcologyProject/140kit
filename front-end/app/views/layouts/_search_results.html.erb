@@ -17,14 +17,8 @@
 <% end -%>
   <%= will_paginate @users, :class => 'pagination ajax' %>
 </div>
-<% elsif @items.first.class.to_s == "RestMetadata" -%>
-<div id="restDatasets">
-  <% for item in @items %>
-  <%= render :partial => "/datasets/datasets_associate", :locals => {:collection => @collection, :datasets => @items.collect{|i| i.collection}.paginate, :page_param => "addable_rest_page", :id_prefix => "addable"} %>
-  <% end %>
-</div>
-<% elsif @items.first.class.to_s == "StreamMetadata" -%>
-<div id="streamDatasets">
-  <%= render :partial => "/datasets/datasets_associate", :locals => {:collection => @collection, :datasets => @items.collect{|i| i.collection}.paginate, :page_param => "addable_stream_page", :id_prefix => "addable"} %>
-</div>
+<% elsif @items.first.class.to_s == "Collection" -%>
+  <div id="datasets">
+    <%= render :partial => "/datasets/datasets_associate", :locals => {:collection => @collection, :datasets => @items, :page_param => "addable_rest_page", :id_prefix => "addable"} %>
+  </div>
 <% end -%>

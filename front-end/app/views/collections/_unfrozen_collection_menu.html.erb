@@ -12,6 +12,6 @@ sm_count = @collection.metadatas.count
   You haven't added any datasets to this collection yet.
   <%= link_to_remote("Start Adding Datasets",
       :replace => 'dataDisplay',
-      :url => metadatas_curate_url(@collection.id)) %>
+      :url => datasets_curate_url(@collection.id)) %>
 <% end -%>
 </div>

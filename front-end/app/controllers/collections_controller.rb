@@ -12,7 +12,6 @@ class CollectionsController < ApplicationController
   end
 
   def dataset_paginate
-    debugger
     @collection = Collection.find(params[:id])
     index({:id => @collection.datasets.collect{|d| d.id}}, 10, 'dataDisplay')
   end
@@ -54,7 +53,6 @@ class CollectionsController < ApplicationController
   end
   
   def freeze
-    debugger
     @collection = Collection.find(params[:id])
     if @collection.scrape && !@collection.scrape.finished
       flash[:notice] = "Can't Freeze Dataset while still in process of collection"
@@ -154,4 +152,70 @@ class CollectionsController < ApplicationController
     redirect_to(request.referrer)
   end
   
+  def search
+    per_page = 5
+    @collection = Collection.find(params[:collection_id].to_s)
+    @stream_metadatas = StreamMetadata.paginate :page => params[:page], :per_page => per_page, :conditions => "term like '%#{params[:query]}%' or sanitized_term like '%#{params[:query]}%'"
+    @datasets = (@stream_metadatas.collect{|sm| sm.collection}-@collection.datasets).paginate :page => params[:addable_page], :per_page => per_page
+    @removeable_datasets = @collection.datasets.paginate :page => params[:removeable_page], :per_page => per_page
+    element_id = params[:element_id].to_s
+    partial = params[:partial].to_s
+    if request.xhr?
+      respond_to do |format|
+        format.js {
+          render :update do |page|
+            page.replace_html 'addableDatasets', :partial => "/datasets/datasets_associate"
+          end
+        }
+      end
+    end
+  end
+  
+  def curate
+    per_page = 5
+    @collection = Collection.find(params[:id])
+    final_statement = @collection.datasets.empty? ? "" :  "and id != #{@collection.datasets.collect{|d| d.id}.join(" and id != ")}"
+    @addable_datasets = Collection.paginate :page => params[:addable_page], :per_page => per_page, :conditions => "finished = 1 and single_dataset = true and scrape_method != 'curate' #{final_statement} "
+    @removeable_datasets = @collection.datasets.paginate :page => params[:removeable_page], :per_page => per_page
+    respond_to do |format|
+      format.html
+      format.js {
+        render :update do |page|
+          page.replace_html 'dataDisplay', :partial => "/datasets/datasets_curate"
+        end
+      }
+    end
+  end
+  
+  def associate
+    per_page = 5
+    @collection = Collection.find(params[:collection_id])
+    @metadata = params[:metadata_type].constantize.find(params[:metadata_id])
+    @collection.send(params[:metadata_type].underscore+"s=", @collection.send(params[:metadata_type].underscore+"s")<<@metadata)
+    @collection.save
+    final_statement = @collection.datasets.empty? ? "" :  "and id != #{@collection.datasets.collect{|d| d.id}.join(" and id != ")}"
+    @addable_datasets = Collection.paginate :page => params[:addable_page], :per_page => per_page, :conditions => "finished = 1 and single_dataset = true and scrape_method != 'curate' #{final_statement} "
+    @removeable_datasets = @collection.datasets.paginate :page => params[:removeable_page], :per_page => per_page
+    return unless request.xhr?
+    render :update do |page|
+      page.replace_html 'dataDisplay', :partial => "/datasets/datasets_curate"
+    end
+  end
+  
+  def dissociate
+    per_page = 5
+    @collection = Collection.find(params[:collection_id])
+    @metadata = params[:metadata_type].constantize.find(params[:metadata_id])
+    @collection.send(params[:metadata_type].underscore+"s").delete(@metadata)
+    @metadata.collections.delete(@collection)
+    @collection.save
+    @metadata.save
+    final_statement = @collection.datasets.empty? ? "" :  "and id != #{@collection.datasets.collect{|d| d.id}.join(" and id != ")}"
+    @addable_datasets = Collection.paginate :page => params[:addable_page], :per_page => per_page, :conditions => "finished = 1 and single_dataset = true and scrape_method != 'curate' #{final_statement} "
+    @removeable_datasets = @collection.datasets.paginate :page => params[:removeable_page], :per_page => per_page
+    return unless request.xhr?
+    render :update do |page|
+      page.replace_html 'dataDisplay', :partial => "/datasets/datasets_curate"
+    end
+  end
 end

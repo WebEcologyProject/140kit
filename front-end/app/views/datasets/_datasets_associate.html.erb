@@ -8,7 +8,6 @@ collection ||= nil
 @collection = @collection || collection || nil
 page_param ||= "page"
 -%>
-
 <div id="datasetDataDisplay">
   <center><%= will_paginate @datasets, :class => 'pagination ajax', :param_name => "#{page_param}" %></center>
 <% for dataset in @datasets -%>
