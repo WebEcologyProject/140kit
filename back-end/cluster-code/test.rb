@@ -18,7 +18,6 @@ ids.each do |id|
       user = UserHelper.hash_user(data["user"])
       tweet = TweetHelper.hash_tweet(data)
     end
-    debugger
     users << user
     tweets << tweet
   end
