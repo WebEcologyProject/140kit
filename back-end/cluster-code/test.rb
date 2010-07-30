@@ -23,7 +23,6 @@ ids.each do |id|
     tweets << tweet
   end
   if users.length > MAX_ROW_COUNT_PER_BATCH 
-    debugger
     U.append_scrape_id({:users => users, :tweets => tweets}, metadata)
     Database.save_all(:tweets => tweets)
     Database.save_all(:users => users)
