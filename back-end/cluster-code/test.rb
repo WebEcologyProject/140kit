@@ -1,3 +1,3 @@
 load "run.rb"
 $w = Worker.new("worker-3")
-retweet_graph(47, "/raw_data/retweet_graphs/")
+time_based_summary(975, "/raw_data/word_frequencies/")

@@ -80,7 +80,7 @@ class Database
     Database.update_all(objects)
   end
   
-  def self.update_all(objects)
+  def self.update_all(objects, connection=Environment.db)
     if !objects.empty?
       objects.each_pair do |k,v|
         if !v.compact.empty?
@@ -90,13 +90,13 @@ class Database
             object_groups << v[objects_uploaded..objects_uploaded+MAX_ROW_COUNT_PER_BATCH]
             objects_uploaded = objects_uploaded+MAX_ROW_COUNT_PER_BATCH > v.length ? v.length : objects_uploaded+MAX_ROW_COUNT_PER_BATCH
           end
-          object_groups.collect{|partitioned_objects| self.batch_operation({k => partitioned_objects}, "replace into")}
+          object_groups.collect{|partitioned_objects| self.batch_operation({k => partitioned_objects}, "replace into", connection)}
         end
       end
     end
   end
   
-  def self.update_attributes(object_class, objects, attribute_set)
+  def self.update_attributes(object_class, objects, attribute_set, connection=Environment.db)
     new_attrs = {}
     attribute_set.each_pair do |k,v|
       new_attrs[k.to_s] = v
@@ -111,7 +111,7 @@ class Database
       end
       replaced[object_class] << obj_attrs
     end
-    self.update_all(replaced)
+    self.update_all(replaced, connection)
   end
 
 ###DATA PREP METHODS###
@@ -236,7 +236,7 @@ class Database
     end
   end
   
-  def self.batch_operation(objects, declarative_statement)
+  def self.batch_operation(objects, declarative_statement, connection=Environment.db)
     objects.each_pair do |class_name, data_set|
       #########################################################
       #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
@@ -251,13 +251,12 @@ class Database
       # - - - - - - - - - - - - - - - - - - - - - - - - - - - #
       #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#
       #########################################################
-      self.write_db(SQLParser.batch(class_name, data_set, declarative_statement))      
+      self.write_db(SQLParser.batch(class_name, data_set, declarative_statement), connection)      
     end
   end
   
-  def self.write_db(sql_statement)
+  def self.write_db(sql_statement, connection=Environment.db)
     if !sql_statement.nil? && sql_statement != false
-      connection = Environment.db
       puts sql_statement
       query_result = Database.run_query(connection, sql_statement)
       puts query_result

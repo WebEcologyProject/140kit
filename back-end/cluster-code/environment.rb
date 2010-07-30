@@ -133,6 +133,11 @@ class Environment
     @@db = db
   end
   
+  def self.new_db_connect
+    settings = U.get_config[$runtime_environment]
+    return Mysql.real_connect(settings["host"], settings["username"], settings["password"], settings["database"])
+  end
+  
   def self.load_arguments
     database = nil
     storage_location = nil
@@ -149,6 +154,7 @@ class Environment
     end  
     database = database.nil? ? ENVIRONMENT : database
     storage_location = storage_location.nil? ? "local" : storage_location
+    $runtime_environment = database
     return run_type,database,storage_location
   end
   

@@ -39,13 +39,18 @@ class Analysis
     end
     query += " group by #{attribute} order by count(*) desc;"
     puts query
-    result = Environment.db.query(query)
-    hash = {}
-    1.upto(result.num_rows) do |iii|
-      row = SQLParser.type_attributes(result.fetch_hash, result).to_a.flatten
-      hash[row[row.index(attribute)+1]] = row[row.index("frequency")+1]
+    if block_given?
+      objects = Database.spooled_result(query)
+      yield objects
+    else
+      result = Environment.db.query(query)
+      hash = {}
+      1.upto(result.num_rows) do |iii|
+        row = SQLParser.type_attributes(result.fetch_hash, result).to_a.flatten
+        hash[row[row.index(attribute)+1]] = row[row.index("frequency")+1]
+      end
+      return hash
     end
-    return hash
   end
   
   def self.mode(class_name, attribute, parameters={})
