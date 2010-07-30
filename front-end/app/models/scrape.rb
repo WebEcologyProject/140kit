@@ -35,6 +35,7 @@ class Scrape < ActiveRecord::Base
   end
   
   def self.create_rest_temp_file(params)
+    debugger
     researcher = Researcher.find(params[:scrape][:researcher_id])
     if !`ls public/files/source_data`.split("\n").include?(researcher.user_name)
       `mkdir public/files/source_data/#{researcher.user_name}`
@@ -70,6 +71,7 @@ class Scrape < ActiveRecord::Base
   end
   
   def fill_out_secondary_data
+    debugger
     if self.scrape_type == "Search"
       scrape_method = "Stream"
       @stream_metadata = StreamMetadata.new
@@ -176,6 +178,7 @@ class Scrape < ActiveRecord::Base
   end
   
   def self.valid(temp_data)
+    require 'open-uri'
     if temp_data.split(/[,\t\n]/).length > 1
       return true
     else
