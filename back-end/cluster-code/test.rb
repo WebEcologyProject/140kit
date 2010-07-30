@@ -16,8 +16,9 @@ ids.each do |id|
     data = JSON.parse(data)
     if !data.empty?
       user = UserHelper.hash_user(data["user"])
-      tweet = TweetHelper.hash_tweets([data])
+      tweet = TweetHelper.hash_tweet(data)
     end
+    debugger
     users << user
     tweets << tweet
   end
@@ -29,9 +30,9 @@ ids.each do |id|
     users = []
     tweets = []
   end
-  Database.save_all(:tweets => tweets)
-  Database.save_all(:users => users)
 end
+Database.save_all(:tweets => tweets)
+Database.save_all(:users => users)
   
 # $w = Worker.new("worker-3")
 # time_based_summary(975, "/raw_data/word_frequencies/")
