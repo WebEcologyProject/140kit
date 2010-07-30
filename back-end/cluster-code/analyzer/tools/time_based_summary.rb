@@ -44,7 +44,7 @@ def time_based_analytics(model, time_query, object_timeline, collection, granula
       generate_graph_points([{"title" => "hashtags", "style" => "word_frequency", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
         {"title" => "mentions", "style" => "word_frequency", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
         {"title" => "significant_words", "style" => "word_frequency", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
-        {"title" => "urls", "style" => "word_frequency", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity}]).each do |fs, graph, tmp_folder|
+        {"title" => "urls", "style" => "word_frequency", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity}]) do |fs, graph, tmp_folder|
           generate_word_frequency(fs, tmp_folder, frequency_listing, collection, graph)
       end
     when "users"
