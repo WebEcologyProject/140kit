@@ -9,7 +9,7 @@ def retweet_graph(collection_id, save_path)
     num = 0
     finished = false
     while !finished
-      query = "select screen_name,twitter_id,in_reply_to_status_id,created_at,in_reply_to_screen_name from tweets"+Analysis.conditional(collection)+" and in_reply_to_screen_name != '' and twitter_id > #{last_id} order by twitter_id asc limit #{MAX_ROW_COUNT_PER_BATCH}"
+      query = "select screen_name,twitter_id,in_reply_to_status_id,created_at,in_reply_to_screen_name from tweets"+Analysis.conditional(collection)+" and in_reply_to_screen_name != ''"# and twitter_id > #{last_id} order by twitter_id asc limit #{MAX_ROW_COUNT_PER_BATCH}"
       edges = []
       objects = Database.spooled_result(query)
       while row = objects.fetch_hash do
