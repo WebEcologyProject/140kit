@@ -44,7 +44,7 @@ def generate_graph_points(frequency_set)
 end
 
 def frequency_graphs(fs, graph, tmp_folder)
-  Analysis.frequency_hash(fs["model"], fs["attribute"], fs["conditional"]) do |objects|
+  Analysis.frequency_hash(fs["model"], fs["attribute"], fs["conditional"]).each do |objects|
     temp_graph_points = []
     FasterCSV.open(tmp_folder+graph.title+".csv", "w") do |csv|
       keys = ["label", "value"]
