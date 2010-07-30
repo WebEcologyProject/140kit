@@ -33,7 +33,7 @@ def retweet_graph(collection_id, save_path)
           finished = true
         end
         if @edges.length > MAX_ROW_COUNT_PER_BATCH
-          fork{Database.update_all({:graph_points => @edges}, Environment.new_db_connect)}
+          fork{Database.update_all({:edges => @edges}, Environment.new_db_connect)}
           @edges.clear
         end
       end
