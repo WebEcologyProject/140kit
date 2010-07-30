@@ -31,7 +31,7 @@ class Analysis
   end
   
   def self.frequency_hash(class_name, attribute, parameters={})
-    query = "select count(id) frequency, #{attribute} from #{class_name.to_s.underscore}"
+    query = "select count(*) as frequency, #{attribute} from #{class_name.to_s.underscore}"
     if parameters.class == Hash
       query += self.where(parameters)
     elsif parameters.class == String
