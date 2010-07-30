@@ -7,8 +7,9 @@ end
 
 scrape = Scrape.find({:id => 562})
 metadata = scrape.metadatas.first
+users = []
+tweets = []
 ids.each do |id|
-  debugger
   url = "http://api.twitter.com/1/statuses/show/#{id}.json"
   data = U.return_data(url)
   if !data.nil?
@@ -21,6 +22,7 @@ ids.each do |id|
     tweets << tweet
   end
   if users.length > MAX_ROW_COUNT_PER_BATCH 
+    debugger
     U.append_scrape_id({:users => users, :tweets => tweets}, metadata)
     Database.save_all(:tweets => tweets)
     Database.save_all(:users => users)
@@ -29,8 +31,6 @@ ids.each do |id|
   end
   Database.save_all(:tweets => tweets)
   Database.save_all(:users => users)
-  users = []
-  tweets = []
 end
   
 # $w = Worker.new("worker-3")
