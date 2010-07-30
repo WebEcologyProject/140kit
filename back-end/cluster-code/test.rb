@@ -17,14 +17,20 @@ ids.each do |id|
       user = UserHelper.hash_user(data["user"])
       tweet = TweetHelper.hash_tweets([data])
     end
+    users << user
+    tweets << tweet
   end
-  users << user
-  tweets << tweet
   if users.length > MAX_ROW_COUNT_PER_BATCH 
     U.append_scrape_id({:users => users, :tweets => tweets}, metadata)
     Database.save_all(:tweets => tweets)
     Database.save_all(:users => users)
+    users = []
+    tweets = []
   end
+  Database.save_all(:tweets => tweets)
+  Database.save_all(:users => users)
+  users = []
+  tweets = []
 end
   
 # $w = Worker.new("worker-3")
