@@ -43,6 +43,7 @@ class Analysis
       objects = Database.spooled_result(query)
       yield objects
     else
+      debugger
       result = Environment.db.query(query)
       hash = {}
       1.upto(result.num_rows) do |iii|
