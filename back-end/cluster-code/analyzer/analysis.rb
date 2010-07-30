@@ -39,11 +39,11 @@ class Analysis
     end
     query += " group by #{attribute} order by count(*) desc;"
     puts query
+      debugger
     if block_given?
       objects = Database.spooled_result(query)
       yield objects
     else
-      debugger
       result = Environment.db.query(query)
       hash = {}
       1.upto(result.num_rows) do |iii|
