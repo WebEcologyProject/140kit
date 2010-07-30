@@ -10,7 +10,7 @@ def retweet_graph(collection_id, save_path)
     finished = false
     while !finished
       query = "select screen_name,twitter_id,in_reply_to_status_id,created_at,in_reply_to_screen_name from tweets"+Analysis.conditional(collection)+" and in_reply_to_screen_name != ''"# and twitter_id > #{last_id} order by twitter_id asc limit #{MAX_ROW_COUNT_PER_BATCH}"
-      edges = []
+      @edges = []
       objects = Database.spooled_result(query)
       while row = objects.fetch_hash do
         edge = {}
@@ -27,16 +27,20 @@ def retweet_graph(collection_id, save_path)
         edge["graph_id"] = retweet_graph.id
         edge["collection_id"] = collection_id
         puts "Edge: FROM: #{edge["start_node"]} TO: #{edge["end_node"]} ID: #{edge["edge_id"]}"
-        edges << edge
+        @edges << edge
         last_id = edge["edge_id"]
         if last_id.to_i == overall_last_id
           finished = true
         end
+        if @edges.length > MAX_ROW_COUNT_PER_BATCH
+          fork{Database.update_all({:graph_points => @edges}, Environment.new_db_connect)}
+          @edges.clear
+        end
       end
       objects.free
       Database.terminate_spooling  
-      Database.update_all({"edges" => edges})
-      edges.clear
+      Database.update_all({"edges" => @edges})
+      @edges.clear
     end
   end
   retweet_graph.written = true
