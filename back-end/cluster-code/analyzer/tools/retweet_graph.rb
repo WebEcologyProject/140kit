@@ -13,7 +13,6 @@ def retweet_graph(collection_id, save_path)
       edges = []
       objects = Database.spooled_result(query)
       while row = objects.fetch_hash do
-        debugger
         edge = {}
         num+=1
         if row["in_reply_to_status_id"] == "0"
@@ -27,7 +26,7 @@ def retweet_graph(collection_id, save_path)
         edge["time"] = row["created_at"]
         edge["graph_id"] = retweet_graph.id
         edge["collection_id"] = collection_id
-        puts edge
+        puts "Edge: FROM: #{edge["start_node"]} TO: #{edge["end_node"]} ID: #{edge["edge_id"]}"
         edges << edge
         last_id = edge["edge_id"]
         if last_id.to_i == overall_last_id
