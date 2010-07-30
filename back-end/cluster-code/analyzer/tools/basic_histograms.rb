@@ -24,6 +24,7 @@ def basic_histograms(collection_id, save_path)
 end
 
 def generate_graph_points(frequency_set)
+  debugger
   require 'fastercsv'
   @graph_points = []
   @graphs = []
