@@ -79,7 +79,7 @@ def self.fetch_rgraph_json(edges, logic_params)
   return json
 end
 
-def self.fetch_graphml(edges)
+def self.fetch_graphml(edges, params)
   graphml = Graph.graphml_header(Time.now.to_i.to_s)
   graphml = graphml+Graph.graphml_attribute_declares(edges.first)
   graphml = graphml+Graph.graphml_write_data(edges)+Graph.graphml_footer
