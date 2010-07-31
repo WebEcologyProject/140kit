@@ -33,4 +33,4 @@ load "run.rb"
 # Database.save_all(:users => users)
 #   
 $w = Worker.new("worker-3")
-gender_estimation(975, "/raw_data/word_frequencies/")
+basic_histograms(1447, "/raw_data/graph_points/")

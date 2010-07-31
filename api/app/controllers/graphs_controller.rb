@@ -52,7 +52,6 @@ class GraphsController < ApplicationController
   def network_query
     original_params = params.dup
     results = super(params)
-    debugger
     respond_to do |format|
       format.xml  { render :xml => results }
       format.json  { render :json => results }

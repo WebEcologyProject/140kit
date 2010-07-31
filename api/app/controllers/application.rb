@@ -67,7 +67,7 @@ class ApplicationController < ActionController::Base
   def network_query(params)
     graph = Graph.find(:first, :conditions => {:collection_id => params["collection_id"], :style => params["style"].singularize})
     if graph.written
-      return Rails.cache.fetch(graph.get_cached("networks", "retweets", params["logic"])) { fetch_network_query(graph, params) }
+      return Rails.cache.fetch(graph.get_cached("networks", params["format"], params["logic"])) { fetch_network_query(graph, params) }
     else
       return fetch_network_query(graph, params)
     end

@@ -1,4 +1,5 @@
 def word_frequency(collection_id, save_path)
+    debugger
   collection = Collection.find({:id => collection_id})
   query = "select text from tweets "+Analysis.conditional(collection)
   frequency_listing = get_frequency_listing(query)
