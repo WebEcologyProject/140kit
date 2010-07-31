@@ -70,12 +70,10 @@ end
 def check_for_save
   if @graph_points.length > MAX_ROW_COUNT_PER_BATCH
     Database.update_all({:graph_points => @graph_points}, Environment.new_db_connect)
-    Process.wait
     @graph_points = []
   end
   if @graphs.length > MAX_ROW_COUNT_PER_BATCH
     Database.update_attributes(:graphs, @graphs, {:written => true}, Environment.new_db_connect)
-    Process.wait
     @graphs = []
   end
 end

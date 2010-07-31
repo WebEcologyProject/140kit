@@ -43,6 +43,7 @@ class Environment
       Environment.load_development
     end
     Environment.setup_file_storage
+    Environment.setup_tk_authentication
   end
   
   def self.load_production
@@ -128,6 +129,14 @@ class Environment
   def self.storage_ssh
     return @@storage_ssh
   end
+
+  def self.tk_username
+    return @@tk_username
+  end
+
+  def self.tk_password
+    return @@tk_password
+  end
   
   def self.set_db(db)
     @@db = db
@@ -169,4 +178,17 @@ class Environment
       end
     end
   end
+  
+  def self.setup_tk_authentication
+    settings = U.get_config["tk_authentication"]
+    if settings.nil?
+      @@tk_username = ""
+      @@tk_password = ""
+    else
+      settings.each_pair do |k,v|
+        class_variable_set(("@@tk_"+k).to_sym, v)
+      end
+    end
+  end
+  
 end
