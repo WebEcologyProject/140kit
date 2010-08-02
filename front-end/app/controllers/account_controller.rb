@@ -37,11 +37,12 @@ class AccountController < ApplicationController
   end
   
   def forgot
+    debugger
     @researcher = Researcher.find(:first, :conditions => {:user_name => params["login"]})
     if @researcher.nil?
       @researcher = Researcher.find(:first, :conditions => {:email => params["email"]})
     end
-    @tweets = Tweet.paginate :page => params[:page], :conditions => "text like '%lost%' or text like '%password%' or text like '%fml%' or text like '%whoops%'", :per_page => 10
+    @tweets = Tweet.find(:all, :limit => 10, :offset => rand(1000))
     if @researcher
       flash[:notice] = "An email containing a reset code has been sent."
       ResearcherNotifier.password_reset(@researcher)
@@ -56,7 +57,7 @@ class AccountController < ApplicationController
       end
     else
       flash[:notice] = "Sorry, we don't have anyone on file with that login."
-      redirect_to("/")
+      redirect_to("/login")
     end
   end
   

@@ -20,6 +20,7 @@ class Researcher < ActiveRecord::Base
   before_save :encrypt_password
   before_save :set_times
   before_create :set_join_date
+  before_create :validate_characters
   
   # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
   def self.authenticate(user_name, password)
@@ -66,6 +67,12 @@ class Researcher < ActiveRecord::Base
   
   def set_join_date
     self.join_date = Time.now
+  end
+  
+  def validate_characters
+    if !self.user_name.scan(/[\.\;\:\?\<\>\,\+\=\_\-\{\}\[\]\(\)\|\\\*\&\^%\$#\@\!\~\`]/).empty?
+      errors.add("User Name", "You can only use alpha numeric characters in your user name (a-z, 0-9).")
+    end
   end
   
   def create_reset_code

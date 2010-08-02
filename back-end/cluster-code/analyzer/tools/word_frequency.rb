@@ -17,16 +17,18 @@ def word_frequency(collection_id, save_path)
 end
 
 def get_frequency_listing(query)
+  debugger
   frequency_listing = {}
   num = 1
   objects = Database.spooled_result(query)
   while row = objects.fetch_row do
     num+=1
     row.first.super_split(" ").collect do |word|
-      word = word.super_strip
+      word = word.super_strip.downcase
       frequency_listing[word].nil? ? frequency_listing[word] = 1 : frequency_listing[word]+= 1
     end
   end
+  debugger
   Database.terminate_spooling
   objects.free
   return frequency_listing
@@ -63,7 +65,7 @@ end
 
 def significant_words(frequency_listing)
   stop_words = File.open(ROOT_FOLDER+"cluster-code/analyzer/resources/stop_words.txt").read.split
-  frequency_listing.reject{|k,v| stop_words.include?(k) || k.include?("@") || k.include?("#")}
+  frequency_listing.reject{|k,v| stop_words.include?(k) || k.include?("@") || k.include?("#")|| k.include?("http")}
 end
 
 def urls(frequency_listing)

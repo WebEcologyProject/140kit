@@ -6,7 +6,6 @@ It's not that we don't trust that you are actually you, it's just a security thi
 <% for tweet in @tweets -%>
   <%= render :partial => "/tweets/tweet", :locals => {:tweet => tweet, :display_user_header => true} %>
 <% end -%>
-<%= will_paginate @tweets, :class => 'pagination ajax' %>
 <br />
 
 </div>
