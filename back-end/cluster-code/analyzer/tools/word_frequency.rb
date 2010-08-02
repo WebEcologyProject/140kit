@@ -17,7 +17,6 @@ def word_frequency(collection_id, save_path)
 end
 
 def get_frequency_listing(query)
-  debugger
   frequency_listing = {}
   num = 1
   objects = Database.spooled_result(query)

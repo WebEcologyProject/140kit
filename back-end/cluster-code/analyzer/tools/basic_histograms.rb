@@ -32,6 +32,7 @@ def generate_graph_points(frequency_set)
     graph = generate_graph({:style => fs["style"], :title => fs["title"], :collection_id => fs["collection"].id, :time_slice => time, :hour => hour, :date => date, :month => month, :year => year})
     @graphs << graph
     sub_folder = [graph.year, graph.month, graph.date, graph.hour].join("/")
+    debugger
     tmp_folder = FilePathing.tmp_folder(fs["collection"], sub_folder)
     if block_given?
       yield fs, graph, tmp_folder

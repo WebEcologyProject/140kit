@@ -1,4 +1,8 @@
 load "run.rb"
+$w = Worker.new("worker-3")
+debugger
+# Graphml.generate_file("select * from edges where graph_id = 1235", "test")
+retweet_graph(975, "/graphs/time_based/")
 # require 'fastercsv'
 # ids = []
 # FasterCSV.foreach("../../files/oldspice.csv") do |row|
@@ -32,5 +36,5 @@ load "run.rb"
 # Database.save_all(:tweets => tweets)
 # Database.save_all(:users => users)
 #   
-$w = Worker.new("worker-3")
-word_frequency(1449, "/raw_data/gender_estimation/")
+# $w = Worker.new("worker-3")
+# word_frequency(1449, "/raw_data/gender_estimation/")

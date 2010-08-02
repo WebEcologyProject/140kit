@@ -45,6 +45,7 @@ class FilePathing
   
   def self.remove_folder(folder)
     `rm -r #{folder}`
+    `mkdir ../tmp_files`
   end
   
   def self.resolve_path_zip_name(folder)
