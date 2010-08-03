@@ -5,7 +5,6 @@ def time_based_summary(collection_id, save_path)
     collection = Collection.find({:id => collection_id})
     user_timeline = Database.result("select date_format(created_at, '#{time_query}') as created_at from users"+Analysis.conditional(collection)+"group by date_format(created_at, '#{time_query}') order by created_at desc")
     tweet_timeline = Database.result("select date_format(created_at, '#{time_query}') as created_at from tweets"+Analysis.conditional(collection)+"group by date_format(created_at, '#{time_query}') order by created_at desc")
-    debugger
     # time_based_analytics("tweets", time_query, tweet_timeline, collection, time_granularity, save_path)
     time_based_analytics("users", time_query, user_timeline, collection, time_granularity, save_path)
   end
@@ -21,8 +20,8 @@ def resolve_time_query(time_granularity)
   when "date"
     return {"year" => "%Y", "month" => "%Y-%m", "date" => "%Y-%m-%e"}
   when "hour"
-    # return {"year" => "%Y", "month" => "%Y-%m", "date" => "%Y-%m-%e", "hour" => "%Y-%m-%e %H"}
-    {"hour" => "%Y-%m-%e %H"}
+    # return {"year" => "%Y", "month" => "%Y-%m", "date" => "%Y-%m-%e", 
+    return {"hour" => "%Y-%m-%e %H"}
   end
 end
 
@@ -49,9 +48,7 @@ def time_based_analytics(model, time_query, object_timeline, collection, granula
         {"title" => "urls", "style" => "word_frequency", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity}]) do |fs, graph, tmp_folder|
           generate_word_frequency(fs, tmp_folder, frequency_listing, collection, graph)
       end
-      
     when "users"
-      debugger
       generate_graph_points([
         {"model" => User, "attribute" => "followers_count", "conditional" => conditional, "style" => "histogram", "title" => "user_followers_count", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
         {"model" => User, "attribute" => "friends_count", "conditional" => conditional, "style" => "histogram", "title" => "user_friends_count", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},

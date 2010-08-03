@@ -1,6 +1,5 @@
 load "run.rb"
 $w = Worker.new("worker-3")
-debugger
 # Graphml.generate_file("select * from edges where graph_id = 1235", "test")
 retweet_graph(975, "/graphs/time_based/")
 # require 'fastercsv'
