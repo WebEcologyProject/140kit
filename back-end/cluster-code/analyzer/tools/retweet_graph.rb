@@ -46,6 +46,7 @@ def retweet_graph(collection_id, save_path)
   # retweet_graph.written = true
   # retweet_graph.save
   generate_graphml_files(collection, save_path, retweet_graph)
+  FilePathing.push_tmp_folder(save_path)
 end
 
 def generate_graph(attribute_hash)
