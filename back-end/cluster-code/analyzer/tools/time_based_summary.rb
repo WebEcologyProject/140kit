@@ -4,7 +4,7 @@ def time_based_summary(collection_id, save_path)
   time_queries.each_pair do |time_granularity,time_query|
     collection = Collection.find({:id => collection_id})
     user_timeline = Database.result("select date_format(created_at, '#{time_query}') as created_at from users"+Analysis.conditional(collection)+"group by date_format(created_at, '#{time_query}') order by created_at desc")
-    tweet_timeline = Database.result("select date_format(created_at, '#{time_query}') as created_at from tweets"+Analysis.conditional(collection)+"group by date_format(created_at, '#{time_query}') order by created_at desc")
+    # tweet_timeline = Database.result("select date_format(created_at, '#{time_query}') as created_at from tweets"+Analysis.conditional(collection)+"group by date_format(created_at, '#{time_query}') order by created_at desc")
     # time_based_analytics("tweets", time_query, tweet_timeline, collection, time_granularity, save_path)
     time_based_analytics("users", time_query, user_timeline, collection, time_granularity, save_path)
   end
