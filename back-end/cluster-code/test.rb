@@ -1,7 +1,7 @@
 load "run.rb"
 $w = Worker.new("worker-3")
 # Graphml.generate_file("select * from edges where graph_id = 1235", "test")
-retweet_graph(975, "/graphs/time_based/")
+time_based_summary(975, "/graphs/time_based_summary/")
 # require 'fastercsv'
 # ids = []
 # FasterCSV.foreach("../../files/oldspice.csv") do |row|
