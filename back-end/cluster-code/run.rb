@@ -18,7 +18,7 @@ include NET
 
 #Operational Shit
 ROOT_FOLDER = "#{File.dirname(__FILE__)}/../"
-TIME_OFFSET = Time.now.to_f#NTP.get_ntp_response()["Receive Timestamp"] - Time.now.to_f
+TIME_OFFSET = NTP.get_ntp_response()["Receive Timestamp"] - Time.now.to_f
 API_RATE_LIMIT_URL = "http://twitter.com/account/rate_limit_status.json"
 #Streaming Instances
 HOSTNAME = "http://stream.twitter.com"
