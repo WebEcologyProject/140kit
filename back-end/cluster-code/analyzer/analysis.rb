@@ -198,6 +198,22 @@ class Analysis
     return " where "+conditional
   end
   
+  def self.time_conditional(time_variable, datetime, granularity)
+    debugger
+    case granularity
+    when "hour"
+      return "#{time_variable} >= cast('#{datetime}:00:00' as datetime) and #{time_variable} <= cast('#{datetime}:59:59' as datetime)"
+    when "date"
+      return "#{time_variable} >= cast('#{datetime} 00:00:00' as datetime) and #{time_variable} <= cast('#{datetime} 23:59:59' as datetime)"
+    when "month"
+      month = datetime.split("-").last.to_i
+      year = datetime.split("-").first.to_i
+      return "#{time_variable} >= cast('#{datetime}-01 00:00:00' as datetime) and #{time_variable} <= cast('#{datetime}-#{U.month_days(month, year)} 23:59:59' as datetime)"
+    when "year"
+      return "#{time_variable} >= cast('#{datetime}-01-01 00:00:00' as datetime) and #{time_variable} <= cast('#{datetime}-12-31 23:59:59' as datetime)"
+    end
+  end
+  
   def self.remove_broken_collections(collection)
     if collection.scraped_collection
       if collection.scrape.tweets.length == 0 && collection.scrape.users.length == 0

@@ -1,7 +1,7 @@
 load "run.rb"
 $w = Worker.new("worker-3")
-# Graphml.generate_file("select * from edges where graph_id = 1235", "test")
-basic_histograms(1437, "/raw_data/graph_points")
+Analysis.time_conditional("created_at", "2010-02-03 06", "hour")
+# basic_histograms(1437, "/raw_data/graph_points")
 # require 'fastercsv'
 # ids = []
 # FasterCSV.foreach("../../files/oldspice.csv") do |row|

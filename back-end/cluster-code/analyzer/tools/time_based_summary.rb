@@ -28,37 +28,40 @@ end
 def time_based_analytics(model, time_query, object_timeline, collection, granularity, save_path)
   object_timeline.each do |object_group|
     temp_save_path = resolve_time(granularity, object_group["created_at"])
-    temp_save_path.shift
-    graphs = []
-    graph_points = []
-    conditional = Analysis.conditional(collection)+" and date_format(created_at, '#{time_query}') = '#{object_group["created_at"]}'"
-    totals_hash = {}
-    case model
-    when "tweets"
-      frequency_listing = get_frequency_listing("select text from tweets "+Analysis.conditional(collection)+" and date_format(created_at, '#{time_query}') = '#{object_group["created_at"]}'")
-      generate_graph_points([
-        {"model" => Tweet, "attribute" => "language", "conditional" => conditional, "style" => "histogram", "title" => "tweet_language", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
-        {"model" => Tweet, "attribute" => "created_at", "conditional" => conditional, "style" => "histogram", "title" => "tweet_created_at", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
-        {"model" => Tweet, "attribute" => "source", "conditional" => conditional, "style" => "histogram", "title" => "tweet_source", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
-        {"model" => Tweet, "attribute" => "location", "conditional" => conditional, "style" => "histogram", "title" => "tweet_location", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity}
-      ])
-      generate_graph_points([{"title" => "hashtags", "style" => "word_frequency", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
-        {"title" => "mentions", "style" => "word_frequency", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
-        {"title" => "significant_words", "style" => "word_frequency", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
-        {"title" => "urls", "style" => "word_frequency", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity}]) do |fs, graph, tmp_folder|
-          generate_word_frequency(fs, tmp_folder, frequency_listing, collection, graph)
+    if Time.parse(object_group["created_at"]) < Time.parse("2010-06-07 01:00:00")
+      temp_save_path.shift
+      graphs = []
+      graph_points = []
+      debugger
+      conditional = Analysis.conditional(collection)+" and "+Analysis.time_conditional("created_at", object_group["created_at"], granularity)#" and date_format(created_at, '#{time_query}') = '#{object_group["created_at"]}'"
+      totals_hash = {}
+      case model
+      when "tweets"
+        frequency_listing = get_frequency_listing("select text from tweets "+Analysis.conditional(collection)+" and "+Analysis.time_conditional("created_at", object_group["created_at"], granularity))
+        generate_graph_points([
+          {"model" => Tweet, "attribute" => "language", "conditional" => conditional, "style" => "histogram", "title" => "tweet_language", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
+          {"model" => Tweet, "attribute" => "created_at", "conditional" => conditional, "style" => "histogram", "title" => "tweet_created_at", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
+          {"model" => Tweet, "attribute" => "source", "conditional" => conditional, "style" => "histogram", "title" => "tweet_source", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
+          {"model" => Tweet, "attribute" => "location", "conditional" => conditional, "style" => "histogram", "title" => "tweet_location", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity}
+        ])
+        generate_graph_points([{"title" => "hashtags", "style" => "word_frequency", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
+          {"title" => "mentions", "style" => "word_frequency", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
+          {"title" => "significant_words", "style" => "word_frequency", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
+          {"title" => "urls", "style" => "word_frequency", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity}]) do |fs, graph, tmp_folder|
+            generate_word_frequency(fs, tmp_folder, frequency_listing, collection, graph)
+        end
+      when "users"
+        generate_graph_points([
+          {"model" => User, "attribute" => "followers_count", "conditional" => conditional, "style" => "histogram", "title" => "user_followers_count", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
+          {"model" => User, "attribute" => "friends_count", "conditional" => conditional, "style" => "histogram", "title" => "user_friends_count", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
+          {"model" => User, "attribute" => "favourites_count", "conditional" => conditional, "style" => "histogram", "title" => "user_favourites_count", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
+          {"model" => User, "attribute" => "geo_enabled", "conditional" => conditional, "style" => "histogram", "title" => "user_geo_enabled", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
+          {"model" => User, "attribute" => "statuses_count", "conditional" => conditional, "style" => "histogram", "title" => "user_statuses_count", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
+          {"model" => User, "attribute" => "lang", "conditional" => conditional, "style" => "histogram", "title" => "user_lang", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
+          {"model" => User, "attribute" => "time_zone", "conditional" => conditional, "style" => "histogram", "title" => "user_time_zone", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
+          {"model" => User, "attribute" => "created_at", "conditional" => conditional, "style" => "histogram", "title" => "user_created_at", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity}
+        ])
       end
-    when "users"
-      generate_graph_points([
-        {"model" => User, "attribute" => "followers_count", "conditional" => conditional, "style" => "histogram", "title" => "user_followers_count", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
-        {"model" => User, "attribute" => "friends_count", "conditional" => conditional, "style" => "histogram", "title" => "user_friends_count", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
-        {"model" => User, "attribute" => "favourites_count", "conditional" => conditional, "style" => "histogram", "title" => "user_favourites_count", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
-        {"model" => User, "attribute" => "geo_enabled", "conditional" => conditional, "style" => "histogram", "title" => "user_geo_enabled", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
-        {"model" => User, "attribute" => "statuses_count", "conditional" => conditional, "style" => "histogram", "title" => "user_statuses_count", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
-        {"model" => User, "attribute" => "lang", "conditional" => conditional, "style" => "histogram", "title" => "user_lang", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
-        {"model" => User, "attribute" => "time_zone", "conditional" => conditional, "style" => "histogram", "title" => "user_time_zone", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
-        {"model" => User, "attribute" => "created_at", "conditional" => conditional, "style" => "histogram", "title" => "user_created_at", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity}
-      ])
     end
   end
 end
