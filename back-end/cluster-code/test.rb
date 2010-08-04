@@ -1,6 +1,5 @@
 load "run.rb"
-
-# basic_histograms(1437, "/raw_data/graph_points")
+# retweet_graph(7, "/raw_data/retweet_graphs")
 # require 'fastercsv'
 # ids = []
 # FasterCSV.foreach("../../files/oldspice.csv") do |row|
