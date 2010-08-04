@@ -65,6 +65,7 @@ class Pretty
   end
   
   def self.time_generalize(graphs)
+    debugger
     sorted_times = graphs.collect{|g| Time.parse(g["label"].to_s).to_i}.sort
     length = sorted_times.last-sorted_times.first
     if length < 60

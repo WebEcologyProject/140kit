@@ -8,10 +8,10 @@
 <h1><%= @researcher.user_name.capitalize %></h1>
   <%= render :partial => 'image', :locals => {:researcher => @researcher} %>
   <p>
-    <strong>Role:</strong> <%= @researcher.role %><br />
-   <strong>Hailing from:</strong> <%= @researcher.location %><br />
+    <strong>Role:</strong> <%=h @researcher.role %><br />
+   <strong>Hailing from:</strong> <%=h @researcher.location %><br />
    <% if @researcher.share_email %>
-    <strong>E-mail:</strong> <%= @researcher.email %><br />
+    <strong>E-mail:</strong> <%=h @researcher.email %><br />
    <% end %>
   <% if !@researcher.website_url.nil? %>
     <%= link_to @researcher.website_url.to_url, @researcher.website_url.to_url %><br />

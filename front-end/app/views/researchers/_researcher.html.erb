@@ -5,9 +5,9 @@
     <%= render :partial => 'image', :locals => {:researcher => researcher} %>
     </div>
     <div class="researcherTab">
-     <strong>Hailing from:</strong> <%= researcher.location %><br />
+     <strong>Hailing from:</strong> <%=h researcher.location %><br />
      <% if researcher.share_email %>
-      <strong>E-mail:</strong> <%= researcher.email %><br />
+      <strong>E-mail:</strong> <%=h researcher.email %><br />
      <% end %>
     <% if !researcher.website_url.nil? %>
       <%= link_to researcher.website_url, researcher.website_url %><br />

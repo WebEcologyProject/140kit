@@ -46,8 +46,16 @@ def frequency_graphs(fs, graph, tmp_folder)
   Analysis.frequency_hash(fs["model"], fs["attribute"], fs["conditional"]) do |objects|
     temp_graph_points = []
     FasterCSV.open(tmp_folder+graph.title+".csv", "w") do |csv|
-      keys = ["label", "value"]
+      first_hash = objects.fetch_hash
+      keys = first_hash.keys
       csv << keys
+      csv << keys.collect{|key| first_hash[key]}
+      graph_point = {}
+      graph_point["label"] = (first_hash[fs["attribute"]].class == NilClass || (first_hash[fs["attribute"]].class == String && first_hash[fs["attribute"]].empty?)) ? "Not Reported" : first_hash[fs["attribute"]].to_s.gsub("\n", " ")
+      graph_point["value"] = first_hash["frequency"].to_s.gsub("\n", " ")
+      graph_point["graph_id"] = graph.id
+      graph_point["collection_id"] = fs["collection"].id
+      temp_graph_points << graph_point
       num=1
       while row = objects.fetch_hash do
         num+=1
@@ -58,7 +66,9 @@ def frequency_graphs(fs, graph, tmp_folder)
         graph_point["graph_id"] = graph.id
         graph_point["collection_id"] = fs["collection"].id
         temp_graph_points << graph_point
+        debugger
       end
+      debugger
       @graph_points += Pretty.pretty_up_labels(fs["style"], fs["title"], temp_graph_points)
     end
     check_for_save

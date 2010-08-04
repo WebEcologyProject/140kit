@@ -1,7 +1,7 @@
 load "run.rb"
 $w = Worker.new("worker-3")
 # Graphml.generate_file("select * from edges where graph_id = 1235", "test")
-time_based_summary(7, "/graphs/time_based_summary/")
+basic_histograms(1437, "/raw_data/graph_points")
 # require 'fastercsv'
 # ids = []
 # FasterCSV.foreach("../../files/oldspice.csv") do |row|
