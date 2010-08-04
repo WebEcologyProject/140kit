@@ -32,7 +32,6 @@ def time_based_analytics(model, time_query, object_timeline, collection, granula
       temp_save_path.shift
       graphs = []
       graph_points = []
-      debugger
       conditional = Analysis.conditional(collection)+" and "+Analysis.time_conditional("created_at", object_group["created_at"], granularity)#" and date_format(created_at, '#{time_query}') = '#{object_group["created_at"]}'"
       totals_hash = {}
       case model

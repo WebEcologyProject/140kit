@@ -1,6 +1,5 @@
 load "run.rb"
-$w = Worker.new("worker-3")
-Analysis.time_conditional("created_at", "2010-02-03 06", "hour")
+
 # basic_histograms(1437, "/raw_data/graph_points")
 # require 'fastercsv'
 # ids = []
