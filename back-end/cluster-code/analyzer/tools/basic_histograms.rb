@@ -66,9 +66,7 @@ def frequency_graphs(fs, graph, tmp_folder)
         graph_point["graph_id"] = graph.id
         graph_point["collection_id"] = fs["collection"].id
         temp_graph_points << graph_point
-        debugger
       end
-      debugger
       @graph_points += Pretty.pretty_up_labels(fs["style"], fs["title"], temp_graph_points)
     end
     check_for_save

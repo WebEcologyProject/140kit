@@ -199,7 +199,6 @@ class Analysis
   end
   
   def self.time_conditional(time_variable, datetime, granularity)
-    debugger
     case granularity
     when "hour"
       return "#{time_variable} >= cast('#{datetime}:00:00' as datetime) and #{time_variable} <= cast('#{datetime}:59:59' as datetime)"
