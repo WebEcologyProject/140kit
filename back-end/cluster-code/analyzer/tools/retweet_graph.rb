@@ -66,7 +66,7 @@ def generate_graphml_files(collection, save_path, graph)
       time, hour, date, month, year = resolve_time(granularity, time_set["time"])
       sub_folder = [year, month, date, hour].join("/")
       tmp_folder = FilePathing.tmp_folder(collection, sub_folder)
-      query = "select * from edges where"+Analysis.time_conditional("created_at", object_group["created_at"], granularity)+" and graph_id = #{graph.id}"
+      query = "select * from edges where"+Analysis.time_conditional("created_at", time_set["time"], granularity)+" and graph_id = #{graph.id}"
       Graphml.generate_file(query, "full", tmp_folder)
     end
   end
