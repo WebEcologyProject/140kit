@@ -35,6 +35,8 @@ class NetworksController < ApplicationController
     @api_url = "http://api.140kit.com#{api_suffix}"
     logger.debug("\napi_url: #{URI.parse(URI.encode(internal_call))}")
     @json = open(URI.parse(URI.encode(internal_call))).read
+    debugger
+    g = ""
   end
   
   def flare

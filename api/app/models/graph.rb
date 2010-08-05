@@ -45,35 +45,53 @@ def self.fetch_google_json(graph, params)
 end
 
 def self.fetch_rgraph_json(edges, logic_params)
+  debugger
+  g = ""
   node_index = {}
   for edge in edges
+    # debugger
     edge = edge["edge"] if edge["edge"].class == Edge
-    if node_index[edge.start_node].nil?
-      node_index[edge.start_node] = [edge.end_node]
-    else
-      node_index[edge.start_node] << edge.end_node
-      node_index[edge.start_node].uniq!
-    end
     if node_index[edge.end_node].nil?
-      node_index[edge.end_node] = [edge.start_node]
+      node_index[edge.end_node] = {}
+      node_index[edge.end_node]["user"] = edge.end_node
+      # node_index[edge.end_node]["adjacencies"] = [edge.start_node]
+      # tweet = Tweet.find_by_twitter_id(edge.edge_id)
+      node_index[edge.end_node]["tweets"] = [{"from" => edge.end_node, "to" => edge.start_node, "id" => edge.edge_id, "time" => edge.time, "relationship" => edge.style}]
     else
-      node_index[edge.end_node] << edge.start_node
-      node_index[edge.end_node].uniq!
+      # node_index[edge.end_node]["adjacencies"] << edge.start_node
+      # node_index[edge.end_node]["adjacencies"].uniq!
+      # tweet = Tweet.find_by_twitter_id(edge.edge_id)
+      node_index[edge.end_node]["tweets"] << {"from" => edge.end_node, "to" => edge.start_node, "id" => edge.edge_id, "time" => edge.time, "relationship" => edge.style}
+    end
+    if node_index[edge.start_node].nil?
+      node_index[edge.start_node] = {}
+      node_index[edge.start_node]["user"] = edge.start_node
+      # node_index[edge.start_node]["adjacencies"] = [edge.end_node]
+      # tweet = Tweet.find_by_twitter_id(edge.edge_id)
+      node_index[edge.start_node]["tweets"] = [{"from" => edge.end_node, "to" => edge.start_node, "id" => edge.edge_id, "time" => edge.time, "relationship" => edge.style}]
+    else
+      # node_index[edge.start_node]["adjacencies"] << edge.end_node
+      # node_index[edge.start_node]["adjacencies"].uniq!
+
+      node_index[edge.start_node]["tweets"] << {"from" => edge.end_node, "to" => edge.start_node, "id" => edge.edge_id, "time" => edge.time, "relationship" => edge.style}
     end
   end
-  # if edge["edge"].class == Edge
-  #   verbose_index = {}
-  #   for edge in edges
-  #     
   json = "["
-  nodes = node_index.to_a.sort {|x,y| node_index[y[0]].length <=> node_index[x[0]].length }
-  for node_and_adjacencies in nodes
-    node = node_and_adjacencies[0]
-    adjacencies = node_and_adjacencies[1]
-    json += "{\"id\":\"#{node}\","
-    json += "\"name\":\"#{node}\","
-    json += "\"data\":{\"relation\" : \"<a href=\\\"http://twitter.com/#{node}\\\" target=\\\"_blank\\\">#{node}'s profile</a>\"},"
-    json += "\"adjacencies\":#{adjacencies.inspect}},"
+  nodes = node_index.values.sort{|x,y| y["tweets"].length <=> x["tweets"].length}
+  debugger
+  for node in nodes
+    json += "{\"id\":\"#{node["user"]}\","
+    json += "\"name\":\"#{node["user"]}\","
+    json += "\"data\":{\"relation\" : \"<a href=\\\"http://twitter.com/#{node["user"]}\\\" target=\\\"_blank\\\">#{node["user"]}'s profile</a><br /><h4>#{node["user"]} referenced #{node["tweets"].select{|t| t["from"] == node["user"]}.length} tweets, and was referenced by #{node["tweets"].select{|t| t["to"] == node["user"]}.length} tweets</h4>. <a href=\\\"#\\\" onclick=\\\"$('tweets').hide();$('tweets').show()\\\">show them?</a><br /><ul id=\\\"tweets\\\" style=\\\"display:none;\\\">"
+    node["tweets"].each do |tweet|
+      json+= "<li><a href=\\\"http://www.twitter.com/#{tweet["from"]}\\\" target=\\\"_blank\\\">#{tweet["from"]}</a> #{tweet["relationship"]}ed <a href=\\\"http://www.twitter.com/#{tweet["to"]}\\\">#{tweet["to"]}</a> in a <a href=\\\"http://twitter.com/#{tweet["from"]}/status/#{tweet["id"]}\\\">tweet</a>.</li>"
+    end
+    json += "</ul>\"},\"adjacencies\": [  "
+    # debugger
+    for tweet in node["tweets"]
+    json+= "{\"nodeTo\": \"#{tweet["from"]}\",\"data\": {\"weight\": \"1\",\"label\": \"#{tweet["method"]}\",\"edge_id\": \"#{tweet["id"]}\",$direction: [\"#{tweet["from"]}\", \"#{tweet["to"]}\"] }},"
+    end
+    json += "]},"
   end
   json += "]"
   return json
