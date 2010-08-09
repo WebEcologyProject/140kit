@@ -4,8 +4,8 @@ def time_based_summary(collection_id, save_path)
   time_queries.each_pair do |time_granularity,time_query|
     collection = Collection.find({:id => collection_id})
     user_timeline = Database.result("select date_format(created_at, '#{time_query}') as created_at from users"+Analysis.conditional(collection)+"group by date_format(created_at, '#{time_query}') order by created_at desc")
-    # tweet_timeline = Database.result("select date_format(created_at, '#{time_query}') as created_at from tweets"+Analysis.conditional(collection)+"group by date_format(created_at, '#{time_query}') order by created_at desc")
-    # time_based_analytics("tweets", time_query, tweet_timeline, collection, time_granularity, save_path)
+    tweet_timeline = Database.result("select date_format(created_at, '#{time_query}') as created_at from tweets"+Analysis.conditional(collection)+"group by date_format(created_at, '#{time_query}') order by created_at desc")
+    time_based_analytics("tweets", time_query, tweet_timeline, collection, time_granularity, save_path)
     time_based_analytics("users", time_query, user_timeline, collection, time_granularity, save_path)
   end
   FilePathing.push_tmp_folder(save_path)
@@ -20,8 +20,7 @@ def resolve_time_query(time_granularity)
   when "date"
     return {"year" => "%Y", "month" => "%Y-%m", "date" => "%Y-%m-%e"}
   when "hour"
-    # return {"year" => "%Y", "month" => "%Y-%m", "date" => "%Y-%m-%e", 
-    return {"hour" => "%Y-%m-%e %H"}
+    return {"year" => "%Y", "month" => "%Y-%m", "date" => "%Y-%m-%e", "hour" => "%Y-%m-%e %H"}
   end
 end
 
