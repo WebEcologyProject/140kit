@@ -42,7 +42,6 @@ class Rest
         U.append_scrape_id({:users => user, :tweets => tweets}, self.metadata)
         User.new(user).save
         Database.save_all(:tweets => tweets)
-        debugger
         self.users-=[user]
       end
     end
