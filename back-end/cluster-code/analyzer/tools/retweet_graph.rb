@@ -63,13 +63,11 @@ def generate_graphml_files(collection, save_path, graph)
   time_queries.each_pair do |granularity, time_query|
     edge_timeline = Database.result("select date_format(time, '#{time_query}') as time from edges where graph_id = #{graph.id} group by date_format(time, '#{time_query}') order by time desc")
     edge_timeline.each do |time_set|
-      if Time.parse(time_set["time"]) < Time.parse("2009-12-03 00:00:00")
-        time, hour, date, month, year = resolve_time(granularity, time_set["time"])
-        sub_folder = [year, month, date, hour].join("/")
-        tmp_folder = FilePathing.tmp_folder(collection, sub_folder)
-        query = "select * from edges where "+Analysis.time_conditional("time", time_set["time"], granularity)+" and graph_id = #{graph.id}"
-        Graphml.generate_file(query, "full", tmp_folder)
-      end
+      time, hour, date, month, year = resolve_time(granularity, time_set["time"])
+      sub_folder = [year, month, date, hour].join("/")
+      tmp_folder = FilePathing.tmp_folder(collection, sub_folder)
+      query = "select * from edges where "+Analysis.time_conditional("time", time_set["time"], granularity)+" and graph_id = #{graph.id}"
+      Graphml.generate_file(query, "full", tmp_folder)
     end
   end
 end
