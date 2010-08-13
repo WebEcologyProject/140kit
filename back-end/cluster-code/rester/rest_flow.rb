@@ -11,6 +11,8 @@ module RestFlow
   end
   
   def self.determine_rest_work
+    debugger
+    g = ""
     metadata = $w.rest_instance.metadata
     case metadata.scrape.scrape_type.downcase
     when "user source scrape"
