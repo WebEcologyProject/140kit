@@ -45,11 +45,8 @@ def self.fetch_google_json(graph, params)
 end
 
 def self.fetch_rgraph_json(edges, logic_params)
-  debugger
-  g = ""
   node_index = {}
   for edge in edges
-    # debugger
     edge = edge["edge"] if edge["edge"].class == Edge
     if node_index[edge.end_node].nil?
       node_index[edge.end_node] = {}
@@ -78,7 +75,6 @@ def self.fetch_rgraph_json(edges, logic_params)
   end
   json = "["
   nodes = node_index.values.sort{|x,y| y["tweets"].length <=> x["tweets"].length}
-  debugger
   for node in nodes
     json += "{\"id\":\"#{node["user"]}\","
     json += "\"name\":\"#{node["user"]}\","
@@ -87,7 +83,6 @@ def self.fetch_rgraph_json(edges, logic_params)
       json+= "<li><a href=\\\"http://www.twitter.com/#{tweet["from"]}\\\" target=\\\"_blank\\\">#{tweet["from"]}</a> #{tweet["relationship"]}ed <a href=\\\"http://www.twitter.com/#{tweet["to"]}\\\">#{tweet["to"]}</a> in a <a href=\\\"http://twitter.com/#{tweet["from"]}/status/#{tweet["id"]}\\\">tweet</a>.</li>"
     end
     json += "</ul>\"},\"adjacencies\": [  "
-    # debugger
     for tweet in node["tweets"]
     json+= "{\"nodeTo\": \"#{tweet["from"]}\",\"data\": {\"weight\": \"1\",\"label\": \"#{tweet["method"]}\",\"edge_id\": \"#{tweet["id"]}\",$direction: [\"#{tweet["from"]}\", \"#{tweet["to"]}\"] }},"
     end

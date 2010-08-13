@@ -11,8 +11,6 @@ module RestFlow
   end
   
   def self.determine_rest_work
-    debugger
-    g = ""
     metadata = $w.rest_instance.metadata
     case metadata.scrape.scrape_type.downcase
     when "user source scrape"
@@ -44,7 +42,7 @@ module RestFlow
   
   def self.create_temp_file
     `mkdir ../tmp_files/#{$w.instance_id}`
-    source_data = `curl #{SITE_URL}#{$w.rest_instance.metadata.source_data}`
+    source_data = `curl #{SITE_URL}/#{$w.rest_instance.metadata.source_data}`
     f = File.open("../tmp_files/#{$w.instance_id}/source_data.txt", "w")
     f.write(source_data)
     f.close

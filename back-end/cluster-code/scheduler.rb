@@ -2,7 +2,6 @@ class Scheduler
   
   def self.rest(scrape_types)
     if $w.rest_allowed
-      debugger
       metadatas = Scrape.find_all({:scrape_finished => false, :scrape_type => scrape_types}).collect{|scrape| scrape.metadatas}.flatten.compact
       unclaimed_metadatas = metadatas.select {|m| (m.instance_id.nil? || m.instance_id.empty?)}
       claimed_metadatas = metadatas.select {|m| (m.instance_id == $w.instance_id)}

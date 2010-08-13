@@ -12,7 +12,6 @@ class ResearchersController < ApplicationController
   def edit
     model = params[:controller].classify.constantize
     inst_var = instance_variable_set("@#{params[:controller].singularize}", model.find(params[:id]))
-    debugger
     @page_title = "Edit Profile"
     if !current_researcher.admin? || (current_researcher.id != @researcher.id)
       redirect_to("/pages/nasty-boys")

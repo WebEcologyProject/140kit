@@ -37,7 +37,6 @@ class AccountController < ApplicationController
   end
   
   def forgot
-    debugger
     @researcher = Researcher.find(:first, :conditions => {:user_name => params["login"]})
     if @researcher.nil?
       @researcher = Researcher.find(:first, :conditions => {:email => params["email"]})
