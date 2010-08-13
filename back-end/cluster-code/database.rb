@@ -199,10 +199,13 @@ class Database
     connection = Environment.db
     results = []
     query_result = Database.run_query(connection, query)
-    while row = query_result.fetch_hash do
-      results << SQLParser.type_attributes(row, query_result)
+    if query_result
+      while row = query_result.fetch_hash do
+        results << SQLParser.type_attributes(row, query_result)
+      end
+      return results
+    else return nil
     end
-    return results
   end
     
   def self.submit(query)
