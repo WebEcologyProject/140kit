@@ -3,5 +3,5 @@
   <td><a href="mailto:<%=h researcher.email %>"><%=h researcher.email %></a></td>
   <td><%=h researcher.collections.length %></td>
   <td><%=h researcher.role %></td>
-  <td><%= link_to "Promote", researcher_promote_path(researcher.id) %> | <%= link_to "Suspend", researcher_suspend_path(researcher.id) %></td>
+  <td><%= link_to "Edit Access", researcher_access_path(researcher.id) %> | <%= link_to "Suspend", researcher_suspend_path(researcher.id) %></td>
 </tr>

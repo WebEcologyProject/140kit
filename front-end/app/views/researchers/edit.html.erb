@@ -10,6 +10,12 @@
     <%= f.label "Would you like to make your e-mail address available to other researchers?" %><br />
     <%= f.check_box :share_email, :value => @researcher.share_email %>
   </p>
+  <% if @researcher.private_data %>
+    <p>
+      <%= f.label "Make account completely hidden?" %><br />
+      <%= f.check_box :hidden_account, :value => @researcher.hidden_account %>
+    </p>  
+  <% end %>
   <p>
     <%= f.label :website_url %><br />
     <%= f.text_field :website_url, :value => @researcher.website_url %>

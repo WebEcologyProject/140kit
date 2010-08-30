@@ -95,6 +95,14 @@ class CollectionsController < ApplicationController
     redirect_to(request.referrer)
   end
   
+  def hide
+    @collection = Collection.find(params[:collection_id])
+    @collection.private_data = !@collection.private_data
+    @collection.save
+    flash[:notice] = "Your collection has been successfully <a href=\"/pages/hidden-datasets\">#{@collection.private_data ? "un-hidden" : "hidden"}</a> for the time being"
+    redirect_to(request.referrer)
+  end
+  
   def rollback
     @collection = Collection.find(params[:collection_id])
     @collection.finished = false

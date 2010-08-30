@@ -8,6 +8,10 @@
     <%= f.text_field :title %>
   </p>
   <p>
+    <%= f.label "Level of Data Control:" %><br />
+    <%= f.select :access_level, ["Select An Access Level", "User", "Private Researcher", "Commercial Account", "Admin"], :value => "Select An Access Level" %>    
+  </p>
+  <p>
     <%= f.label :description %><br />
     <%= f.text_area :description %>
   </p>

@@ -240,4 +240,9 @@ class Analysis
       end
     end
   end
+  
+  def self.proper_access_level(researcher_level, analysis_level)
+    access_levels = ["User", "Private Researcher", "Commercial Account", "Admin"]
+    return access_levels.index(researcher_level) >= access_levels.index(analysis_level)
+  end
 end

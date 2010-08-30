@@ -14,7 +14,7 @@ end
   <% form_for(@scrape) do |f| -%>
   <%= f.error_messages %>
     <p>
-      <%= f.label :name, "Search Term (cannot contain spaces)" %><br />
+      <%= f.label :name, "Search Term (<a href=\"http://dev.twitter.com/pages/streaming_api_methods#track\">Twitter's rules for search terms</a>)" %><br />
       <%= f.text_field :name, :value => "" %>
     </p>
     <% if logged_in? && current_researcher.admin? -%>

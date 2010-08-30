@@ -18,6 +18,7 @@ ActionController::Routing::Routes.draw do |map|
   map.collection_add_analytics '/collections/:collection_id/add/analytics/:analytical_offering_id', :controller => 'collections', :action => 'add_analytics'
   map.collection_remove_analytics '/collections/:collection_id/remove/analytics/:analytical_offering_id', :controller => 'collections', :action => 'remove_analytics'
   map.collection_mothball '/collections/:collection_id/mothball', :controller => 'collections', :action => 'mothball'
+  map.collection_hide '/collections/:collection_id/hide', :controller => 'collections', :action => 'hide'
   map.collection_rollback '/collections/:collection_id/rollback', :controller => 'collections', :action => 'rollback'
   map.collection_full_destroy '/collections/:collection_id/full_destroy', :controller => 'collections', :action => 'full_destroy'
   
@@ -100,6 +101,7 @@ ActionController::Routing::Routes.draw do |map|
   map.analytical_offering_enable 'analytical_offerings/enable/:id', :controller => 'analytical_offerings', :action => 'enable'
   map.researchers_manage 'researchers/manage', :controller => 'researchers', :action => 'manage'
   map.researcher_promote '/researchers/promote/:id', :controller => 'researchers', :action => 'promote'
+  map.researcher_access '/researchers/access/:id', :controller => 'researchers', :action => 'access_level'
   map.researcher_suspend '/researchers/suspend/:id', :controller => 'researchers', :action => 'suspend'
   map.manage_cluster '/cluster/manage', :controller => 'cluster', :action => 'manage'
   map.kill_instance '/instances/kill/:instance_type/:id', :controller => 'cluster', :action => 'kill_instance'

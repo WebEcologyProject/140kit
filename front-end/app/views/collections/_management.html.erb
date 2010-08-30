@@ -3,6 +3,11 @@
   <ul>
     <li><%= link_to_remote("Analytics", {:replace => 'dataDisplay', :url => analytical_offerings_curate_url(@collection.id)} ) %></li>
     <li><%= link_to "Clear Analytical Results?", collection_rollback_url(@collection.id), :confirm => "Warning, this will destroy all analytical results and force a refresh of all the data - reverts back to phase before frozen. Still want to proceed?" %></li>
+    <% if current_researcher.private_data %>
+      <li>
+        <%= link_to @collection.private_data ? "Unhide Dataset?" : "Hide Dataset?", collection_hide_url(@collection.id) %> <%= link_to "About hidden datasets", "/pages/hidden-datasets" %>
+      </li>
+    <% end %>
   </ul>
 <% end -%>
 

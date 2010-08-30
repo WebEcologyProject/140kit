@@ -284,12 +284,14 @@ module AnalysisFlow
       analytical_offerings = AnalyticalOffering.find_all({:enabled => true})
       new_analysis_metadatas = []
       analytical_offerings.each do |ao|
-        new_am = {}
-        new_am["function"] = ao.function
-        new_am["save_path"] = ao.save_path
-        new_am["collection_id"] = collection.id
-        new_am["rest"] = ao.rest
-        new_analysis_metadatas << new_am
+        if Analysis.proper_access_level(collection.researcher.role, ao.access_level)
+          new_am = {}
+          new_am["function"] = ao.function
+          new_am["save_path"] = ao.save_path
+          new_am["collection_id"] = collection.id
+          new_am["rest"] = ao.rest
+          new_analysis_metadatas << new_am
+        end
       end
       Database.save_all({:analysis_metadatas => new_analysis_metadatas})
     end

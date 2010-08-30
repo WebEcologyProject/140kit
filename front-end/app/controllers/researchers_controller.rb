@@ -36,9 +36,12 @@ class ResearchersController < ApplicationController
   def update
     model = params[:controller].classify.constantize
     inst_var = instance_variable_set("@#{params[:controller].singularize}", model.find(params[:id]))
-    if !params[params[:controller].singularize][:password].empty? && params[params[:controller].singularize][:password] == params[params[:controller].singularize][:password_confirmation]
-      if params[params[:controller].singularize][:password].length >= 6
-        inst_var.password = params[params[:controller].singularize][:password]
+    debugger
+    if params[params[:controller].singularize][:password]
+      if !params[params[:controller].singularize][:password].empty? && params[params[:controller].singularize][:password] == params[params[:controller].singularize][:password_confirmation]
+        if params[params[:controller].singularize][:password].length >= 6
+          inst_var.password = params[params[:controller].singularize][:password]
+        end
       end
     end
     respond_to do |format|
@@ -97,5 +100,9 @@ class ResearchersController < ApplicationController
         end
       }
     end
+  end
+  
+  def access_level
+    @researcher = Researcher.find(params[:id])
   end
 end

@@ -8,8 +8,8 @@
     element_class = "finished"
   end
 -%>
-
-<% if !collection.researcher.nil? -%>
+<%debugger%>
+<% if !collection.researcher.nil? && (!collection.researcher.hidden_account || (logged_in? && collection.researcher == current_researcher)) && !collection.private_data -%>
 
   <tr class="<%= element_class %>">
     <% for column in extra_columns -%>
@@ -54,19 +54,5 @@
       <% end -%>
     <% end %>
     </td>
-  </tr>
-
-<% else -%>
-
-  <tr>
-  <% for column in extra_columns -%>
-    <td><%= column %></td>
-  <% end -%>
-    <td><%= collection.name %></td>
-    <td>N/A</td>
-    <td><%= collection.metadatas.collect{|m| m.tweets_count}.sum %></td>
-    <td><%= collection.metadatas.collect{|m| m.users_count}.sum %></td>
-    <td>N/A</td>
-    <td></td>
   </tr>
 <% end -%>

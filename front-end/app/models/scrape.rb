@@ -10,9 +10,7 @@ class Scrape < ActiveRecord::Base
   
   def validate_on_create
     if self.scrape_type == "Search"
-      if self.name.include?(" ")
-        errors.add("name", " for a search-based scrape must follow the Stream API rules - only single words, sorry.")
-      elsif self.name == ""
+      if self.name == ""
         errors.add("name", "it looks like you forgot to put in an actual search term. Perhaps you should try \"Bieber\"?")
       end
       other_current_scrapes = self.researcher.collections.select{|c| !c.single_dataset && (!c.finished && !c.analyzed)}.select{|c| !c.mothballed}.collect{|c| c.name}
