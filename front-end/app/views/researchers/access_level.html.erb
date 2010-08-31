@@ -1,0 +1,9 @@
+<%= @researcher.user_name %>'s Access Level
+<% form_for(@researcher) do |f| %>
+  <%= f.label "Make user capable of privatizing data?" %>
+  <%= f.check_box :private_data, :value => @researcher.private_data %><br />
+  <%= f.label "Level of Data Control:" %><br />
+  <%= f.select :role, ["User", "Private Researcher", "Commercial Account", "Admin"], :value => @researcher.role %>
+  <br />
+  <%= f.submit %>
+<% end %>
