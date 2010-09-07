@@ -3,14 +3,45 @@ class CollectionsController < ApplicationController
   before_filter :login_required, :except => [:show, :index, :search]
   
   def index(conditions={}, per_page=10, element_id='main')
+    debugger
+    @sort = params[:sort]
     if params[:single_dataset]
+      if params[:sort]
+        @page_title = params[:single_dataset].to_bool ? "All Datasets" : "All Collections"
+        super({:single_dataset => params[:single_dataset].to_bool, :order_by => collection_sort(params[:sort])}, per_page, element_id)
+      else
+        @page_title = params[:single_dataset].to_bool ? "All Datasets" : "All Collections"
+        super({:single_dataset => params[:single_dataset].to_bool, :order_by => "finished desc, tweets_count desc, created_at desc"}, per_page, element_id)
+      end
+    elsif params[:sort]
       @page_title = params[:single_dataset].to_bool ? "All Datasets" : "All Collections"
-      super({:single_dataset => params[:single_dataset].to_bool, :order_by => "finished desc, tweets_count desc, created_at desc"}, per_page, element_id)
+      super({:single_dataset => params[:single_dataset].to_bool, :order_by => collection_sort(params[:sort])}, per_page, element_id)
     else
       super(conditions, per_page, element_id)
     end
   end
-
+  
+  def collection_sort(sort)
+    case sort
+    when "name"
+      return "name, created_at desc"
+    when "name_desc"
+      return "name desc, created_at desc"
+    when "tweets"
+      return "tweets_count, created_at desc"
+    when "tweets_desc"
+      return "tweets_count desc, created_at desc"
+    when "users"
+      return "users_count, created_at desc"
+    when "users_desc"
+      return "users_count desc, created_at desc"
+    when "date_created"
+      return "created_at desc"
+    when "date_created_desc"
+      return "created_at"
+    end
+  end
+  
   def dataset_paginate
     @collection = Collection.find(params[:id])
     index({:id => @collection.datasets.collect{|d| d.id}}, 10, 'dataDisplay')

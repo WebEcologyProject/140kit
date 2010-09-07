@@ -8,6 +8,7 @@ ActionController::Routing::Routes.draw do |map|
   # map.analytical_offerings_dissociate '/analytical_offerings/:analytical_offering_id/dissociate/:collection_id', :controller => 'stream_metadatas', :action => 'dissociate'
   
   map.collections '/collections', :controller => 'collections', :action => 'index', :single_dataset => 'false'
+  map.collections_sort '/collections/sort/:sort', :controller => 'collections', :action => 'index', :single_dataset => 'false'  
   map.collections_manage '/collections/manage', :controller => 'collections', :action => 'manage'
   map.collection_add '/collections/add', :controller => 'collections', :action => 'creator'
   map.create_collection '/collections/create', :controller => 'collections', :action => 'create'

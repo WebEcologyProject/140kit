@@ -8,7 +8,6 @@
     element_class = "finished"
   end
 -%>
-<%debugger%>
 <% if !collection.researcher.nil? && (!collection.researcher.hidden_account || (logged_in? && collection.researcher == current_researcher)) && !collection.private_data -%>
 
   <tr class="<%= element_class %>">
