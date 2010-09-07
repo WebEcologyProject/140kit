@@ -104,7 +104,7 @@ class ApplicationController < ActionController::Base
     respond_to do |format|
       if inst_var.update_attributes(params[params[:controller].singularize.to_sym])
         flash[:notice] =  "#{model} was successfully updated."
-        format.html { redirect_to(inst_var) }
+        format.html { redirect_to(request.referrer) }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }

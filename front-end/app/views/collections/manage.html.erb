@@ -10,7 +10,7 @@ in_process_collection_count = in_process_collections.length
 datasets = @collections.collect{|sm| sm if sm.finished && !sm.analyzed && !sm.single_dataset }.compact.paginate
 dataset_count = datasets.length
 -%>
-<h2>Collections</h2>
+<h2>Collections/h2>
 <% if !scraped_collections.empty? -%>
 <h3><%= scraped_collection_count %> Scraped Collection<%= "s" if scraped_collection_count != 1 %></h3>
 <%= render :partial => "/collections/collections_index", :locals => {:collections => scraped_collections, :show_researchers => false} %>

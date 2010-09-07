@@ -5,7 +5,7 @@ class Scrape < ActiveRecord::Base
   has_many :stream_metadatas
   belongs_to :collection, :foreign_key => 'primary_collection_id'
   before_save :derive_length
-  before_create :generate_humanized_length
+  before_update :update_name
   after_create :fill_out_secondary_data
   
   def validate_on_create
@@ -140,6 +140,7 @@ class Scrape < ActiveRecord::Base
     self.length = run_ends.to_i-Time.now.to_i
     self.last_branch_check = Time.now
     self.folder_name = "#{self.name.downcase.gsub(".", "").gsub(" ", "_").gsub(/\W/, "")}-#{Time.now.strftime("%Y-%m-%d__%H:%M:%S")}"
+    self.generate_humanized_length
   end
   
   def generate_humanized_length
@@ -171,6 +172,10 @@ class Scrape < ActiveRecord::Base
       self.humanized_length += seconds == 1 ? "#{seconds} second, " : "#{seconds} seconds, "      
     end
     self.humanized_length.chop!.chop! if !self.humanized_length.empty? && !self.humanized_length.nil?
+  end
+  
+  def update_name
+    self.collection.name = self.name
   end
   
   def self.valid(temp_data)

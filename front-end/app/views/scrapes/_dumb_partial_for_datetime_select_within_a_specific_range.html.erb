@@ -1,3 +1,6 @@
+<p><%= link_to_function "For half a day",  "update_time(#{(Time.now+12.hours).year},#{(Time.now+12.hours).month},#{(Time.now+12.hours).day},#{(Time.now+12.hours).hour},#{(Time.now+12.hours).min})"%> | 
+<%= link_to_function "For one day",  "update_time(#{(Time.now+24.hours).year},#{(Time.now+24.hours).month},#{(Time.now+24.hours).day},#{(Time.now+24.hours).hour},#{(Time.now+24.hours).min})"%> | 
+<%= link_to_function "For one week",  "update_time(#{(Time.now+7.days).year},#{(Time.now+7.days).month},#{(Time.now+7.days).day},#{(Time.now+7.days).hour},#{(Time.now+7.days).min})"%></p>
 <select id="scrape_run_ends_1i" name="scrape[run_ends(1i)]">
 <% start_time.year.upto(end_time.year) do |year| -%>
   <% if selected_time.year == year -%>

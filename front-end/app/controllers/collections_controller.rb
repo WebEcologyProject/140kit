@@ -67,6 +67,10 @@ class CollectionsController < ApplicationController
     redirect_to("/collections/#{params[:id]}")
   end
   
+  def alter
+    @collection = Collection.find(params[:id])
+  end
+  
   def analytical_setup
     @collection = Collection.find(params[:id])
     @analytical_offerings = AnalyticalOffering.paginate :page => params[:page], :per_page => 10

@@ -34,7 +34,7 @@
 
       <% if !collection.finished -%>
         <% if current_researcher == collection.researcher -%>  
-          <%= link_to "Freeze?", collection_freeze_url(collection.id), :confirm => "Warning, you can't add any more analysis to this job if you press OK. Still want to proceed?" %>
+          <%= link_to "Alter?", collection_alter_url(collection.id) %>
         <% else -%>
           In Process
         <% end -%>

@@ -1,10 +1,3 @@
-<%
-  scraped_collection_count = @collections.select{|c| c.scraped_collection && !c.single_dataset }.compact.length
-  curated_collection_count = @collections.select{|c| !c.scraped_collection && c.finished && !c.single_dataset }.compact.length
-  curating_collection_count = @collections.select{|c| !c.analyzed && !c.single_dataset }.compact.length
-  in_process_collection_count = @collections.select{|c| (c.scraped_collection || c.finished) && !c.analyzed && !c.single_dataset }.compact.length
--%>
-
 <h1><%= @researcher.user_name.capitalize %></h1>
   <%= render :partial => 'image', :locals => {:researcher => @researcher} %>
   <p>
@@ -18,15 +11,15 @@
   <% end %>
     <strong>Joined:</strong> about <%= distance_of_time_in_words(@researcher.join_date, Time.now) %> ago
   </p>
-<h2>Collections</h2>
-<% if !@collections.empty? -%>
-  <%= render :partial => "/collections/collections_index", :locals => {:collections => @collections, :show_researchers => false} %>
-<% end -%>
-<%= scraped_collection_count %> Scraped Collection<%= "s" if scraped_collection_count != 1 %>.<br />
-<%= curated_collection_count %> Finished Curated Collection<%= "s" if curated_collection_count != 1 %>.<br />
-<%= curating_collection_count %> Unfrozen Collection<%= "s" if curating_collection_count != 1 %>.<br />
-<%= curated_collection_count %> In-Process Collection<%= "s" if curated_collection_count != 1 %>.<br />
 <h2><%= link_to "Add a new collection", collection_add_url %></h2>
-<div id="dataDisplay">
-  
-</div>
+<h2>Currently Running</h2>
+<% if !@unfinished_collections.empty? -%>
+  <%= render :partial => "/collections/collections_index", :locals => {:collections => @unfinished_collections, :show_researchers => false} %>
+<% else -%>
+  You have no datasets currently running.
+<% end -%>
+
+<h2>Finished</h2>
+<% if !@finished_collections.empty? -%>
+  <%= render :partial => "/collections/collections_index", :locals => {:collections => @finished_collections, :show_researchers => false} %>
+<% end -%>

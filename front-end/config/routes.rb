@@ -12,7 +12,7 @@ ActionController::Routing::Routes.draw do |map|
   map.collection_add '/collections/add', :controller => 'collections', :action => 'creator'
   map.create_collection '/collections/create', :controller => 'collections', :action => 'create'
   map.analytical_setup '/collections/:id/analytical_setup', :controller => 'collections', :action => 'analytical_setup'
-  map.collection_freeze '/collections/:id/freeze', :controller => 'collections', :action => 'freeze'
+  map.collection_alter '/collections/:id/alter', :controller => 'collections', :action => 'alter'
   map.datasets_curate '/collections/:id/datasets', :controller => 'stream_metadatas', :action => 'curate'
   map.analytical_offerings_curate '/collections/:id/analytical_offerings', :controller => 'analytical_offerings', :action => 'curate'
   map.collection_add_analytics '/collections/:collection_id/add/analytics/:analytical_offering_id', :controller => 'collections', :action => 'add_analytics'

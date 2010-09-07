@@ -59,7 +59,8 @@ class ResearchersController < ApplicationController
   def show
     @researcher = Researcher.find_by_user_name(params[:user_name])
     @page_title = "#{@researcher.user_name}'s page"
-    @collections = Collection.paginate :page => params[:page], :conditions => {:researcher_id => @researcher.id, :single_dataset => false}, :per_page => 10
+    @finished_collections = Collection.paginate :page => params[:page], :conditions => {:researcher_id => @researcher.id, :single_dataset => false, :finished => true}, :per_page => 10
+    @unfinished_collections = Collection.paginate :page => params[:page], :conditions => {:researcher_id => @researcher.id, :single_dataset => false, :finished => false}, :per_page => 10
     respond_to do |format|
       format.html
       format.xml  { render :xml => inst_var }

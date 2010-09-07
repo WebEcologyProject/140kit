@@ -32,6 +32,10 @@
     <%= f.text_field :created_by_link %>
   </p>
   <p>
+    <%= f.label :access_level %><br />
+    <%= f.select :access_level, ["Select An Access Level", "User", "Private Researcher", "Commercial Account", "Admin"], :value => "Select An Access Level" %>    
+  </p>
+  <p>
     <%= f.submit 'Create' %>
   </p>
 <% end %>
