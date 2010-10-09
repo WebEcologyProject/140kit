@@ -34,19 +34,19 @@ def time_based_analytics(model, time_query, object_timeline, collection, granula
     totals_hash = {}
     case model
     when "tweets"
-      frequency_listing = get_frequency_listing("select text from tweets "+Analysis.conditional(collection)+" and "+Analysis.time_conditional("created_at", object_group["created_at"], granularity))
-      generate_graph_points([
-        {"model" => Tweet, "attribute" => "language", "conditional" => conditional, "style" => "histogram", "title" => "tweet_language", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
-        {"model" => Tweet, "attribute" => "created_at", "conditional" => conditional, "style" => "histogram", "title" => "tweet_created_at", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
-        {"model" => Tweet, "attribute" => "source", "conditional" => conditional, "style" => "histogram", "title" => "tweet_source", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
-        {"model" => Tweet, "attribute" => "location", "conditional" => conditional, "style" => "histogram", "title" => "tweet_location", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity}
-      ])
-      generate_graph_points([{"title" => "hashtags", "style" => "word_frequency", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
-        {"title" => "mentions", "style" => "word_frequency", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
-        {"title" => "significant_words", "style" => "word_frequency", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
-        {"title" => "urls", "style" => "word_frequency", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity}]) do |fs, graph, tmp_folder|
-          generate_word_frequency(fs, tmp_folder, frequency_listing, collection, graph)
-      end
+      # frequency_listing = get_frequency_listing("select text from tweets "+Analysis.conditional(collection)+" and "+Analysis.time_conditional("created_at", object_group["created_at"], granularity))
+      # generate_graph_points([
+      #   {"model" => Tweet, "attribute" => "language", "conditional" => conditional, "style" => "histogram", "title" => "tweet_language", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
+      #   {"model" => Tweet, "attribute" => "created_at", "conditional" => conditional, "style" => "histogram", "title" => "tweet_created_at", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
+      #   {"model" => Tweet, "attribute" => "source", "conditional" => conditional, "style" => "histogram", "title" => "tweet_source", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
+      #   {"model" => Tweet, "attribute" => "location", "conditional" => conditional, "style" => "histogram", "title" => "tweet_location", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity}
+      # ])
+      # generate_graph_points([{"title" => "hashtags", "style" => "word_frequency", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
+      #   {"title" => "mentions", "style" => "word_frequency", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
+      #   {"title" => "significant_words", "style" => "word_frequency", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},
+      #   {"title" => "urls", "style" => "word_frequency", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity}]) do |fs, graph, tmp_folder|
+      #     generate_word_frequency(fs, tmp_folder, frequency_listing, collection, graph)
+      # end
     when "users"
       generate_graph_points([
         {"model" => User, "attribute" => "followers_count", "conditional" => conditional, "style" => "histogram", "title" => "user_followers_count", "collection" => collection, "time_slice" => object_group["created_at"], "granularity" => granularity},

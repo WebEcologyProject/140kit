@@ -1,0 +1,34 @@
+<% if @collection.scrape_method == "Stream" -%>
+  <h1>Alter Stream Settings</h1>
+  <% form_for(@collection.scrape) do |f| -%>
+  <p>
+    Currently, your scrape will run for  <%= @collection.scrape.humanized_length %>. You can alter this to any time ranging from ten minutes from now until a week from now.
+    <%= render :partial => "/scrapes/dumb_partial_for_datetime_select_within_a_specific_range", :locals => {:start_time => Time.now+10.minutes, :end_time => Time.now+1.week, :selected_time => @collection.scrape.run_ends} %>
+  </p>
+  <p>
+    <%= f.label :branching, "Also search for terms we think might be related to your term?" %>
+    <%= f.check_box :branching, :value => @collection.scrape.branching %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+  <% end %>
+<% elsif @collection.scrape_method == "Curate" -%>
+  <h1>Alter Curate Settings</h1>
+  <% form_for(@collection.scrape) do |f| -%>
+    <p>
+      <%= f.label :name, "Re-Name your Scrape" %><br />
+      <%= f.text_field :name, :value => "" %>
+    </p>
+  <% end %>
+  
+<% elsif @collection.scrape_method == "REST" -%>
+  <h1>Alter REST Settings</h1>
+  <% form_for(@collection.scrape) do |f| -%>
+    <p>
+      <%= f.label :name, "Re-Name your Scrape" %><br />
+      <%= f.text_field :name, :value => "" %>
+    </p>
+  <% end %>
+  
+<% end -%>

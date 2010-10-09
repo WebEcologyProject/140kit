@@ -1,0 +1,17 @@
+<% @am = am || @am -%>
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<script type="text/javascript">
+google.load('visualization', '1', {packages: ['table','barchart','columnchart','linechart','piechart','geomap']});
+</script>
+<h4 class="accordion_toggle">Gender Estimations</h4>
+<div class="accordion_content">
+  <% if @am.finished -%>  
+  <ul>
+    <% for graph in @am.graphs %>
+      <li><%= link_to_remote(graph.title.split("_").collect{|t| t.capitalize}.join(" "),  :replace => 'dataDisplay', :url => google_graph_url(graph.id)) %></li>
+    <% end %>
+  </ul>
+  <% else -%>
+    The Basic Histograms for this dataset are not yet complete
+  <% end -%>
+</div>

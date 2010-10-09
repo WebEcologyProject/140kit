@@ -40,7 +40,7 @@ def gender_estimation(collection_id, save_path)
   objects.free
   Database.terminate_spooling
   Database.update_all({:graph_points => gender_mapping})
-  Database.update_all({:graph_points => gender_resupts_mapping})
+  Database.update_all({:graph_points => gender_results_mapping})
   Database.update_attributes(:graphs, [gender_graph, gender_results], {:written => true}, Environment.new_db_connect)
 end
 
