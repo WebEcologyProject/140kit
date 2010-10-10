@@ -59,14 +59,16 @@ class ResearchersController < ApplicationController
   def show
     @researcher = Researcher.find_by_user_name(params[:user_name])
     @page_title = "#{@researcher.user_name}'s page"
-    @finished_collections = Collection.paginate :page => params[:page], :conditions => {:researcher_id => @researcher.id, :single_dataset => false, :finished => true}, :per_page => 10
-    @unfinished_collections = Collection.paginate :page => params[:page], :conditions => {:researcher_id => @researcher.id, :single_dataset => false, :finished => false}, :per_page => 10
+    @finished_collections = Collection.paginate :page => params[:finished_page] || 1, :conditions => {:researcher_id => @researcher.id, :single_dataset => false, :finished => true}, :per_page => 10
+    @unfinished_collections = Collection.paginate :page => params[:unfinished_page] || 1, :conditions => {:researcher_id => @researcher.id, :single_dataset => false, :finished => false}, :per_page => 10
     respond_to do |format|
       format.html
       format.xml  { render :xml => inst_var }
       format.js {
         render :update do |page|
-          page.replace_html 'main', :partial => "/collections/collections_index"
+          debugger
+          js_collections, page_param = params[:update_div].include?("unfinished") ? [@unfinished_collections,"unfinished_page"] : [@finished_collections,"finished_page"]
+          page.replace_html params[:update_div], :partial => "/collections/collections_index", :locals => {:collections => js_collections, :update_div => params[:update_div], :page_param => page_param}
         end
       }
     end

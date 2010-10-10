@@ -3,7 +3,6 @@ class CollectionsController < ApplicationController
   before_filter :login_required, :except => [:show, :index, :search]
   
   def index(conditions={}, per_page=10, element_id='main')
-    debugger
     @sort = params[:sort]
     if params[:single_dataset]
       if params[:sort]

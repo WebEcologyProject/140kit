@@ -10,6 +10,8 @@ class AnalysisMetadata < ActiveRecord::Base
       graphs = Graph.find(:all, :conditions => {:collection_id => self.collection_id, :style => "word_frequency", :hour => params[:hour], :date => params[:date], :month => params[:month], :year => params[:year]})
     when "time_based_summary"
       graphs = Graph.find(:all, :conditions => {:collection_id => self.collection_id, :style => "time_based_histogram", :hour => params[:hour], :date => params[:date], :month => params[:month], :year => params[:year]})
+    when "gender_estimation"
+      graphs = Graph.find(:all, :conditions => {:collection_id => self.collection_id, :style => "gender", :hour => params[:hour], :date => params[:date], :month => params[:month], :year => params[:year]})
     end
   end
   

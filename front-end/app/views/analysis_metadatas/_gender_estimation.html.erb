@@ -6,6 +6,7 @@ google.load('visualization', '1', {packages: ['table','barchart','columnchart','
 <h4 class="accordion_toggle">Gender Estimations</h4>
 <div class="accordion_content">
   <% if @am.finished -%>  
+  <% debugger %>
   <ul>
     <% for graph in @am.graphs %>
       <li><%= link_to_remote(graph.title.split("_").collect{|t| t.capitalize}.join(" "),  :replace => 'dataDisplay', :url => google_graph_url(graph.id)) %></li>

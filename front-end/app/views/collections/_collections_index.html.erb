@@ -1,10 +1,11 @@
 <%
-  collections ||= nil
   @collections = collections || @collections
+  page_param = page_param || "page"
+  update_div = update_div || "main"
   show_researchers = true if show_researchers.nil? #!@collections.collect{|c| c.researcher_id }.select{|i| i != current_researcher.id}.empty?
   field_selected = field_selected || @field_selected
 -%>
-<div id="main">
+<div id="<%= update_div %>">
 <table id="collections">
   <tr>
     <th>Name</th>
@@ -22,5 +23,5 @@
   <% end -%>    
 <% end -%>
 </table>
-  <%= will_paginate @collections, :class => 'pagination ajax' %>
+  <%= will_paginate @collections, :class => 'pagination ajax', :param_name => page_param, :params => {:update_div=>update_div} %>
 </div>

@@ -28,6 +28,7 @@ def self.fetch_google_json(graph, params)
   when "mentions"
     attribute = "User Mentioned"
   end
+  debugger
   header = "google.visualization.Query.setResponse({version:0.1,status:'ok',#{params["tqx"]},table:{cols:[{id:\"#{attribute}\",label:\"#{attribute}\",type:'string'},{id:'Frequency',label:'Frequency',type:'number'}],"
   data_set = header+"rows:["
   reversed_graphs = ["user_favourites_count", "user_followers_count", "user_friends_count", "user_statuses_count"]

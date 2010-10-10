@@ -1,7 +1,7 @@
 def gender_estimation(collection_id, save_path)
   collection = Collection.find({:id => collection_id})
-  gender_graph = generate_graph({:style => "gender", :title => "User Gender Mapping", :collection_id => collection_id})
-  gender_results = generate_graph({:style => "gender", :title => "User Gender Breakdown", :collection_id => collection_id})
+  gender_graph = generate_graph({:style => "gender", :title => "mapping", :collection_id => collection_id})
+  gender_results = generate_graph({:style => "gender", :title => "breakdown", :collection_id => collection_id})
   gender_mapping = []
   gender_results_mapping = []
   gender_results_tracker = {}
@@ -16,6 +16,14 @@ def gender_estimation(collection_id, save_path)
     rescue Timeout::Error
       puts "FAIL"
       retry
+    end
+    case result
+    when "inconclusive"
+      return 0
+    when "male"
+      return 1
+    when "female"
+      return 2
     end
     graph_point = {}
     graph_point["label"] = row["twitter_id"]
