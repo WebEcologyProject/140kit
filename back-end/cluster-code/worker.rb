@@ -17,13 +17,12 @@ class Worker
   end
   
   def poll
-    check_in(AnalyticalInstance)
+    check_in("analysis")
     while true
-      killed = killed?(AnalyticalInstance)
-      if !killed
+      if !killed?
         # begin
           AnalysisFlow.work
-        # rescue => e        
+        # rescue => e
         #   Failure.new({:message => "Error from Analytical instance #{$w.id} on machine #{@hostname} at #{Time.ntp}", :trace => "#{e}", :created_at => Time.ntp, :instance_id => $w.instance_id}).save
         #   next
         # end
@@ -37,11 +36,10 @@ class Worker
   
   def stream
     settings = {}
-    check_in(StreamInstance)
+    check_in("stream")
     assign_user_account
     while true
-      killed = killed?(StreamInstance)
-      if !killed
+      if !killed?
         # begin
           StreamFlow.stream
         # rescue => e        
@@ -53,7 +51,8 @@ class Worker
         sleep(SLEEP_CONSTANT)
       end
     end
-    check_out(StreamInstance)
+    # this will never ever be called:
+    check_out
   end
   
   def rest
@@ -77,29 +76,49 @@ class Worker
   end
   
   def check_in(instance_type)
-    w = instance_type.find({:hostname => self.hostname, :instance_name => self.instance_name})
-    if w.class == instance_type
-      self.instance_id = w.instance_id
-      w.created_at = Time.ntp
-      w.updated_at = Time.ntp
-      w.pid = Process.pid
-      w.slug = self.hostname.gsub(/[\.]/, "-")
-      w.save
-    else
+    
+    # new:
+    # AnalyticalInstance, RestInstance, StreamInstance are now just Instances with instance_types
+    
+    i = Instance.find({:hostname => self.hostname, :instance_name => self.instance_name})
+    if i.nil?
       self.instance_id = Digest::SHA1.hexdigest(Time.ntp.to_s+rand(100000).to_s)
-      w = instance_type.new({:instance_id => self.instance_id, :created_at => Time.ntp, :hostname => self.hostname, :instance_name => self.instance_name, :killed => false, :pid => Process.pid, :slug => self.hostname.gsub(/[\.]/, "-")})
-      w.save
+      i = Instance.new({:instance_id => self.instance_id, :created_at => Time.ntp, :hostname => self.hostname, :instance_name => self.instance_name, :killed => false, :pid => Process.pid, :slug => self.hostname.gsub(/[\.]/, "-"), :instance_type => instance_type})
+      i.save
+    else
+      self.instance_id = i.instance_id
+      i.created_at = Time.ntp
+      i.updated_at = Time.ntp
+      i.pid = Process.pid
+      i.slug = self.hostname.gsub(/(\W+)/, "-")
+      i.save
     end
     initialize_logged_session
+    
+    # old:
+    # w = instance_type.find({:hostname => self.hostname, :instance_name => self.instance_name})
+    # if w.class == instance_type
+    #   self.instance_id = w.instance_id
+    #   w.created_at = Time.ntp
+    #   w.updated_at = Time.ntp
+    #   w.pid = Process.pid
+    #   w.slug = self.hostname.gsub(/[\.]/, "-")
+    #   w.save
+    # else
+    #   self.instance_id = Digest::SHA1.hexdigest(Time.ntp.to_s+rand(100000).to_s)
+    #   w = instance_type.new({:instance_id => self.instance_id, :created_at => Time.ntp, :hostname => self.hostname, :instance_name => self.instance_name, :killed => false, :pid => Process.pid, :slug => self.hostname.gsub(/[\.]/, "-")})
+    #   w.save
+    # end
+    # initialize_logged_session
   end
   
-  def killed?(instance_type)
-    instance_type.find({:hostname => self.hostname, :instance_name => self.instance_name}).killed
+  def killed?
+    Instance.find({:hostname => self.hostname, :instance_name => self.instance_name}).killed
   end
   
   def check_out
-    w = instance_type.find({:instance_id => self.instance_id, :hostname => self.hostname, :instance_name => self.instance_name})
-    w.destroy
+    i = Instance.find({:instance_id => self.instance_id, :hostname => self.hostname, :instance_name => self.instance_name})
+    i.destroy
   end
    
   def initialize_logged_session
@@ -136,4 +155,7 @@ class Worker
       end
     end
   end
+  
+  
+  
 end

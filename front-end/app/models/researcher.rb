@@ -1,5 +1,6 @@
 require 'digest/sha1'
 class Researcher < ActiveRecord::Base
+  has_many :curations
   has_many :collections
   has_many :scrapes
   has_many :news_items

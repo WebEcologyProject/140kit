@@ -1,5 +1,5 @@
 class AnalysisMetadata < SiteData
-  attr_accessor :function, :instance_id, :collection_id, :finished, :id, :collection, :processing, :scrape_id, :scrape, :rest, :save_path
+  attr_accessor :function, :instance_id, :collection_id, :finished, :id, :collection, :processing, :scrape_id, :scrape, :rest, :save_path, :dataset_id, :dataset
 
   ###############Relation methods
 
@@ -9,6 +9,15 @@ class AnalysisMetadata < SiteData
       return @collection
     else
       return @collection
+    end
+  end
+  
+  def dataset
+    if @dataset.nil?
+      @dataset = Dataset.find({:id => @dataset})
+      return @dataset
+    else
+      return @dataset
     end
   end
   

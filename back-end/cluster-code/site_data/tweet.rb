@@ -3,7 +3,7 @@ class Tweet < SiteData
   attr_accessor :twitter_id, :text, :source, :language, :user_id, :scrape_id
   attr_accessor :screen_name, :location, :in_reply_to_status_id, :in_reply_to_user_id
   attr_accessor :favorited, :truncated, :in_reply_to_screen_name, :id, :instance_id, :flagged
-  attr_accessor :created_at, :lat, :lon, :metadata, :metadata_id, :user, :metadata_type
+  attr_accessor :created_at, :lat, :lon, :metadata, :metadata_id, :user, :metadata_type, :dataset_id
 
   ###############Specific methods
 

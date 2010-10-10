@@ -3,11 +3,12 @@ module StreamFlow
   attr_accessor :stream
 
   def self.stream
-    Scheduler.stream(["Search", "Trend"])
-    if $w.stream_instance.metadatas.length > 0
+    Scheduler.add_stream_datasets
+    # if $w.stream_instance.metadatas.length > 0
+    if !$w.stream_instance.datasets.empty?
       $w.stream_instance.stream_data
     else
-      puts "No Scrapes found to work on at this time."
+      puts "No stream datasets found to track at this time."
     end
   end
   
@@ -28,9 +29,11 @@ module StreamFlow
       buffer = ""
       http.stream do |chunk|
         buffer += chunk
-        puts "TimeCheck! result: #{U.times_up(@stream.length, @stream.counter)}"
+        # new: time check
+        times_up = (Time.ntp.to_f >= @stream.next_stop_time)
+        puts "TimeCheck! result: #{times_up}"
         self.collect_data(buffer)
-        EventMachine::stop_event_loop if U.times_up(@stream.length, @stream.counter)
+        EventMachine::stop_event_loop if times_up # U.times_up(@stream.length, @stream.counter)
       end
     end
   end
@@ -52,15 +55,21 @@ module StreamFlow
   end
 
   def self.adopt_new_requests
-    new_metadatas_added = false
+    # new:
     puts "########LOOKING FOR NEW REQUESTS TO ADOPT########"
-    metadatas = Scrape.find_all({:scrape_finished => false}).collect{|scrape| scrape.metadatas}
-    metadatas = metadatas.flatten.compact
-    metadatas = metadatas.select {|m| (m.instance_id.nil? || m.instance_id.empty?)}
-    new_metdatas_added = Scheduler.claim_metadata(metadatas, StreamInstance)
-    if new_metadatas_added
+    datasets_added = Scheduler.add_stream_datasets
+    if datasets_added
       EventMachine::stop_event_loop
     end
+    
+    # old:
+    # metadatas = Scrape.find_all({:scrape_finished => false}).collect{|scrape| scrape.metadatas}
+    # metadatas = metadatas.flatten.compact
+    # metadatas = metadatas.select {|m| (m.instance_id.nil? || m.instance_id.empty?)}
+    # new_metdatas_added = Scheduler.claim_metadata(metadatas, StreamInstance)
+    # if new_metadatas_added
+    #   EventMachine::stop_event_loop
+    # end
   end
 
   def self.collect_data(buffer)

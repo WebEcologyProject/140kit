@@ -1,5 +1,7 @@
 class Tweet < ActiveRecord::Base
   belongs_to :stream_metadata, :foreign_key => "metadata_id"
+  belongs_to :users
+  belongs_to :datasets
   
   def self.source(source)
     if source.include?("</a>")

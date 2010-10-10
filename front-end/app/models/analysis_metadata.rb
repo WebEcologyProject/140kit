@@ -1,5 +1,6 @@
 class AnalysisMetadata < ActiveRecord::Base
   belongs_to :collection
+  belongs_to :dataset
   has_one :instance, :class_name => "AnalyticalInstance", :primary_key => "instance_id", :foreign_key => "instance_id"
   
   def graphs(params={})

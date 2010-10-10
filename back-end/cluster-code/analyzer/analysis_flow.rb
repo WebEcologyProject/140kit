@@ -5,60 +5,111 @@ module AnalysisFlow
   
   def self.work
     self.finish_scrapes
-    self.do_analysis_work
-    self.check_like_terms
-    self.check_trends
-    self.tweet_user_count
-    self.do_analysis_work
+    # self.do_analysis_work
+    # self.check_like_terms
+    # self.check_trends
+    # self.tweet_user_count
+    # self.do_analysis_work
   end
-    
+  
   def self.finish_scrapes
-    scrapes = Scrape.find_all({:finished => false, :scrape_finished => true})
-    for scrape in scrapes
-      if scrape.class != NilClass && (!scrape.flagged || scrape.instance_id == $w.instance_id)
-        scrape.flagged = true
-        scrape.instance_id = $w.instance_id
-        scrape.save
-        sleep(SLEEP_CONSTANT)
-        scrape = Scrape.find({:instance_id => $w.instance_id, :id => scrape.id})
-        if scrape.class != NilClass && scrape.instance_id == $w.instance_id
-          datasets = Collection.find_all({:scrape_id => scrape.id, :single_dataset => true}).compact
-          collection = scrape.collection
-          datasets.each do |d|
-            d.tweets_count = Tweet.count({:metadata_id => d.metadata.id, :metadata_type => d.metadata.class.underscore.chop}) if !d.metadata.nil?
-            d.users_count = User.count({:metadata_id => d.metadata.id, :metadata_type => d.metadata.class.underscore.chop}) if !d.metadata.nil?
-            d.finished = true
-          end
-          datasets.each {|d| AnalysisFlow.create_singular_analysis_metadatas(d) if  d.tweets_count != 0}
-          collection.tweets_count = datasets.collect{|d| d.tweets_count}.sum if !collection.nil?
-          collection.users_count = datasets.collect{|d| d.users_count}.sum if !collection.nil?
-          if collection.nil? || collection.tweets_count == 0
-            self.generate_scrape_failed_email(collection) if !collection.nil?
-            metadatas = datasets.collect{|d| d.metadata}.compact
-            metadatas.collect{|m| m.destroy}
-            datasets.collect{|d| d.destroy}
-            collection.destroy if !collection.nil?
-            scrape = scrape.destroy
+    #TODO: split this into multiple functions!!!
+    debugger
+    
+    # tweet and user counts
+    loop do
+      # this set up favors distribution of work
+      datasets = Dataset.find_all({:scrape_finished => true, :tweets_count => nil, :users_count => nil})
+      break if datasets.empty?
+      # pick a random one
+      dataset = datasets[rand(datasets.length-1)]
+      dataset.tweets_count = Tweet.count({:dataset_id => dataset.id})
+      dataset.users_count = User.count({:dataset_id => dataset.id})
+      # delete empty datasets
+      if dataset.tweets_count == 0
+        # there really should only be one curation at this point
+        for curation in dataset.curations
+          if curation.datasets.length > 1
+            dataset.destroy
           else
-            AnalysisFlow.create_singular_analysis_metadatas(collection) 
-            collection.finished = true
-            Collection.update_all(datasets.collect{|d| d.attributes}<<collection.attributes)
-            scrape.finished = true
-            scrape.save
-            puts "-+"*20
-            puts "SCRAPE #{scrape.id} IS TOTALLY FINISHED!"
-            puts "-+"*20
-            self.generate_scrape_done_email(collection)
+            self.generate_scrape_failed_email(curation)
+            dataset.destroy
+            curation.destroy
+            Database.submit("delete from curations_datasets where dataset_id = '#{dataset.id}' and curation_id = '#{curation.id}';")
           end
         end
-        if scrape.class != NilClass
-          scrape.flagged = false
-          scrape.instance_id = ""
-          scrape.save
+      else
+        dataset.save
+      end
+    end
+    
+    # set analyzed datasets to analyzed
+    datasets = Dataset.find_all({:scrape_finished => true, :analyzed => false})
+    for dataset in datasets
+      # if the num of finished metadatas == total metadatas and total != 0
+      unfinished = AnalysisMetadata.count({:dataset_id => dataset.id, :finished => false})
+      if unfinished == 0
+        total = AnalysisMetadata.count({:dataset_id => dataset.id})
+        if total > 0
+          dataset.analyzed = true
+          dataset.save
+        else
+          # spawn analysis jobs
+          self.spawn_analysis_metadatas(dataset)
         end
       end
     end
+    
   end
+  
+  #deprecated:
+  # def self.finish_scrapes
+  #   scrapes = Scrape.find_all({:finished => false, :scrape_finished => true})
+  #   for scrape in scrapes
+  #     if scrape.class != NilClass && (!scrape.flagged || scrape.instance_id == $w.instance_id)
+  #       scrape.flagged = true
+  #       scrape.instance_id = $w.instance_id
+  #       scrape.save
+  #       sleep(SLEEP_CONSTANT)
+  #       scrape = Scrape.find({:instance_id => $w.instance_id, :id => scrape.id})
+  #       if scrape.class != NilClass && scrape.instance_id == $w.instance_id
+  #         datasets = Collection.find_all({:scrape_id => scrape.id, :single_dataset => true}).compact
+  #         collection = scrape.collection
+  #         datasets.each do |d|
+  #           d.tweets_count = Tweet.count({:metadata_id => d.metadata.id, :metadata_type => d.metadata.class.underscore.chop}) if !d.metadata.nil?
+  #           d.users_count = User.count({:metadata_id => d.metadata.id, :metadata_type => d.metadata.class.underscore.chop}) if !d.metadata.nil?
+  #           d.finished = true
+  #         end
+  #         datasets.each {|d| AnalysisFlow.create_singular_analysis_metadatas(d) if d.tweets_count != 0}
+  #         collection.tweets_count = datasets.collect{|d| d.tweets_count}.sum if !collection.nil?
+  #         collection.users_count = datasets.collect{|d| d.users_count}.sum if !collection.nil?
+  #         if collection.nil? || collection.tweets_count == 0
+  #           self.generate_scrape_failed_email(collection) if !collection.nil?
+  #           metadatas = datasets.collect{|d| d.metadata}.compact
+  #           metadatas.collect{|m| m.destroy}
+  #           datasets.collect{|d| d.destroy}
+  #           collection.destroy if !collection.nil?
+  #           scrape = scrape.destroy
+  #         else
+  #           AnalysisFlow.create_singular_analysis_metadatas(collection) 
+  #           collection.finished = true
+  #           Collection.update_all(datasets.collect{|d| d.attributes}<<collection.attributes)
+  #           scrape.finished = true
+  #           scrape.save
+  #           puts "-+"*20
+  #           puts "SCRAPE #{scrape.id} IS TOTALLY FINISHED!"
+  #           puts "-+"*20
+  #           self.generate_scrape_done_email(collection)
+  #         end
+  #       end
+  #       if scrape.class != NilClass
+  #         scrape.flagged = false
+  #         scrape.instance_id = ""
+  #         scrape.save
+  #       end
+  #     end
+  #   end
+  # end
   
   def self.redact_metadata(scrape, metadatas)
     for metadata in metadatas
@@ -267,34 +318,50 @@ module AnalysisFlow
     end
   end
 
-  def self.generate_scrape_failed_email(collection)
-    if !collection.single_dataset
-      subject = "Your Scrape failed to collect any data."
-      message_content = "We ran the term that you threw in (\"#{collection.name}\") and did everything according to specification.
-      Unfortunately, however, the data never came through - when we were ticking this job off and sending ti to analysis, we found that it actually contained 0 tweets, which means it has to be thrown out. 
-      Please feel free to submit another job. (The likely reasons this job failed: the term did not have enough traffic around it/the users you searched for did not exist)
-      Thanks, 
-      140Kit Team."
-      recipient = collection.researcher.email
-      p = PendingEmail.new({:recipient => recipient, :subject => subject, :message_content => message_content}).save
-    end
+  def self.generate_scrape_failed_email(curation)
+    subject = "Your Scrape failed to collect any data."
+    message_content = "We ran the term that you threw in (\"#{curation.name}\") and did everything according to specification.
+    Unfortunately, however, the data never came through - when we were ticking this job off and sending it to analysis, we found that it actually contained 0 tweets, which means it has to be thrown out. 
+    Please feel free to submit another job. (The likely reasons this job failed: the term did not have enough traffic around it/the users you searched for did not exist)
+    Thanks, 
+    140Kit Team."
+    recipient = curation.researcher.email
+    p = PendingEmail.new({:recipient => recipient, :subject => subject, :message_content => message_content}).save
   end
   
-    def self.create_singular_analysis_metadatas(collection)
-      analytical_offerings = AnalyticalOffering.find_all({:enabled => true})
-      new_analysis_metadatas = []
-      analytical_offerings.each do |ao|
-        if Analysis.proper_access_level(collection.researcher.role, ao.access_level)
-          new_am = {}
-          new_am["function"] = ao.function
-          new_am["save_path"] = ao.save_path
-          new_am["collection_id"] = collection.id
-          new_am["rest"] = ao.rest
-          new_analysis_metadatas << new_am
-        end
-      end
-      Database.save_all({:analysis_metadatas => new_analysis_metadatas})
+  def self.spawn_analysis_metadatas(dataset)
+    analytical_offerings = AnalyticalOffering.find_all({:enabled => true})
+    new_analysis_metadatas = []
+    analytical_offerings.each do |analytic|
+      #FIXME: no access level checking
+      # if Analysis.proper_access_level(collection.researcher.role, ao.access_level)
+        metadata = {}
+        metadata["function"] = analytic.function
+        metadata["save_path"] = analytic.save_path
+        metadata["dataset_id"] = dataset.id
+        metadata["rest"] = analytic.rest
+        new_analysis_metadatas << metadata
+      # end
     end
+    Database.save_all({:analysis_metadatas => new_analysis_metadatas})
+  end
+
+  #deprecated:
+  # def self.create_singular_analysis_metadatas(collection)
+  #   analytical_offerings = AnalyticalOffering.find_all({:enabled => true})
+  #   new_analysis_metadatas = []
+  #   analytical_offerings.each do |ao|
+  #     if Analysis.proper_access_level(collection.researcher.role, ao.access_level)
+  #       new_am = {}
+  #       new_am["function"] = ao.function
+  #       new_am["save_path"] = ao.save_path
+  #       new_am["collection_id"] = collection.id
+  #       new_am["rest"] = ao.rest
+  #       new_analysis_metadatas << new_am
+  #     end
+  #   end
+  #   Database.save_all({:analysis_metadatas => new_analysis_metadatas})
+  # end
   
   def self.update_time
     si = AnalyticalInstance.find({:instance_id => $w.instance_id})

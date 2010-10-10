@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100815181606) do
+ActiveRecord::Schema.define(:version => 20101010003640) do
 
   create_table "analysis_metadatas", :force => true do |t|
     t.boolean "finished",      :default => false, :null => false
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(:version => 20100815181606) do
     t.integer "collection_id"
     t.boolean "rest",          :default => false, :null => false
     t.string  "save_path"
+    t.integer "dataset_id"
   end
 
   add_index "analysis_metadatas", ["function", "collection_id"], :name => "analysis_metadatas_function_collection_id", :unique => true
@@ -74,7 +75,7 @@ ActiveRecord::Schema.define(:version => 20100815181606) do
     t.integer  "users_count",        :default => 0,                     :null => false
     t.string   "scrape_method"
     t.boolean  "mothballed",         :default => false,                 :null => false
-    t.boolean  "private_data"
+    t.boolean  "private_data",       :default => false,                 :null => false
   end
 
   add_index "collections", ["researcher_id", "scrape_id", "folder_name"], :name => "unique_collection"
@@ -100,6 +101,32 @@ ActiveRecord::Schema.define(:version => 20100815181606) do
     t.integer  "post_id"
     t.text     "comment"
     t.string   "title",         :null => false
+  end
+
+  create_table "curations", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "researcher_id"
+  end
+
+  create_table "curations_datasets", :id => false, :force => true do |t|
+    t.integer "curation_id"
+    t.integer "dataset_id"
+  end
+
+  create_table "datasets", :force => true do |t|
+    t.string   "term"
+    t.string   "scrape_type"
+    t.datetime "start_time"
+    t.integer  "length"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "scrape_finished",               :default => false
+    t.string   "instance_id",     :limit => 40
+    t.boolean  "analyzed",                      :default => false
+    t.integer  "tweets_count"
+    t.integer  "users_count"
   end
 
   create_table "edges", :force => true do |t|
@@ -174,6 +201,18 @@ ActiveRecord::Schema.define(:version => 20100815181606) do
     t.string  "researcher_id"
   end
 
+  create_table "instances", :force => true do |t|
+    t.string   "instance_id",   :limit => 40
+    t.string   "hostname"
+    t.string   "instance_name"
+    t.integer  "pid"
+    t.boolean  "killed",                      :default => false
+    t.string   "slug"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "instance_type"
+  end
+
   create_table "news", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -192,7 +231,7 @@ ActiveRecord::Schema.define(:version => 20100815181606) do
     t.string  "subject",                            :null => false
   end
 
-  add_index "pending_emails", ["message_content", "recipient", "subject"], :name => "unique_email", :unique => true
+  add_index "pending_emails", ["recipient", "subject"], :name => "unique_email", :unique => true
 
   create_table "researchers", :force => true do |t|
     t.string   "user_name",                 :limit => 20,                                    :null => false
@@ -210,8 +249,8 @@ ActiveRecord::Schema.define(:version => 20100815181606) do
     t.datetime "remember_token_expires_at",               :default => '2010-01-01 01:01:01', :null => false
     t.string   "crypted_password"
     t.boolean  "share_email",                             :default => false,                 :null => false
-    t.boolean  "private_data"
-    t.boolean  "hidden_account"
+    t.boolean  "private_data",                            :default => false,                 :null => false
+    t.boolean  "hidden_account",                          :default => false,                 :null => false
   end
 
   create_table "rest_instances", :force => true do |t|
@@ -315,6 +354,7 @@ ActiveRecord::Schema.define(:version => 20100815181606) do
     t.string   "metadata_type",                        :default => "stream_metadatas", :null => false
     t.string   "instance_id"
     t.boolean  "flagged",                              :default => false,              :null => false
+    t.integer  "dataset_id"
   end
 
   add_index "tweets", ["metadata_id", "metadata_type"], :name => "metadata_id_type"
@@ -360,6 +400,7 @@ ActiveRecord::Schema.define(:version => 20100815181606) do
     t.string   "instance_id",                                                  :null => false
     t.boolean  "flagged",                      :default => false
     t.integer  "listed_count"
+    t.integer  "dataset_id"
   end
 
   add_index "users", ["metadata_id", "metadata_type"], :name => "metadata_id_type"

@@ -1,12 +1,12 @@
-class TweetHelper
-
-  attr_accessor :branch_terms
+module RestHelper
+  
+  # REST API returns different shit than the Stream API. Awesome.
 
   def self.hash_tweets(dataset)
     tweets = []
     puts "Retrieved " + dataset.length.to_s + " new tweets"
     dataset.each do |entry|
-      tweet = TweetHelper.hash_tweet(entry)
+      tweet = RestHelper.hash_tweet(entry)
       tweets << tweet
     end
     tweets = U.uniform_columns(tweets)
@@ -14,13 +14,14 @@ class TweetHelper
   end
 
   def self.hash_tweet(entry)
-    tweet = TweetHelper.scrape_tweet_attributes(entry)
+    tweet = RestHelper.scrape_tweet_attributes(entry)
     # puts "Hashed tweet: #{tweet["twitter_id"]}"
     return tweet
   end
   
   def self.scrape_tweet_attributes(entry)
-    allowed_fields = ["lat", "twitter_id", "metadata_id", "dataset_id", "in_reply_to_user_id", "lon", "language", "scrape_id", "favorited", "text", "user_id", "truncated", "source", "screen_name", "created_at", "in_reply_to_screen_name", "location", "id", "in_reply_to_status_id"]
+    allowed_fields = ["max_id", "created_at", "profile_image_url", "since_id", "from_user", "refresh_url", "metadata", "to_user_id", "text", "next_page", "id", "page", "results_per_page", "from_user_id", "to_user", "completed_in", "iso_language_code", "source", "query"]
+    allowed_fields = ["lat", "twitter_id", "metadata_id", "in_reply_to_user_id", "lon", "language", "scrape_id", "favorited", "text", "user_id", "truncated", "source", "screen_name", "created_at", "in_reply_to_screen_name", "location", "id", "in_reply_to_status_id"]
     twitter_id = entry["id"]
     tweet = {}
     entry.delete_if{|k, v| k == "title" || k == "profile_image_url" || k == "from_user_id"}
@@ -88,29 +89,6 @@ class TweetHelper
     elsif !mentioned_names.empty?
       return mentioned_names.first
     else return "" 
-    end
-  end
-  
-  def self.check_for_branch_terms(tweet_content)
-    # branch_terms = TweetHelper.prep_branch_terms(@branch_terms)
-    # TweetHelper.check_for_branch_terms(twitter_message)
-    tweet_content.scan(/(#\w*)\W/).flatten.each do |tag|
-      @branch_terms[tag] = @branch_terms[tag].nil? ? 1 : @branch_terms[tag]+1
-    end
-  end
-  
-  def self.prep_branch_terms(branch_terms)
-    sql_safe_branch_terms = []
-    if branch_terms.keys.length > 1
-      branch_terms.each_pair do |k, v|
-        branch = {}
-        branch["word"] = k
-        branch["frequency"] = v
-        sql_safe_branch_terms << branch
-      end
-      return sql_safe_branch_terms
-    else
-      return nil
     end
   end
   

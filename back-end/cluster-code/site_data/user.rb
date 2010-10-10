@@ -5,7 +5,7 @@ class User < SiteData
   attr_accessor :profile_sidebar_fill_color, :profile_sidebar_border_color, :friends_count
   attr_accessor :created_at, :favourites_count, :utc_offset, :time_zone, :profile_background_image_url
   attr_accessor :profile_background_tile, :notifications, :geo_enabled, :verified, :following, :listed_count
-  attr_accessor :statuses_count, :scrape_id, :contributors_enabled, :lang, :id, :metadata_id, :tweets
+  attr_accessor :statuses_count, :scrape_id, :contributors_enabled, :lang, :id, :metadata_id, :tweets, :dataset_id
 
 
   ###############Relation methods

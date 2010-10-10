@@ -1,17 +1,24 @@
 module U
 
-  def self.append_and_save(objects, metadata)
-    U.append_scrape_id(objects, metadata)
+  def self.append_and_save(objects, dataset)
+    U.append_dataset_id(objects, dataset)
     Database.save_all(objects)
   end
   
-  def self.append_scrape_id(objects, metadata)
+  def self.append_dataset_id(objects, dataset)
     objects.values.flatten.compact.each do |object|
-      object["metadata_id"] = metadata.id
-      object["metadata_type"] = metadata.class.to_s.underscore.chop
-      object["scrape_id"] = metadata.scrape_id
+      object["dataset_id"] = dataset.id
     end
   end
+  
+  #deprecated
+  # def self.append_scrape_id(objects, metadata)
+  #   objects.values.flatten.compact.each do |object|
+  #     object["metadata_id"] = metadata.id
+  #     object["metadata_type"] = metadata.class.to_s.underscore.chop
+  #     object["scrape_id"] = metadata.scrape_id
+  #   end
+  # end
     
   def self.times_up(start_time, counter)
     if Time.ntp.to_f >= start_time.to_f+counter

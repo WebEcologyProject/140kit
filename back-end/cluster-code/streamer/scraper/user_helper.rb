@@ -11,7 +11,7 @@ class UserHelper
   end
   
   def self.hash_user(raw_user)
-    disallowed_keys = ["profile_use_background_image", "follow_request_sent", "show_all_inline_media"]
+    disallowed_keys = ["profile_use_background_image", "follow_request_sent", "show_all_inline_media", "mobile_phone_discoverability_set", "email_discoverability_set", "discoverable_by_email", "discoverable_by_mobile_phone"]
     user = {}
       user["screen_name"] = raw_user["screen_name"]
       raw_user.delete_if {|k, v| k == "following" || k == "status"}
