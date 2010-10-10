@@ -28,12 +28,12 @@ def self.fetch_google_json(graph, params)
   when "mentions"
     attribute = "User Mentioned"
   end
-  debugger
   header = "google.visualization.Query.setResponse({version:0.1,status:'ok',#{params["tqx"]},table:{cols:[{id:\"#{attribute}\",label:\"#{attribute}\",type:'string'},{id:'Frequency',label:'Frequency',type:'number'}],"
   data_set = header+"rows:["
   reversed_graphs = ["user_favourites_count", "user_followers_count", "user_friends_count", "user_statuses_count"]
   unprocessed_graph_points = reversed_graphs.include?(graph.title) ? graph.graph_points.sort {|x,y| y.label.to_i <=> x.label.to_i } : graph.graph_points.sort {|x,y| y.value <=> x.value }
   processed_graph_points = Graph.data_sort(graph.title, unprocessed_graph_points)
+  debugger
   processed_graph_points.each do |graph_point|
     if reversed_graphs.include?(graph.title)
       data_set = data_set+"{c:[{v:#{graph_point.value}},{v:#{graph_point.label.gsub("\n", "")}}]},"
@@ -103,6 +103,9 @@ end
 ###GOOGLE PARSING
   
   def self.data_sort(title, graphs)
+    debugger
+    gg = ""
+
     case title
     when "tweet_location"
       graphs.collect{|graph| graph.label = "<a href='http://maps.google.com/maps?q=#{graph.label}' target='_blank'>#{graph.label}</a>"}
@@ -139,6 +142,19 @@ end
       return graphs
     when "urls"
       graphs.collect{|g| g.label = "<a href='#{g.label}' target='_blank'>#{g.label}</a>"}
+      return graphs
+    when "user_gender_mapping"
+      graphs.collect{|g|
+        if g.value = 0
+          g.value = "inconclusive"
+        elsif g.value = 1
+          g.value = "male"
+        elsif g.value = 2
+          g.value = "female"
+        end
+      }
+      return graphs
+    when "user_gender_breakdown"
       return graphs
     end
   end

@@ -27,6 +27,7 @@ class ApplicationController < ActionController::Base
 
   #DEFAULT RAILS ACTIONS
   def index(conditions={}, per_page=10, element_id='main')
+    debugger
     model = params[:controller].classify.constantize
     if conditions.nil?
       value = (model.paginate :page => params[:page], :per_page => per_page)

@@ -101,38 +101,6 @@ module U
   end
   
   def self.month_days(month, year=nil)
-    case month.to_i
-    when 1
-      return 31
-    when 2
-      if year%400 == 0
-        return 28
-      elsif year%100 == 0
-        return 29
-      elsif year%4 == 0
-        return 28
-      else return 29
-      end
-    when 3
-      return 31
-    when 4
-      return 30
-    when 5
-      return 31
-    when 6
-      return 30
-    when 7
-      return 31
-    when 8
-      return 31
-    when 9
-      return 30
-    when 10
-      return 31
-    when 11
-      return 30
-    when 12
-      return 31
-    end                                                                 
+    ((Date.new(year, month.to_i, 1) >> 1) - 1).day
   end
 end

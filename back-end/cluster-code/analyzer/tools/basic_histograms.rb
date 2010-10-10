@@ -48,7 +48,6 @@ def frequency_graphs(fs, graph, tmp_folder)
     FasterCSV.open(tmp_folder+graph.title+".csv", "w") do |csv|
       first_hash = objects.fetch_hash
       keys = first_hash.keys
-      debugger
       csv << keys
       csv << keys.collect{|key| first_hash[key]}
       graph_point = {}

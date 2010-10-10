@@ -39,6 +39,9 @@ class Graph < ActiveRecord::Base
       return "Table", "pageSize: 100, page: 'enable', showRowNumber: true, startPage: 0, allowHtml: true, title: 'Significant Words'" + universals
     when "urls"
       return "Table", "pageSize: 100, page: 'enable', showRowNumber: true, startPage: 0, allowHtml: true, title: 'URLs'" + universals
+    when "user_gender_breakdown"
+      return "PieChart", "height:500, pieMinimalAngle: 1, title: 'Gender Breakdown'" + universals
+
     end
   end
 end

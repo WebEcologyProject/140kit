@@ -3,14 +3,15 @@
 <script type="text/javascript">
 google.load('visualization', '1', {packages: ['table','barchart','columnchart','linechart','piechart','geomap']});
 </script>
-<h4 class="accordion_toggle">Gender Estimations</h4>
+<h4 class="accordion_toggle">Gender Estimation</h4>
 <div class="accordion_content">
   <% if @am.finished -%>  
-  <% debugger %>
   <ul>
-    <% for graph in @am.graphs %>
+    <% for graph in @am.graphs -%>
+      <% if graph.title == "user_gender_breakdown" -%>
       <li><%= link_to_remote(graph.title.split("_").collect{|t| t.capitalize}.join(" "),  :replace => 'dataDisplay', :url => google_graph_url(graph.id)) %></li>
-    <% end %>
+      <% end -%>
+    <% end -%>
   </ul>
   <% else -%>
     The Basic Histograms for this dataset are not yet complete

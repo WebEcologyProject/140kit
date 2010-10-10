@@ -1,7 +1,7 @@
 def gender_estimation(collection_id, save_path)
   collection = Collection.find({:id => collection_id})
-  gender_graph = generate_graph({:style => "gender", :title => "mapping", :collection_id => collection_id})
-  gender_results = generate_graph({:style => "gender", :title => "breakdown", :collection_id => collection_id})
+  gender_graph = generate_graph({:style => "gender", :title => "user_gender_mapping", :collection_id => collection_id})
+  gender_results = generate_graph({:style => "gender", :title => "user_gender_breakdown", :collection_id => collection_id})
   gender_mapping = []
   gender_results_mapping = []
   gender_results_tracker = {}
@@ -19,11 +19,11 @@ def gender_estimation(collection_id, save_path)
     end
     case result
     when "inconclusive"
-      return 0
+      result = 0
     when "male"
-      return 1
+      result = 1
     when "female"
-      return 2
+      result = 2
     end
     graph_point = {}
     graph_point["label"] = row["twitter_id"]

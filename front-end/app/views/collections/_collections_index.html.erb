@@ -1,5 +1,6 @@
 <%
-  @collections = collections || @collections
+  collections = collections||nil
+  @collections = collections if !collections.nil?
   page_param = page_param || "page"
   update_div = update_div || "main"
   show_researchers = true if show_researchers.nil? #!@collections.collect{|c| c.researcher_id }.select{|i| i != current_researcher.id}.empty?
