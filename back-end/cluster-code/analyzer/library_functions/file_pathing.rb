@@ -1,11 +1,11 @@
 class FilePathing
-  def self.tmp_folder(collection, sub_folder="")
-    $w.tmp_path = "../tmp_files/#{$w.instance_id}/#{collection.folder_name}/"
-    FilePathing.make_directories("#{$w.instance_id}/#{collection.folder_name}/#{sub_folder}", "local", "back-end/tmp_files")
-    return "../tmp_files/#{$w.instance_id}/#{collection.folder_name}/#{sub_folder}"
+  def self.tmp_folder(dataset, sub_folder="")
+    $w.tmp_path = "../tmp_files/#{$w.instance_id}/#{dataset.folder_name}/"
+    FilePathing.make_directories("#{$w.instance_id}/#{dataset.folder_name}/#{sub_folder}", "local", "back-end/tmp_files")
+    return "../tmp_files/#{$w.instance_id}/#{dataset.folder_name}/#{sub_folder}".gsub(/\/+/, "/")
   end
 
-  def self.mysqldump(model, conditional, collection)
+  def self.mysqldump(model, conditional)
     `mysqldump -h #{Environment.host} -u #{Environment.username} --password='#{Environment.password}' --databases #{Environment.database} --tables #{model} --where='#{conditional}' > #{$w.tmp_path}/#{model}.sql`
   end
 
@@ -65,7 +65,7 @@ class FilePathing
       made = false
       case storage_type
       when "local"
-        attempt = "mkdir ../../#{root_path}/#{dirs.join("/")+"/"+dir}"
+        attempt = "mkdir ../../#{root_path}/#{dirs.join("/")+"/"+dir}".gsub(/\/+/, "/")
       when "remote"
         attempt = "ssh #{Environment.storage_ssh} 'mkdir #{root_path}/#{dirs.join("/")+"/"+dir}'"          
       end

@@ -1,7 +1,7 @@
 class Graphml
   def self.generate_file(query, filename, path="files")#$w.tmp_path)
     @user_names = []
-    internal_keys = ["graph_id", "lock", "flagged", "collection_id", "id"]
+    internal_keys = ["graph_id", "lock", "flagged", "dataset_id", "id"]
     graphml = File.open(path+"/"+filename+".graphml", "w")
     graphml.write(self.graphml_header(Time.now.to_i.to_s))
     edges = Database.spooled_result(query)

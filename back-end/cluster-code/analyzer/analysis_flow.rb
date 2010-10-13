@@ -5,7 +5,7 @@ module AnalysisFlow
   
   def self.work
     self.finish_scrapes
-    # self.do_analysis_work
+    self.do_analysis_work
     # self.check_like_terms
     # self.check_trends
     # self.tweet_user_count
@@ -13,8 +13,7 @@ module AnalysisFlow
   end
   
   def self.finish_scrapes
-    #TODO: split this into multiple functions!!!
-    debugger
+    #TODO: split this into multiple functions??
     
     # tweet and user counts
     loop do
@@ -248,7 +247,7 @@ module AnalysisFlow
   end
   
   def self.do_analysis_work    
-    metadata = Scheduler.decide_analysis_metadata.first
+    metadata = Scheduler.decide_analysis_metadata
     if !metadata.nil?
       metadata.processing = true
       metadata.save
@@ -260,12 +259,12 @@ module AnalysisFlow
   end
   
   def self.route(metadata)
-    if Analysis.conditional(metadata.collection) != " where "
-      puts "#{metadata.function}(#{metadata.collection_id}, \"#{metadata.save_path}\")"
-      eval("#{metadata.function}(#{metadata.collection_id}, \"#{metadata.save_path}\")")
-    else
-      Analysis.remove_broken_collections(metadata.collection)
-    end
+    # if Analysis.conditional(metadata.collection) != " where "
+      puts "#{metadata.function}(#{metadata.dataset_id}, \"#{metadata.save_path}\")"
+      eval("#{metadata.function}(#{metadata.dataset_id}, \"#{metadata.save_path}\")")
+    # else
+    #   Analysis.remove_broken_collections(metadata.collection)
+    # end
   end
     
   def self.grow_branch(scrape, term)

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101010003640) do
+ActiveRecord::Schema.define(:version => 20101010184249) do
 
   create_table "analysis_metadatas", :force => true do |t|
     t.boolean "finished",      :default => false, :null => false
@@ -180,6 +180,7 @@ ActiveRecord::Schema.define(:version => 20101010003640) do
     t.datetime "time_slice"
     t.integer  "hour"
     t.integer  "date"
+    t.integer  "dataset_id"
   end
 
   add_index "graphs", ["hour"], :name => "hour"

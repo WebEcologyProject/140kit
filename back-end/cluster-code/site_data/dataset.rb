@@ -36,6 +36,10 @@ class Dataset < SiteData
     end
   end
   
+  def folder_name
+    "dataset_#{@id}"
+  end
+  
   def habtm(class_to_return, associated_class, relation_table_name)
     query = "select #{class_to_return.underscore}.* from #{class_to_return.underscore} "
     query += "inner join #{relation_table_name} "

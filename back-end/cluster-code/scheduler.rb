@@ -106,7 +106,7 @@ class Scheduler
       end
       for m_id in metadatas.collect {|m| m.id }
         metadata = AnalysisMetadata.find({:id => m_id})
-        if metadata.instance_id.empty? || metadata.instance_id.nil?
+        if metadata.instance_id.nil? || metadata.instance_id.empty?
           metadata.instance_id = $w.instance_id
           metadata.save
           sleep(SLEEP_CONSTANT)

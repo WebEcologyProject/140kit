@@ -1,6 +1,6 @@
 class Graph < SiteData
   attr_accessor :title, :format, :collection_id, :style, :hour, :date, :month, :year#, :minute, :hour, :day, :month, :year
-  attr_accessor :written, :lock, :flagged, :id, :edges, :graph_points, :time_slice, :collection
+  attr_accessor :written, :lock, :flagged, :id, :edges, :graph_points, :time_slice, :collection, :dataset_id, :dataset
   ###############Relation methods
 
   def collection
@@ -9,6 +9,15 @@ class Graph < SiteData
       return @collection
     else
       return @collection
+    end
+  end
+  
+  def dataset
+    if @dataset.nil?
+      @dataset = Dataset.find({:id => @dataset_id})
+      return @dataset
+    else
+      return @dataset
     end
   end
 

@@ -32,7 +32,7 @@ class Analysis
   
   def self.frequency_hash(class_name, attribute, parameters={})
     query = "select count(*) as frequency, #{attribute} from #{class_name.to_s.underscore}"
-    if parameters.class == Hash
+    if parameters.class == Hash && !parameters.empty?
       query += self.where(parameters)
     elsif parameters.class == String
       query += parameters
@@ -175,28 +175,33 @@ class Analysis
     return SQLParser.type_attributes(hash, result).to_a.flatten[1].class.to_s.downcase
   end
   
-  def self.conditional(collection)
-    conditional = ""
-    if collection.single_dataset
-      m_ids = [collection.metadata.id]
-      metadatas = [collection.metadata]
-      conditional = " metadata_id = #{metadatas.first.id} and metadata_type = '#{metadatas.first.class.underscore.chop}' "
-    else
-      metadatas = [collection.metadatas]
-      rm_ids = collection.metadatas.collect{|rm| rm.id if rm.class == RestMetadata}.compact
-      sm_ids = collection.metadatas.collect{|sm| sm.id if sm.class == StreamMetadata}.compact
-      rm_conditional = rm_ids.empty? ? "" : " (metadata_type = 'rest_metadata' and ( metadata_id = '#{rm_ids.join("' or metadata_id = '")}')) "
-      sm_conditional = sm_ids.empty? ? "" : " (metadata_type = 'stream_metadata' and ( metadata_id = '#{sm_ids.join("' or metadata_id = '")}')) "
-      if rm_ids.empty?
-        conditional = sm_conditional
-      elsif sm_ids.empty?
-        conditional = rm_conditional
-      elsif !rm_ids.empty? && !sm_ids.empty?
-        conditional = rm_conditional+" or "+sm_conditional
-      end
-    end
-    return " where "+conditional
+  def self.conditional(dataset)
+    " where dataset_id = #{dataset.id}"
   end
+  
+  #deprecated
+  # def self.conditional(collection)
+  #   conditional = ""
+  #   if collection.single_dataset
+  #     m_ids = [collection.metadata.id]
+  #     metadatas = [collection.metadata]
+  #     conditional = " metadata_id = #{metadatas.first.id} and metadata_type = '#{metadatas.first.class.underscore.chop}' "
+  #   else
+  #     metadatas = [collection.metadatas]
+  #     rm_ids = collection.metadatas.collect{|rm| rm.id if rm.class == RestMetadata}.compact
+  #     sm_ids = collection.metadatas.collect{|sm| sm.id if sm.class == StreamMetadata}.compact
+  #     rm_conditional = rm_ids.empty? ? "" : " (metadata_type = 'rest_metadata' and ( metadata_id = '#{rm_ids.join("' or metadata_id = '")}')) "
+  #     sm_conditional = sm_ids.empty? ? "" : " (metadata_type = 'stream_metadata' and ( metadata_id = '#{sm_ids.join("' or metadata_id = '")}')) "
+  #     if rm_ids.empty?
+  #       conditional = sm_conditional
+  #     elsif sm_ids.empty?
+  #       conditional = rm_conditional
+  #     elsif !rm_ids.empty? && !sm_ids.empty?
+  #       conditional = rm_conditional+" or "+sm_conditional
+  #     end
+  #   end
+  #   return " where "+conditional
+  # end
   
   def self.time_conditional(time_variable, datetime, granularity)
     case granularity
@@ -213,21 +218,22 @@ class Analysis
     end
   end
   
-  def self.remove_broken_collections(collection)
-    if collection.scraped_collection
-      if collection.scrape.tweets.length == 0 && collection.scrape.users.length == 0
-        AnalysisMetadata.find_all({:collection_id => collection.id}).each {|x| x.destroy}
-        collection.metadatas.collect{|x| x.destroy}
-        collection.scrape.destroy
-        collection.destroy
-      end  
-    else
-      if collection.metadatas.collect{|m| m.tweets_count}.sum == 0 && collection.metadatas.collect{|m| m.tweets_count}.sum == 0
-        AnalysisMetadata.find_all({:collection_id => collection.id}).each {|x| x.destroy}
-        collection.destroy
-      end
-    end
-  end
+  #deprecated
+  # def self.remove_broken_collections(collection)
+  #   if collection.scraped_collection
+  #     if collection.scrape.tweets.length == 0 && collection.scrape.users.length == 0
+  #       AnalysisMetadata.find_all({:collection_id => collection.id}).each {|x| x.destroy}
+  #       collection.metadatas.collect{|x| x.destroy}
+  #       collection.scrape.destroy
+  #       collection.destroy
+  #     end  
+  #   else
+  #     if collection.metadatas.collect{|m| m.tweets_count}.sum == 0 && collection.metadatas.collect{|m| m.tweets_count}.sum == 0
+  #       AnalysisMetadata.find_all({:collection_id => collection.id}).each {|x| x.destroy}
+  #       collection.destroy
+  #     end
+  #   end
+  # end
   
   def self.hashes_to_csv(hash_array, file_name, path=$w.tmp_path)
     require 'fastercsv'

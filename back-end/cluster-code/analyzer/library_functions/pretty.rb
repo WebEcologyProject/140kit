@@ -89,7 +89,7 @@ class Pretty
       graphs.each do |graph|
         time = Time.parse(graph["label"])
         if new_graphs[time.strftime("%b %d, %Y, %H:%m")].nil?
-          new_graphs[time.strftime("%b %d, %Y, %H:%m")] = {"label" => time.strftime("%b %d, %Y, %H:%m"), "value" => graph["value"].to_i, "collection_id" => graph["collection_id"], "graph_id" => graph["graph_id"]}
+          new_graphs[time.strftime("%b %d, %Y, %H:%m")] = {"label" => time.strftime("%b %d, %Y, %H:%m"), "value" => graph["value"].to_i, "dataset_id" => graph["dataset_id"], "graph_id" => graph["graph_id"]}
         else
           new_graphs[time.strftime("%b %d, %Y, %H:%m")]["value"] += graph["value"].to_i
         end
@@ -98,7 +98,7 @@ class Pretty
       graphs.each do |graph|
         time = Time.parse(graph["label"])
         if new_graphs[time.strftime("%b %d, %Y, %H")].nil?
-          new_graphs[time.strftime("%b %d, %Y, %H")] = {"label" => time.strftime("%b %d, %Y, %H"), "value" => graph["value"].to_i, "collection_id" => graph["collection_id"], "graph_id" => graph["graph_id"]}
+          new_graphs[time.strftime("%b %d, %Y, %H")] = {"label" => time.strftime("%b %d, %Y, %H"), "value" => graph["value"].to_i, "dataset_id" => graph["dataset_id"], "graph_id" => graph["graph_id"]}
         else
           new_graphs[time.strftime("%b %d, %Y, %H")]["value"] += graph["value"].to_i
         end
@@ -107,7 +107,7 @@ class Pretty
       graphs.each do |graph|
         time = Time.parse(graph["label"])
         if new_graphs[time.strftime("%b %d, %Y")].nil?
-          new_graphs[time.strftime("%b %d, %Y")] = {"label" => time.strftime("%b %d, %Y"), "value" => graph["value"].to_i, "collection_id" => graph["collection_id"], "graph_id" => graph["graph_id"]}
+          new_graphs[time.strftime("%b %d, %Y")] = {"label" => time.strftime("%b %d, %Y"), "value" => graph["value"].to_i, "dataset_id" => graph["dataset_id"], "graph_id" => graph["graph_id"]}
         else
           new_graphs[time.strftime("%b %d, %Y")]["value"] += graph["value"].to_i
         end
@@ -116,7 +116,7 @@ class Pretty
       graphs.each do |graph|
         time = Time.parse(graph["label"])
         if new_graphs[time.strftime("%b %Y")].nil?
-          new_graphs[time.strftime("%b %Y")] = {"label" => time.strftime("%b %Y"), "value" => graph["value"].to_i, "collection_id" => graph["collection_id"], "graph_id" => graph["graph_id"]}
+          new_graphs[time.strftime("%b %Y")] = {"label" => time.strftime("%b %Y"), "value" => graph["value"].to_i, "dataset_id" => graph["dataset_id"], "graph_id" => graph["graph_id"]}
         else
           new_graphs[time.strftime("%b %Y")]["value"] += graph["value"].to_i
         end
