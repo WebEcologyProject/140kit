@@ -103,9 +103,6 @@ end
 ###GOOGLE PARSING
   
   def self.data_sort(title, graphs)
-    debugger
-    gg = ""
-
     case title
     when "tweet_location"
       graphs.collect{|graph| graph.label = "<a href='http://maps.google.com/maps?q=#{graph.label}' target='_blank'>#{graph.label}</a>"}

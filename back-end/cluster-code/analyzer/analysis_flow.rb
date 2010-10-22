@@ -210,6 +210,7 @@ module AnalysisFlow
   
   def self.route(metadata)
     if Analysis.conditional(metadata.collection) != " where "
+      case 
       puts "#{metadata.function}(#{metadata.collection_id}, \"#{metadata.save_path}\")"
       eval("#{metadata.function}(#{metadata.collection_id}, \"#{metadata.save_path}\")")
     else

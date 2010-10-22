@@ -20,7 +20,7 @@ module StreamFlow
 
   def self.collect_stream(url)
     EventMachine.run do
-      EventMachine::add_periodic_timer(30) { self.check_for_lost_stream }
+      EventMachine::add_periodic_timer(180) { self.check_for_lost_stream }
       EventMachine::add_periodic_timer(300) { self.adopt_new_requests }
       request_start = Time.ntp.to_i
       puts "Connection Started at #{Time.at(request_start)} to URL #{url}"
@@ -81,8 +81,6 @@ module StreamFlow
     when "track"
       stored = self.store_track_tweets(tweet)
     when "sample"
-      # This line was changed because flatify was moved to internal tweet parsing - Devin, May 19, 2010 @ 8:56pm
-      # @stream.end_data["sample"] << flatify(tweet)
       @stream.end_data["sample"] << tweet
       stored = true
     end

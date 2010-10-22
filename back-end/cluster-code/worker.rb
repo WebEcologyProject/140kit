@@ -2,6 +2,7 @@ class Worker
   
   require "#{ROOT_FOLDER}cluster-code/analyzer/analysis"
   require "#{ROOT_FOLDER}cluster-code/streamer/stream"
+  require "#{ROOT_FOLDER}cluster-code/searcher/search"
   require "#{ROOT_FOLDER}cluster-code/rester/rest"
     
   attr_accessor :instance_id, :hostname, :db, :scrape, :metadata, :stream_instance, :run_type, :rest_allowed, :rest_instance, :instance_name, :pid, :last_count_check, :tmp_path, :tmp_data, :killed

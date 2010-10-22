@@ -16,7 +16,8 @@ class ScrapesController < ApplicationController
   end
   
   def create
-    temp_params = params
+    debugger
+    temp_params, params = request.params, request.params
     model = params[:controller].classify.constantize
     if !params[:scrape][:uploaded_data].nil?
       params = model.create_rest_temp_file(temp_params)

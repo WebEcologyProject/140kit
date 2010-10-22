@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100815181606) do
+ActiveRecord::Schema.define(:version => 20101022173305) do
 
   create_table "analysis_metadatas", :force => true do |t|
     t.boolean "finished",      :default => false, :null => false
@@ -74,7 +74,7 @@ ActiveRecord::Schema.define(:version => 20100815181606) do
     t.integer  "users_count",        :default => 0,                     :null => false
     t.string   "scrape_method"
     t.boolean  "mothballed",         :default => false,                 :null => false
-    t.boolean  "private_data"
+    t.boolean  "private_data",       :default => false,                 :null => false
   end
 
   add_index "collections", ["researcher_id", "scrape_id", "folder_name"], :name => "unique_collection"
@@ -210,8 +210,9 @@ ActiveRecord::Schema.define(:version => 20100815181606) do
     t.datetime "remember_token_expires_at",               :default => '2010-01-01 01:01:01', :null => false
     t.string   "crypted_password"
     t.boolean  "share_email",                             :default => false,                 :null => false
-    t.boolean  "private_data"
-    t.boolean  "hidden_account"
+    t.boolean  "private_data",                            :default => false,                 :null => false
+    t.boolean  "hidden_account",                          :default => false,                 :null => false
+    t.boolean  "rate_limited"
   end
 
   create_table "rest_instances", :force => true do |t|
