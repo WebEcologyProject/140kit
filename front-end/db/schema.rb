@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101022173305) do
+ActiveRecord::Schema.define(:version => 20101022181838) do
 
   create_table "analysis_metadatas", :force => true do |t|
     t.boolean "finished",      :default => false, :null => false
@@ -45,6 +45,7 @@ ActiveRecord::Schema.define(:version => 20101022173305) do
     t.boolean "enabled",          :default => false, :null => false
     t.string  "save_path"
     t.string  "access_level"
+    t.string  "language"
   end
 
   create_table "auth_users", :force => true do |t|
@@ -212,7 +213,7 @@ ActiveRecord::Schema.define(:version => 20101022173305) do
     t.boolean  "share_email",                             :default => false,                 :null => false
     t.boolean  "private_data",                            :default => false,                 :null => false
     t.boolean  "hidden_account",                          :default => false,                 :null => false
-    t.boolean  "rate_limited"
+    t.boolean  "rate_limited",                            :default => false
   end
 
   create_table "rest_instances", :force => true do |t|

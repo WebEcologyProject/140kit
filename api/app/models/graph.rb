@@ -152,6 +152,15 @@ end
       }
       return graphs
     when "user_gender_breakdown"
+      graphs.collect{|g|
+        if g.label == "0"
+          g.label = "inconclusive"
+        elsif g.label == "1"
+          g.label = "male"
+        elsif g.label == "2"
+          g.label = "female"
+        end
+      }
       return graphs
     end
   end

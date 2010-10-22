@@ -210,9 +210,14 @@ module AnalysisFlow
   
   def self.route(metadata)
     if Analysis.conditional(metadata.collection) != " where "
-      case 
-      puts "#{metadata.function}(#{metadata.collection_id}, \"#{metadata.save_path}\")"
-      eval("#{metadata.function}(#{metadata.collection_id}, \"#{metadata.save_path}\")")
+      case metadata.language
+      when "ruby"
+        puts "#{metadata.function}(#{metadata.collection_id}, \"#{metadata.save_path}\")"
+        eval("#{metadata.function}(#{metadata.collection_id}, \"#{metadata.save_path}\")")
+      when "python"
+        puts "#{metadata.function}(#{metadata.collection_id}, \"#{metadata.save_path}\")"
+        `python analyzer/tools/#{metadata.function}.py -collection_id #{metdata.collection_id} -save_path #{metadata.save_path}`
+      end
     else
       Analysis.remove_broken_collections(metadata.collection)
     end
