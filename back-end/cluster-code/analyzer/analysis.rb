@@ -2,7 +2,7 @@ class Analysis
   
   require "#{ROOT_FOLDER}cluster-code/analyzer/analysis_flow"
   
-  `ls #{ROOT_FOLDER}cluster-code/analyzer/tools/`.split.each {|f| require "#{ROOT_FOLDER}cluster-code/analyzer/tools/#{f}"}
+  `ls #{ROOT_FOLDER}cluster-code/analyzer/tools/`.split.each {|f| require "#{ROOT_FOLDER}cluster-code/analyzer/tools/#{f}" if f.include?(".rb")}
   `ls #{ROOT_FOLDER}cluster-code/analyzer/library_functions/`.split.each {|f| require "#{ROOT_FOLDER}cluster-code/analyzer/library_functions/#{f}"}
   
   def self.tools
