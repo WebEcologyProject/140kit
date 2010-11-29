@@ -6,6 +6,7 @@
   	</div>
 	  <ul>
 <% if logged_in? -%>
+  		<li><%= link_to "Add Collection", collection_add_url %></li>
   		<li><%= link_to "Log out", logout_path %></li>
   		<li><%= link_to "My Page", researcher_page_url(current_researcher.user_name) %></li>
   		<li><%= link_to "Settings", settings_url(current_researcher.id) %></li>

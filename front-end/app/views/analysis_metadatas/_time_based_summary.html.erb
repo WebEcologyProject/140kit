@@ -6,6 +6,7 @@ google.load('visualization', '1', {packages: ['table','barchart','columnchart','
 </script>
 <h4 class="accordion_toggle">Time Based Summary</h4>
 <div id="time_based_summary_menu">
+  <% debugger %>
   <% for year in @am.gather_years %>
     <% months = @am.gather_months(year) %>
       <span id="<%= year %>">

@@ -14,13 +14,13 @@ class Scrape < ActiveRecord::Base
         errors.add("name", "it looks like you forgot to put in an actual search term. Perhaps you should try \"Bieber\"?")
       end
       other_current_scrapes = self.researcher.collections.select{|c| !c.single_dataset && (!c.finished && !c.analyzed)}.select{|c| !c.mothballed}.collect{|c| c.name}
-      if other_current_scrapes.include?(self.name)
+      if other_current_scrapes.include?(self.name) && self.researcher.rate_limited
         errors.add("name: " "You already have another scrape for that term currently running in our system. Sorry, we only allow one scrape per term per person at any time.")
       end
       if (self.run_ends.to_i - Time.now.to_i) < 2.minutes.to_i
         errors.add("run_ends", "This scrape isn't long enough. Scrapes must be longer than 2 minutes.")
-      elsif (self.run_ends.to_i - Time.now.to_i) > 7.days.to_i
-        errors.add("run_ends", "This scrape is too long. Scrapes must be shorter than one week.")
+      elsif (self.run_ends.to_i - Time.now.to_i) > 365.days.to_i
+        errors.add("run_ends", "This scrape is too long. Scrapes must be shorter than one year.")
       end
       if self.name.scan(/\w/).flatten.empty?
         errors.add("name", "Your scrape must contain at least one letter or number.")
@@ -34,17 +34,10 @@ class Scrape < ActiveRecord::Base
   
   def self.create_rest_temp_file(params)
     researcher = Researcher.find(params[:scrape][:researcher_id])
-    if !`ls public/files/source_data`.split("\n").include?(researcher.user_name)
-      `mkdir public/files/source_data/#{researcher.user_name}`
-      if !`ls public/files/source_data/#{researcher.user_name}`.split("\n").include?(params[:scrape][:scrape_type])
-        `mkdir public/files/source_data/#{researcher.user_name}/#{params[:scrape][:scrape_type]}`
-      end
-    end
     folder_name = Digest::SHA1.hexdigest(Time.now.to_s+rand(100000).to_s)
-    `mkdir public/files/source_data/#{researcher.user_name}/#{params[:scrape][:scrape_type]}/#{folder_name}`
+    `mkdir -p public/files/source_data/#{researcher.user_name}/#{params[:scrape][:scrape_type]}/#{folder_name}`
     if params[:scrape][:uploaded_data].class == Tempfile
       f = File.open("public/files/source_data/#{researcher.user_name}/#{params[:scrape][:scrape_type]}/#{folder_name}/source_data.txt", "w+")
-      
       temp_data = params[:scrape][:uploaded_data].read.split(/[,\n\t]/).flatten.select{|a| !a.empty?}.flatten.collect{|a| a.gsub(/\W/, "")}.join(",")
       if self.valid(temp_data)
         f.write(temp_data)

@@ -6,7 +6,7 @@ class ResearcherNotifier < ActionMailer::Base
     email.subject = "Hey, #{researcher.user_name}, here's your reset code"
     email.recipient = researcher.email
     email.message_content = "Hey, it looks like you're having kind of a lame time with your password. Click this link to reset your password and get back to work: 
-    <a href=\"http://#{SITE_URL}reset/#{researcher.reset_code}\">http://#{SITE_URL}reset/#{researcher.reset_code}</a>"
+    <a href=\"http://#{SITE_URL}/reset/#{researcher.reset_code}\">http://#{SITE_URL}/reset/#{researcher.reset_code}</a>"
     email.sent = false
     email.save
   end

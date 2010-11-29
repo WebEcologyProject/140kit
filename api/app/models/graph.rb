@@ -103,9 +103,6 @@ end
 ###GOOGLE PARSING
   
   def self.data_sort(title, graphs)
-    debugger
-    gg = ""
-
     case title
     when "tweet_location"
       graphs.collect{|graph| graph.label = "<a href='http://maps.google.com/maps?q=#{graph.label}' target='_blank'>#{graph.label}</a>"}
@@ -155,6 +152,15 @@ end
       }
       return graphs
     when "user_gender_breakdown"
+      graphs.collect{|g|
+        if g.label == "0"
+          g.label = "inconclusive"
+        elsif g.label == "1"
+          g.label = "male"
+        elsif g.label == "2"
+          g.label = "female"
+        end
+      }
       return graphs
     end
   end

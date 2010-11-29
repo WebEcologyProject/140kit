@@ -12,6 +12,14 @@ class AnalysisMetadata < SiteData
     end
   end
   
+  def analytical_offering
+    if @analytical_offering.nil?
+      @analytical_offering = AnalyticalOffering.find({:function => self.function})
+      return @analytical_offering
+    else
+      return @analytical_offering
+    end
+  end
   # def scrape
   #   if @scrape.nil?
   #     @scrape = Scrape.find({:id => @scrape_id})

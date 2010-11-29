@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100815181606) do
+ActiveRecord::Schema.define(:version => 20101022181838) do
 
   create_table "analysis_metadatas", :force => true do |t|
     t.boolean "finished",      :default => false
@@ -45,6 +45,7 @@ ActiveRecord::Schema.define(:version => 20100815181606) do
     t.boolean "enabled",          :default => false
     t.string  "save_path"
     t.string  "access_level"
+    t.string  "language"
   end
 
   create_table "auth_users", :force => true do |t|
