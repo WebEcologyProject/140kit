@@ -42,12 +42,13 @@ module RestFlow
   
   def self.create_temp_file
     `mkdir ../tmp_files/#{$w.instance_id}`
-    source_data = `curl #{SITE_URL}/files/#{$w.rest_instance.metadata.source_data}`
+#    source_data = `curl #{SITE_URL}/files/#{$w.rest_instance.metadata.source_data}`
+    source_data = File.open("../tmp_files/users.txt").read
     f = File.open("../tmp_files/#{$w.instance_id}/source_data.txt", "w")
     f.write(source_data)
     f.close
     f = File.open("../tmp_files/#{$w.instance_id}/source_data.txt", "r")
-    data = f.read.split(",").collect{|d| d.strip}
+    data = f.read.split(",").flatten.collect{|x| x.split("\n")}.flatten.collect{|d| d.strip}
     f.close
     return data, "../tmp_files/#{$w.instance_id}/source_data.txt"
   end

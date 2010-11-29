@@ -21,13 +21,13 @@ class TweetHelper
   
   def self.scrape_tweet_attributes(entry)
     allowed_fields = ["lat", "twitter_id", "metadata_id", "in_reply_to_user_id", "lon", "language", "scrape_id", "favorited", "text", "user_id", "truncated", "source", "screen_name", "created_at", "in_reply_to_screen_name", "location", "id", "in_reply_to_status_id"]
-    twitter_id = entry["id"]
+    twitter_id = entry["id"].to_i
     tweet = {}
     entry.delete_if{|k, v| k == "title" || k == "profile_image_url" || k == "from_user_id"}
     entry.flatify.each_pair do |key, value|
       case key
       when "id"
-        tweet["twitter_id"] = value
+        tweet["twitter_id"] = value.to_i
       when "user-lang"
         tweet["language"] = value
       when "coordinates"

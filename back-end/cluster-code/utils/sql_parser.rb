@@ -61,7 +61,7 @@ class SQLParser < Database
     type_map = query_result.fetch_fields.collect{|field| map_hash[field.name] = field.type}
     row.each_pair do |k,v|
       if map_hash[k] == 1
-        final_row[k] = v.class == nil ? nil : v.to_bool
+        final_row[k] = v.class == NilClass ? nil : v.to_bool
       elsif map_hash[k] == 3 || map_hash[k] == 8
         final_row[k] = v.nil? ? nil : v.to_i
       elsif map_hash[k] == 246 || map_hash[k] == 5
@@ -113,7 +113,7 @@ class SQLParser < Database
     elsif attribute.class == NilClass
       attribute = "NULL"
     end
-    attribute = "'#{attribute}'" if attribute != "NULL"
+    attribute = "'#{attribute}'" if attribute != "NULL" && attribute.class == String || attribute.class == FalseClass || attribute.class == TrueClass
     if attribute.class == String && ["''", "'\n'", "'\n    '"].include?(attribute.gsub(" ", ""))
       attribute = "NULL"
     end

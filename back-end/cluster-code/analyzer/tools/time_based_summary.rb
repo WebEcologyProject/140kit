@@ -1,5 +1,5 @@
 def time_based_summary(collection_id, save_path)
-  granularity = "hour"
+  granularity = "year"
   time_queries = resolve_time_query(granularity)
   time_queries.each_pair do |time_granularity,time_query|
     collection = Collection.find({:id => collection_id})
