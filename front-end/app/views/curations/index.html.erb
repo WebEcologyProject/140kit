@@ -1,0 +1,22 @@
+<div>
+<h1>Datasets</h1>
+
+<%= render :partial => "curations_index", :locals => {:curations => @curations}%>
+
+
+<% if false -%>
+<%= render :partial => "/layouts/search", :locals => {:conditions => '', :model => "Curation", :element_id => "main", :partial => "/curations/search_results"} %>
+
+  <%= render :partial => "/layouts/search", :locals => {:conditions => "single_dataset:0", :model => "Collection", :element_id => "main", :partial => "/collections/search_results"} %>
+  <div>
+    <% @sort ||= "" %>
+  Sort by: 
+    <% if @sort == "name" %><%= link_to "Name Reverse", collections_sort_url("name_desc") %><% else %><%= link_to "Name", collections_sort_url("name") %><% end %> | 
+    <% if @sort == "tweets" %><%= link_to "Tweets Reverse", collections_sort_url("tweets_desc") %><% else %><%= link_to "Tweets", collections_sort_url("tweets") %><% end %> | 
+    <% if @sort == "users" %><%= link_to "Users Reverse", collections_sort_url("users_desc") %><% else %><%= link_to "Users", collections_sort_url("users") %><% end %> | 
+    <% if @sort == "date_created" %><%= link_to "Date Created Reverse", collections_sort_url("date_created_desc") %><% else %><%= link_to "Date Created", collections_sort_url("date_created") %><% end %> | 
+  </div>
+  <%= render :partial => "collections_index", :locals => {:collections => @collections}%>
+<br />
+<% end %>
+</div>

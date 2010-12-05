@@ -2,6 +2,8 @@ class Graph < ActiveRecord::Base
   belongs_to :collection
   has_many :edges
   has_many :graph_points
+  belongs_to :curation
+  
   def self.resolve_chart_settings(title)
     universals = ", height: 500, width:920, is3D: true"
     case title

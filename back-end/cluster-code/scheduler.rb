@@ -94,25 +94,20 @@ class Scheduler
   def self.decide_analysis_metadata
     metadata = AnalysisMetadata.find({:finished => false, :instance_id => $w.instance_id})
     return metadata if !metadata.nil?
-    
-    datasets_to_analyze = Dataset.find_all({:scrape_finished => true, :analyzed => false})
-    # sort: scrapes that ended the longest ago first
-    datasets_to_analyze.sort! {|a,b| (a.start_time.to_i + a.length) <=> (b.start_time.to_i + b.length)}
-    for dataset in datasets_to_analyze
-      if $w.rest_allowed
-        metadatas = AnalysisMetadata.find_all({:dataset_id => dataset.id, :finished => false, :processing => false, :instance_id => ""})
-      else
-        metadatas = AnalysisMetadata.find_all({:dataset_id => dataset.id, :finished => false, :processing => false, :instance_id => "", :rest => false})
-      end
-      for m_id in metadatas.collect {|m| m.id }
-        metadata = AnalysisMetadata.find({:id => m_id})
-        if metadata.instance_id.nil? || metadata.instance_id.empty?
-          metadata.instance_id = $w.instance_id
-          metadata.save
-          sleep(SLEEP_CONSTANT)
-          metadata = AnalysisMetadata.find({:id => metadata.id, :instance_id => $w.instance_id})
-          return metadata if !metadata.nil?
-        end
+
+    if $w.rest_allowed
+      metadatas = AnalysisMetadata.find_all({:finished => false, :processing => false, :instance_id => ""})
+    else
+      metadatas = AnalysisMetadata.find_all({:finished => false, :processing => false, :instance_id => "", :rest => false})
+    end
+    for m_id in metadatas.collect {|m| m.id }.sort
+      metadata = AnalysisMetadata.find({:id => m_id})
+      if metadata.instance_id.nil? || metadata.instance_id.empty?
+        metadata.instance_id = $w.instance_id
+        metadata.save
+        sleep(SLEEP_CONSTANT)
+        metadata = AnalysisMetadata.find({:id => metadata.id, :instance_id => $w.instance_id})
+        return metadata if !metadata.nil?
       end
     end
     return nil

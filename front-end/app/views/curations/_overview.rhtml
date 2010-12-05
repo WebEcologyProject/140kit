@@ -1,0 +1,8 @@
+<h3 class="line">Overview:</h3>
+<ul>
+  <li>Collection Methods: <%= @curation.datasets.collect {|d| d.scrape_type }.uniq.join(', ') %></li>
+  <li>Number of Tweets: <%= number_with_delimiter(@curation.tweets_count) %></li>
+  <li>Number of Users: <%= number_with_delimiter(@curation.users_count) %></li>
+  <li>Created: <%=h distance_of_time_in_words(@curation.created_at, Time.now) %> ago (<%= @curation.created_at.strftime("%b %d, %Y, at %H:%M:%S %Z")%>)</li>
+  <li>Last Updated: <%=h distance_of_time_in_words(@curation.created_at, Time.now) %> ago (<%= @curation.created_at.strftime("%b %d, %Y, at %H:%M:%S %Z")%>)</li>
+</ul>

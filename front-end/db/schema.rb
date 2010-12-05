@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101010184249) do
+ActiveRecord::Schema.define(:version => 20101023195038) do
 
   create_table "analysis_metadatas", :force => true do |t|
     t.boolean "finished",      :default => false, :null => false
@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(:version => 20101010184249) do
     t.integer "collection_id"
     t.boolean "rest",          :default => false, :null => false
     t.string  "save_path"
-    t.integer "dataset_id"
+    t.integer "curation_id"
   end
 
   add_index "analysis_metadatas", ["function", "collection_id"], :name => "analysis_metadatas_function_collection_id", :unique => true
@@ -108,6 +108,8 @@ ActiveRecord::Schema.define(:version => 20101010184249) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "researcher_id"
+    t.boolean  "single_dataset", :default => false
+    t.boolean  "analyzed",       :default => false
   end
 
   create_table "curations_datasets", :id => false, :force => true do |t|
@@ -180,7 +182,7 @@ ActiveRecord::Schema.define(:version => 20101010184249) do
     t.datetime "time_slice"
     t.integer  "hour"
     t.integer  "date"
-    t.integer  "dataset_id"
+    t.integer  "curation_id"
   end
 
   add_index "graphs", ["hour"], :name => "hour"

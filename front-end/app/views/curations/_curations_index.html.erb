@@ -1,0 +1,26 @@
+<%
+  curations ||= nil
+  @curations = curations || @curations
+  show_researchers = true if show_researchers.nil? #!@curations.collect{|c| c.researcher_id }.select{|i| i != current_researcher.id}.empty?
+  field_selected = field_selected || @field_selected
+-%>
+<div id="main">
+<table id="curations_index">
+  <tr>
+    <th>Name</th>
+<% if show_researchers -%>
+    <th>Researcher</th>
+<% end -%>
+    <th>Tweets</th>
+    <th>Users</th>
+    <th>Last updated</th>
+    <th>Status</th>
+  </tr>
+<% for curation in @curations -%>
+  <%# if !curation.mothballed || (logged_in? && (curation.mothballed && (curation.researcher == current_researcher || current_researcher.admin?))) %>
+    <%= render :partial => "/curations/curation", :locals => {:curation => curation, :show_researchers => show_researchers} %>
+  <%# end -%>    
+<% end -%>
+</table>
+  <%= will_paginate @curations, :class => 'pagination ajax' %>
+</div>

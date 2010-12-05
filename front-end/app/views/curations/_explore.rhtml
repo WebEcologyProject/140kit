@@ -1,0 +1,4 @@
+<h3 class="line">Explore:</h3>
+<%= link_to_remote("Datasets Employed",  :replace => 'dataDisplay', :url => "/datasets/collection_paginate/#{@curation.id}") %> | 
+<%= link_to_remote("Tweets",  :replace => 'dataDisplay', :url => tweets_collection_paginate_url(@curation.id)) %> | 
+<%= link_to_remote("Users",  :replace => 'dataDisplay', :url => users_collection_paginate_url(@curation.id)) %>

@@ -1,0 +1,96 @@
+<h1>Dataset: <%= @curation.name %></h1>
+
+<h3>Collected by:
+<% if logged_in? && (current_researcher.id == @curation.researcher_id) -%>
+  You.
+<% else -%>
+  <%= link_to @curation.researcher.user_name, researcher_page_url(@curation.researcher.user_name) %>
+<% end -%>
+</h3>
+
+<% if @curation.scrape_finished %>
+  <% if !@curation.analyzed %>We're still doing analysis on this dataset. We'll show what we've got so far.<% end %>
+  <%# render :partial => "management" %>
+  <%= render :partial => "overview" %>
+  <%# render :partial => "explore" %>
+  <%= render :partial => "analytics" %>
+  <% if false -%>
+  <div class="line"><%= render :partial => "/layouts/search", :locals => {:conditions => "dataset_id:#{@curation.datasets.collect {|d| d.id }.join(",")}"} %></div>
+  <% end -%>
+  
+  <div id="dataDisplay">
+  </div>
+
+<% else %>
+  We're still collecting data, check back later.
+  <% if !@curation.end_time.nil? %>
+    <% if @curation.end_time > Time.now %>
+      We should be done collecting in about <%= distance_of_time_in_words(@curation.end_time, Time.now) %>.
+    <% end %>
+  <% end %>
+<% end %>
+    
+<!-- ##### -->
+<% if false %>
+
+<% case @collection.scrape_method -%>
+<% when "Stream" -%>
+  <h1>Collection for term "<%= @collection.name %>"<% if @collection.single_dataset %>(Term: "<%= @collection.metadata.term %>")<% end %></h1>
+<% when "REST" -%>
+  <h1>Collection for user group "<%= @collection.name %>"</h1>
+<% when "Curate" -%>
+  <h1>Collection for curation "<%= @collection.name %>"</h1>
+<% else -%>
+  <h1>Collection: <%= @collection.name.capitalize %></h1>
+<% end -%>
+
+<% if logged_in? && (current_researcher.id == @collection.researcher_id) -%>
+  <h3>This is your collection.</h3>
+<% else -%>
+  <h3>Originally collected by <%= link_to @collection.researcher.user_name, researcher_page_url(@collection.researcher.user_name) %></h3>
+<% end -%>
+
+<% if @collection.finished -%>
+
+  <%= render :partial => "management" %>
+  <%= render :partial => "overview" %>
+  <%= render :partial => "explore" %>
+  <%= render :partial => "analytics" %>
+  <div class="line"><%= render :partial => "/layouts/search", :locals => {:conditions => "metadata_id:#{@collection.stream_metadata_ids.join(",")}"} %></div>
+<% else -%>
+
+  <% if (logged_in? && current_researcher.id == @collection.researcher_id) || (logged_in? && current_researcher.admin?)-%>
+    <% if @collection.scraped_collection -%>
+      
+      <% if !@collection.stream_metadatas.empty? -%>
+        <% if !@collection.stream_metadatas.first.finished -%>
+          We're still catching all your "<%= @collection.name %>" tweets. We'll stop in about <%= distance_of_time_in_words(Time.now, @collection.metadatas.first.scrape.run_ends) %>.
+        <% else -%>
+          We've captured all of your data for the term "<%= @collection.name %>", and are now flipping the collection over for analysis. It should start appearing momentarily.
+        <% end -%>
+      <% elsif !@collection.rest_metadatas.empty? -%>
+        <% if !@collection.rest_metadatas.first.finished -%>
+          We're still working through the "<%= @collection.name %>" user set. The Data being used in this collection is located in our filesystem <%= link_to "here", "/files/#{@collection.rest_metadatas.first.source_data}" %>.
+        <% else -%>
+          We've captured all of your data for your user set, and are now flipping the collection over for analysis. It should start appearing momentarily.
+        <% end -%>
+      <% end -%>
+      
+    <% else -%>
+      <b>So here's what you do:</b><br />
+      <b>Add datasets</b> you like to your collection. Also <b>add analytical functions</b> you want to have run on your collection 
+      once it's frozen.<br />
+      When you're very happy with the datasets and analytics you've added, <b>freeze your collection</b>.<br />
+      When you freeze a collection, you won't be able to add any more datasets or analysis.<br />
+      As soon as your collection is frozen, the analytical functions you chose will be scheduled to run on it. Results will be 
+      available right here on this page when they're ready.
+      <%= render :partial => "/collections/unfrozen_collection_menu" %>
+    <% end -%>
+  <% else -%>
+    This collection is still in the works. Check back later.
+  <% end -%>
+<% end -%>
+<div id="dataDisplay">
+</div>
+
+<% end %>

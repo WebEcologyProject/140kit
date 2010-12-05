@@ -1,6 +1,6 @@
 class Dataset < SiteData
   attr_accessor :id, :created_at, :term, :updated_at, :start_time, :length, :scrape_type, :scrape_finished, :instance_id
-  attr_accessor :curations, :tweets, :users, :analysis_metadatas, :analyzed, :tweets_count, :users_count
+  attr_accessor :curations, :tweets, :users, :analyzed, :tweets_count, :users_count
   
   
   def tweets
@@ -19,14 +19,6 @@ class Dataset < SiteData
     end
   end
   
-  def analysis_metadatas
-    if @analysis_metadatas.nil?
-      @analysis_metadatas = AnalysisMetadata.find_all({:dataset_id => @id})
-    else
-      return @analysis_metadatas
-    end
-  end
-  
   def curations
     if @curations.nil?
       @curations = habtm(Curation, Dataset, "curations_datasets")
@@ -34,10 +26,6 @@ class Dataset < SiteData
     else
       return @curations
     end
-  end
-  
-  def folder_name
-    "dataset_#{@id}"
   end
   
   def habtm(class_to_return, associated_class, relation_table_name)

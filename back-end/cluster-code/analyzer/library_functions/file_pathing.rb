@@ -1,8 +1,8 @@
 class FilePathing
-  def self.tmp_folder(dataset, sub_folder="")
-    $w.tmp_path = "../tmp_files/#{$w.instance_id}/#{dataset.folder_name}/"
-    FilePathing.make_directories("#{$w.instance_id}/#{dataset.folder_name}/#{sub_folder}", "local", "back-end/tmp_files")
-    return "../tmp_files/#{$w.instance_id}/#{dataset.folder_name}/#{sub_folder}".gsub(/\/+/, "/")
+  def self.tmp_folder(curation, sub_folder="")
+    $w.tmp_path = "../tmp_files/#{$w.instance_id}/#{curation.folder_name}/"
+    FilePathing.make_directories("#{$w.instance_id}/#{curation.folder_name}/#{sub_folder}", "local", "back-end/tmp_files")
+    return "../tmp_files/#{$w.instance_id}/#{curation.folder_name}/#{sub_folder}".gsub(/\/+/, "/")
   end
 
   def self.mysqldump(model, conditional)

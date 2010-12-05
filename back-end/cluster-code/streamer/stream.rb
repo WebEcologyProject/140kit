@@ -51,7 +51,7 @@ class Stream
   
   def stream_data
     # new:
-    track_terms = @datasets.collect {|d| d.term }.compact.uniq # sanitize terms here???
+    track_terms = @datasets.collect {|d| d.term.sanitize_for_streaming }.compact.uniq # sanitize terms here???
     actual_terms = @datasets.collect {|d| d.term }.compact.uniq
     @length, @counter = determine_timer_values
     # "counter" doesn't seem like a very appropriate name.

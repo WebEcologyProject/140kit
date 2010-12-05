@@ -9,11 +9,11 @@ def self.to_google_json(graph, params)
   result = ""
   if graph.written
     result = Rails.cache.fetch(graph.get_cached("graphs", params[:format], params[:logic])) { Graph.fetch_google_json(graph, params)}
+    #GSUB to change out reqid for pre-cached data - reqid must match in order for graphs to work.
+    return params[:tqx].nil? ? result : result.gsub(/version:0.1,status:'ok',reqId:\d*,table:/, "version:0.1,status:'ok',"+params["tqx"]+",table:")
   else
     return Graph.fetch_google_json(graph, params)
   end      
-  #GSUB to change out reqid for pre-cached data - reqid must match in order for graphs to work.
-  return params[:tqx].nil? ? result : result.gsub(/version:0.1,status:'ok',reqId:\d*,table:/, "version:0.1,status:'ok',"+params["tqx"]+",table:")
 end
 
 def self.fetch_google_json(graph, params)

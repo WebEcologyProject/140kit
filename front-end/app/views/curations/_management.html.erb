@@ -1,0 +1,13 @@
+<% if logged_in? && (current_researcher.id == @curation.researcher_id || current_researcher.admin?) -%>
+  <h3 class="line">Management:</h3>
+  <ul>
+    <li><%= link_to_remote("Analytics", {:replace => 'dataDisplay', :url => analytical_offerings_curate_url(@curation.id)} ) %></li>
+    <li><%= link_to "Clear Analytical Results?", collection_rollback_url(@curation.id), :confirm => "Warning, this will destroy all analytical results and force a refresh of all the data - reverts back to phase before frozen. Still want to proceed?" %></li>
+    <% if current_researcher.private_data %>
+      <li>
+        <%= link_to @curation.private_data ? "Unhide Dataset?" : "Hide Dataset?", collection_hide_url(@curation.id) %> <%= link_to "About hidden datasets", "/pages/hidden-datasets" %>
+      </li>
+    <% end %>
+  </ul>
+<% end -%>
+

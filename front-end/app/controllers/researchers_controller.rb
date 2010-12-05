@@ -1,12 +1,19 @@
 class ResearchersController < ApplicationController
   
   before_filter :admin_required, :only => [:promote, :suspend, :manage]
+  before_filter :login_required, :only => [:edit, :update, :welcome]
   
   layout "main"
   
   def index
     @page_title = "All Researchers"
     super
+  end
+  
+  def welcome
+    @researcher = current_researcher
+    @page_title = "Welcome to 140kit"
+    @curations = Curation.paginate :page => params[:page], :conditions => {:researcher_id => @researcher.id}, :per_page => 10
   end
   
   def edit

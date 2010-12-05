@@ -3,9 +3,18 @@ ActionController::Routing::Routes.draw do |map|
   map.account '/account', :controller => 'researchers', :action => 'show'
   map.account_forgot '/forgot', :controller => 'account', :action => 'forgot'
   map.account_reset 'reset/:reset_code', :controller => 'account', :action => 'reset'
+  map.welcome '/welcome', :controller => 'researchers', :action => 'welcome'
   # map.analytical_offerings_collection_paginate '/analytical_offerings/collection_paginate/:id', :controller => 'stream_metadatas', :action => 'collection_paginate'
   # map.analytical_offerings_associate '/analytical_offerings/:analytical_offering_id/associate/:collection_id', :controller => 'stream_metadatas', :action => 'associate'
   # map.analytical_offerings_dissociate '/analytical_offerings/:analytical_offering_id/dissociate/:collection_id', :controller => 'stream_metadatas', :action => 'dissociate'
+  
+  map.track_preview '/track/preview/:term', :controller => 'datasets', :action => 'track_preview'
+  map.new_track '/track', :controller => 'datasets', :action => 'new_track'
+  map.new_track '/track/:term', :controller => 'datasets', :action => 'new_track'
+  map.create_dataset '/datasets/create', :controller => 'datasets', :action => 'create'
+  map.track_submit '/datasets/submit', :controller => 'datasets', :action => 'track_submit'
+  
+  map.new_dataset '/datasets/new', :controller => 'datasets', :action => 'new'
   
   map.collections '/collections', :controller => 'collections', :action => 'index', :single_dataset => 'false'
   map.collections_sort '/collections/sort/:sort', :controller => 'collections', :action => 'index', :single_dataset => 'false'  
@@ -23,8 +32,12 @@ ActionController::Routing::Routes.draw do |map|
   map.collection_rollback '/collections/:collection_id/rollback', :controller => 'collections', :action => 'rollback'
   map.collection_full_destroy '/collections/:collection_id/full_destroy', :controller => 'collections', :action => 'full_destroy'
   
-  map.datasets '/datasets', :controller => 'collections', :action => 'index', :single_dataset => 'true'
-  map.dataset '/datasets/:id', :controller => 'collections', :action => 'show'
+  # map.datasets '/datasets', :controller => 'collections', :action => 'index', :single_dataset => 'true'
+  # map.dataset '/datasets/:id', :controller => 'collections', :action => 'show'
+  map.datasets '/datasets', :controller => 'curations', :action => 'index'
+  map.dataset '/datasets/:id', :controller => 'curations', :action => 'show'
+  map.curation '/datasets/:id', :controller => 'curations', :action => 'show'
+  map.add_curation '/datasets/:id', :controller => 'curations', :action => 'show'
   
   #ANALYSIS ROUTES
   
@@ -137,6 +150,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :stream_instances
   map.resources :tweets
   map.resources :users 
+  map.resources :curations
   
   map.connect '/:controller/:action/:id'
   map.connect '/:controller/:action/:id.:format'

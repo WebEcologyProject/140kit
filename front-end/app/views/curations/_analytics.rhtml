@@ -1,0 +1,8 @@
+<% ams = @curation.analysis_metadatas -%>
+<h3 class="line">Analytics:</h3>
+<% for am in ams -%>
+  <div class="analytic">
+    <%= render :partial => "/analysis_metadatas/#{am.function}", :locals => {:curation => @curation, :am => am} %>
+  </div>
+<% end -%>
+<div class="clearFloat"></div>

@@ -4,9 +4,13 @@ ENV['RAILS_ENV'] ||= 'production'
 # Specifies gem version of Rails to use when vendor/rails is not present
 RAILS_GEM_VERSION = '2.3.4' unless defined? RAILS_GEM_VERSION
 
-API_URL = "nutmegunit.com"#{}"nutmegunit.com"
-FILE_URL = "nutmegunit.com"
-SITE_URL = "140kit.com"
+# API_URL = "nutmegunit.com"#{}"nutmegunit.com"
+# FILE_URL = "nutmegunit.com"
+# SITE_URL = "140kit.com"
+
+API_URL = 'localhost:3001'
+FILE_URL = 'localhost:3000'
+SITE_URL = 'localhost:3000'
 
 DEFAULT_IMAGE_URL = "/images/default.gif"
 # Bootstrap the Rails environment, frameworks, and default configuration
@@ -28,8 +32,13 @@ Rails::Initializer.run do |config|
   
   # redcloth
   # hpricot
+  # json
+  
+  # backend only?
   # em-http-request
   # eventmachine
+  # ntp
+  # htmlentities
   
   # Only load the plugins named here, in the order given (default is alphabetical).
   # :all can be used as a placeholder for all plugins not explicitly named

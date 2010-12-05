@@ -1,20 +1,20 @@
 #Results: Frequency Charts of basic data on Tweets and Users per data set
-def basic_histograms(dataset_id, save_path)
-  dataset = Dataset.find({:id => dataset_id})
-  # conditional = Analysis.conditional(collection)
+def basic_histograms(curation_id, save_path)
+  curation = Curation.find({:id => curation_id})
+  # conditional = Analysis. (collection)
   generate_graph_points([
-    {"model" => Tweet, "attribute" => "language", "style" => "histogram", "title" => "tweet_language", "dataset" => dataset},
-    {"model" => Tweet, "attribute" => "created_at", "style" => "histogram", "title" => "tweet_created_at", "dataset" => dataset},
-    {"model" => Tweet, "attribute" => "source", "style" => "histogram", "title" => "tweet_source", "dataset" => dataset},
-    {"model" => Tweet, "attribute" => "location", "style" => "histogram", "title" => "tweet_location", "dataset" => dataset},
-    {"model" => User, "attribute" => "followers_count", "style" => "histogram", "title" => "user_followers_count", "dataset" => dataset},
-    {"model" => User, "attribute" => "friends_count", "style" => "histogram", "title" => "user_friends_count", "dataset" => dataset},
-    {"model" => User, "attribute" => "favourites_count", "style" => "histogram", "title" => "user_favourites_count", "dataset" => dataset},
-    {"model" => User, "attribute" => "geo_enabled", "style" => "histogram", "title" => "user_geo_enabled", "dataset" => dataset},
-    {"model" => User, "attribute" => "statuses_count", "style" => "histogram", "title" => "user_statuses_count", "dataset" => dataset},
-    {"model" => User, "attribute" => "lang", "style" => "histogram", "title" => "user_lang", "dataset" => dataset},
-    {"model" => User, "attribute" => "time_zone", "style" => "histogram", "title" => "user_time_zone", "dataset" => dataset},
-    {"model" => User, "attribute" => "created_at", "style" => "histogram", "title" => "user_created_at", "dataset" => dataset}
+    {"model" => Tweet, "attribute" => "language", "style" => "histogram", "title" => "tweet_language", "curation" => curation},
+    {"model" => Tweet, "attribute" => "created_at", "style" => "histogram", "title" => "tweet_created_at", "curation" => curation},
+    {"model" => Tweet, "attribute" => "source", "style" => "histogram", "title" => "tweet_source", "curation" => curation},
+    {"model" => Tweet, "attribute" => "location", "style" => "histogram", "title" => "tweet_location", "curation" => curation},
+    {"model" => User, "attribute" => "followers_count", "style" => "histogram", "title" => "user_followers_count", "curation" => curation},
+    {"model" => User, "attribute" => "friends_count", "style" => "histogram", "title" => "user_friends_count", "curation" => curation},
+    {"model" => User, "attribute" => "favourites_count", "style" => "histogram", "title" => "user_favourites_count", "curation" => curation},
+    {"model" => User, "attribute" => "geo_enabled", "style" => "histogram", "title" => "user_geo_enabled", "curation" => curation},
+    {"model" => User, "attribute" => "statuses_count", "style" => "histogram", "title" => "user_statuses_count", "curation" => curation},
+    {"model" => User, "attribute" => "lang", "style" => "histogram", "title" => "user_lang", "curation" => curation},
+    {"model" => User, "attribute" => "time_zone", "style" => "histogram", "title" => "user_time_zone", "curation" => curation},
+    {"model" => User, "attribute" => "created_at", "style" => "histogram", "title" => "user_created_at", "curation" => curation}
   ])
   
   FilePathing.push_tmp_folder(save_path)
@@ -32,11 +32,11 @@ def generate_graph_points(frequency_set)
   @graphs = []
   frequency_set.each do |fs|
     # time, hour, date, month, year = resolve_time(fs["granularity"], fs["time_slice"])
-    graph = generate_graph({:style => fs["style"], :title => fs["title"], :dataset_id => fs["dataset"].id}) #, :time_slice => time, :hour => hour, :date => date, :month => month, :year => year})
+    graph = generate_graph({:style => fs["style"], :title => fs["title"], :curation_id => fs["curation"].id}) #, :time_slice => time, :hour => hour, :date => date, :month => month, :year => year})
     @graphs << graph
     sub_folder = "" #[graph.year, graph.month, graph.date, graph.hour].join("/")
     
-    tmp_folder = FilePathing.tmp_folder(fs["dataset"], sub_folder)
+    tmp_folder = FilePathing.tmp_folder(fs["curation"], sub_folder)
     
     if block_given?
       yield fs, graph, tmp_folder
@@ -48,7 +48,7 @@ def generate_graph_points(frequency_set)
 end
 
 def frequency_graphs(fs, graph, tmp_folder)
-  Analysis.frequency_hash(fs["model"], fs["attribute"], {:dataset_id => fs["dataset"].id}) do |objects|
+  Analysis.frequency_hash(fs["model"], fs["attribute"], {:dataset_id => [fs["curation"].datasets.collect { |d| d.id }] }) do |objects|
     temp_graph_points = []
     FasterCSV.open(tmp_folder+graph.title+".csv", "w") do |csv|
       first_hash = objects.fetch_hash

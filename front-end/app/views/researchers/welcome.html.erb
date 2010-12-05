@@ -1,0 +1,25 @@
+<h1>Welcome, <%= @researcher.user_name.capitalize %>.</h1>
+
+  <h2>Collect data:</h2>
+<div class="newsItem col-2">
+  <div id="get_started" class="roundedEdge">
+  <!-- <h3>Get Started:</h3> -->
+  <% form_for :track_form, :url => track_submit_path do |f| %>
+    <%= f.text_field :input, :class => 'term_field' %>
+    <%= f.submit 'Track', :class => 'term_submit sans' %>
+  <% end %>
+  </div>
+</div>
+
+<div class="newsItem col">
+  <h2>Or, try <%= link_to 'other methods', new_dataset_path %> for collecting data.</h2>
+</div>
+
+<div style="float:left">
+<h2>Your datasets:</h2>
+<% if !@curations.empty? -%>
+  <%= render :partial => "/curations/curations_index", :locals => {:curations => @curations, :show_researchers => false} %>
+<% else -%>
+  You have no datasets. <%= link_to "Make some!", new_dataset_path %>
+<% end -%>
+</div>

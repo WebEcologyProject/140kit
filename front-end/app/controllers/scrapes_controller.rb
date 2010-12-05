@@ -1,5 +1,7 @@
 class ScrapesController < ApplicationController
   layout "main"
+  before_filter :login_required, :except => [:show, :index, :search, :welcome, :track_submit, :track_preview]
+  
   def new(element_id='main')
     model = params[:controller].classify.constantize
     inst_var = instance_variable_set("@#{params[:controller].singularize}", model.new)
@@ -36,4 +38,5 @@ class ScrapesController < ApplicationController
       end
     end
   end
+  
 end

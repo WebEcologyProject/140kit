@@ -7,26 +7,28 @@
 	  <ul>
 <% if logged_in? -%>
   		<li><%= link_to "Log out", logout_path %></li>
-  		<li><%= link_to "My Page", researcher_page_url(current_researcher.user_name) %></li>
+  		<li><%= link_to "My Home", welcome_url %></li>
+  		<% if false %><li><%= link_to "My Page", researcher_page_url(current_researcher.user_name) %></li><% end %>
   		<li><%= link_to "Settings", settings_url(current_researcher.id) %></li>
 <% else -%>
   		<li><%= link_to "Log in", login_path %></li>
+  		<li><%= link_to "Sign up", signup_path %></li>
 <% end -%>
   		<li><%= link_to "Researchers", researchers_url %></li>
-  		<li><%= link_to "Collections", collections_url %></li>
   		<li><%= link_to "Datasets", datasets_url %></li>
-  		<li><%= link_to "News", news_url %></li>  		
+  		<li><%= link_to "News", news_url %></li>
 	  </ul>
 	</div>
 <% if logged_in? && current_researcher.admin? -%>
   <div id="adminNavigation">
 	  <ul>
-  		<li><%= link_to "News/Pages Management", news_manage_path %></li>
-  		<li><%= link_to "Analysis Management", analytical_offerings_manage_path %></li>
-  		<li><%= link_to "Cluster Management", manage_cluster_path %></li>
-  		<li><%= link_to "Researcher Management", researchers_manage_path %></li>
-  		<li><%= link_to "Twitter Accounts Management", auth_users_path %></li>
-  		<li><%= link_to "Tickets Management", tickets_manage_path %></li>
+	    <li class="sans f12">Manage:</li>
+  		<li><%= link_to "News/Pages", news_manage_path %></li>
+  		<li><%= link_to "Analysis", analytical_offerings_manage_path %></li>
+  		<li><%= link_to "Cluster", manage_cluster_path %></li>
+  		<li><%= link_to "Researchers", researchers_manage_path %></li>
+  		<li><%= link_to "Twitter Accounts", auth_users_path %></li>
+  		<li><%= link_to "Tickets", tickets_manage_path %></li>
 	  </ul>
   </div>
 <% end -%>

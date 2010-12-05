@@ -11,7 +11,6 @@
   <% end %>
     <strong>Joined:</strong> about <%= distance_of_time_in_words(@researcher.join_date, Time.now) %> ago
   </p>
-<h2><%= link_to "Add a new collection", collection_add_url %></h2>
 <h2>Currently Running</h2>
 <% if !@unfinished_collections.empty? -%>
   <%= render :partial => "/collections/collections_index", :locals => {:collections => @unfinished_collections, :show_researchers => false} %>

@@ -1,0 +1,44 @@
+<h1>Recent tweets containing <span class="bold"><%= @term %></span>:</h1>
+
+<div style="width:520px; float:left; padding:20px">
+  <script src="http://widgets.twimg.com/j/2/widget.js"></script>
+  <script>
+  new TWTR.Widget({
+    version: 2,
+    type: 'search',
+    search: '<%= @term %>',
+    interval: 3000,
+    title: '',
+    subject: '',
+    width: 'auto',
+    height: 300,
+    theme: {
+      shell: {
+        background: '#ffffff',
+        color: '#ffffff'
+      },
+      tweets: {
+        background: '#ffffff',
+        color: '#444444',
+        links: '#1985b5'
+      }
+    },
+    features: {
+      scrollbar: false,
+      loop: true,
+      live: true,
+      hashtags: true,
+      timestamp: true,
+      avatars: true,
+      toptweets: true,
+      behavior: 'default'
+    }
+  }).render().start();
+  </script>
+</div>
+
+<div style="padding:20px; width:320px; float:left">
+  <h2>Like what you see?<br /><br />
+  <%= link_to 'Log in', login_path %> or <%= link_to "sign up", signup_path %> to continue tracking this term.</h2>
+  
+</div>

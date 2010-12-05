@@ -1,0 +1,17 @@
+<% @collection = @collection || collection
+sm_count = @collection.metadatas.count
+-%>
+<div id="unfrozenCollectionMenu">
+<% if @collection.stream_metadatas.length > 0 -%>
+  You have added <b><%= sm_count %> Dataset<%= "s" if sm_count > 1 %></b> so far to this collection.
+  <br /><br />
+  <%= link_to_remote("Add Datasets", {:replace => 'dataDisplay', :url => datasets_curate_url(@collection.id)}, {:class => "big"})%> | 
+  <%= link_to_remote("Add Analytics", {:replace => 'dataDisplay', :url => analytical_offerings_curate_url(@collection.id)}, {:class => "big"} ) %> | 
+  <%= link_to "Freeze Collection", collection_freeze_url(@collection.id), :confirm => "Warning, you can't add any more analysis to this job if you press OK. Still want to proceed?", :class => "big" %>
+<% else -%>
+  You haven't added any datasets to this collection yet.
+  <%= link_to_remote("Start Adding Datasets",
+      :replace => 'dataDisplay',
+      :url => datasets_curate_url(@collection.id)) %>
+<% end -%>
+</div>

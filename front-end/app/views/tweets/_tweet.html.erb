@@ -7,10 +7,10 @@
     <%= tweet.text %><br />
     Originally Posted from <%= tweet.source %><br />
     Self-Reported Location: <%= tweet.location %><br />
-<% if !tweet.in_reply_to_screen_name.empty? -%>
+<% if !tweet.in_reply_to_screen_name.blank? -%>
     Reply/Retweeted to tweet from: <%= link_to tweet.in_reply_to_screen_name, "/users/#{tweet.in_reply_to_screen_name}" %><br />
 <% end -%>
-<% if !tweet.lat.empty? -%>
+<% if !tweet.lat.blank? -%>
     Coordinates of tweet: <%= tweet.lat %>, <%= tweet.lon %><br />
 <% end -%>
     Primary Language: <%= Tweet.language(tweet.language) %>

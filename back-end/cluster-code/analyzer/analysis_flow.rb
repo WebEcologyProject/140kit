@@ -41,74 +41,25 @@ module AnalysisFlow
         dataset.save
       end
     end
-    
-    # set analyzed datasets to analyzed
-    datasets = Dataset.find_all({:scrape_finished => true, :analyzed => false})
-    for dataset in datasets
+
+    # set analyzed curations to analyzed; spawn jobs
+    curations = Curation.find_all({:analyzed => false}).reject {|c| c.datasets.collect {|d| d.scrape_finished }.include?(false) }
+    for curation in curations
       # if the num of finished metadatas == total metadatas and total != 0
-      unfinished = AnalysisMetadata.count({:dataset_id => dataset.id, :finished => false})
+      unfinished = AnalysisMetadata.count({:curation_id => curation.id, :finished => false})
       if unfinished == 0
-        total = AnalysisMetadata.count({:dataset_id => dataset.id})
+        total = AnalysisMetadata.count({:curation_id => curation.id})
         if total > 0
-          dataset.analyzed = true
-          dataset.save
+          curation.analyzed = true
+          curation.save
         else
           # spawn analysis jobs
-          self.spawn_analysis_metadatas(dataset)
+          self.spawn_analysis_metadatas(curation)
         end
       end
     end
     
   end
-  
-  #deprecated:
-  # def self.finish_scrapes
-  #   scrapes = Scrape.find_all({:finished => false, :scrape_finished => true})
-  #   for scrape in scrapes
-  #     if scrape.class != NilClass && (!scrape.flagged || scrape.instance_id == $w.instance_id)
-  #       scrape.flagged = true
-  #       scrape.instance_id = $w.instance_id
-  #       scrape.save
-  #       sleep(SLEEP_CONSTANT)
-  #       scrape = Scrape.find({:instance_id => $w.instance_id, :id => scrape.id})
-  #       if scrape.class != NilClass && scrape.instance_id == $w.instance_id
-  #         datasets = Collection.find_all({:scrape_id => scrape.id, :single_dataset => true}).compact
-  #         collection = scrape.collection
-  #         datasets.each do |d|
-  #           d.tweets_count = Tweet.count({:metadata_id => d.metadata.id, :metadata_type => d.metadata.class.underscore.chop}) if !d.metadata.nil?
-  #           d.users_count = User.count({:metadata_id => d.metadata.id, :metadata_type => d.metadata.class.underscore.chop}) if !d.metadata.nil?
-  #           d.finished = true
-  #         end
-  #         datasets.each {|d| AnalysisFlow.create_singular_analysis_metadatas(d) if d.tweets_count != 0}
-  #         collection.tweets_count = datasets.collect{|d| d.tweets_count}.sum if !collection.nil?
-  #         collection.users_count = datasets.collect{|d| d.users_count}.sum if !collection.nil?
-  #         if collection.nil? || collection.tweets_count == 0
-  #           self.generate_scrape_failed_email(collection) if !collection.nil?
-  #           metadatas = datasets.collect{|d| d.metadata}.compact
-  #           metadatas.collect{|m| m.destroy}
-  #           datasets.collect{|d| d.destroy}
-  #           collection.destroy if !collection.nil?
-  #           scrape = scrape.destroy
-  #         else
-  #           AnalysisFlow.create_singular_analysis_metadatas(collection) 
-  #           collection.finished = true
-  #           Collection.update_all(datasets.collect{|d| d.attributes}<<collection.attributes)
-  #           scrape.finished = true
-  #           scrape.save
-  #           puts "-+"*20
-  #           puts "SCRAPE #{scrape.id} IS TOTALLY FINISHED!"
-  #           puts "-+"*20
-  #           self.generate_scrape_done_email(collection)
-  #         end
-  #       end
-  #       if scrape.class != NilClass
-  #         scrape.flagged = false
-  #         scrape.instance_id = ""
-  #         scrape.save
-  #       end
-  #     end
-  #   end
-  # end
   
   def self.redact_metadata(scrape, metadatas)
     for metadata in metadatas
@@ -260,8 +211,8 @@ module AnalysisFlow
   
   def self.route(metadata)
     # if Analysis.conditional(metadata.collection) != " where "
-      puts "#{metadata.function}(#{metadata.dataset_id}, \"#{metadata.save_path}\")"
-      eval("#{metadata.function}(#{metadata.dataset_id}, \"#{metadata.save_path}\")")
+      puts "#{metadata.function}(#{metadata.curation_id}, \"#{metadata.save_path}\")"
+      eval("#{metadata.function}(#{metadata.curation_id}, \"#{metadata.save_path}\")")
     # else
     #   Analysis.remove_broken_collections(metadata.collection)
     # end
@@ -328,7 +279,7 @@ module AnalysisFlow
     p = PendingEmail.new({:recipient => recipient, :subject => subject, :message_content => message_content}).save
   end
   
-  def self.spawn_analysis_metadatas(dataset)
+  def self.spawn_analysis_metadatas(curation)
     analytical_offerings = AnalyticalOffering.find_all({:enabled => true})
     new_analysis_metadatas = []
     analytical_offerings.each do |analytic|
@@ -337,12 +288,18 @@ module AnalysisFlow
         metadata = {}
         metadata["function"] = analytic.function
         metadata["save_path"] = analytic.save_path
-        metadata["dataset_id"] = dataset.id
+        metadata["curation_id"] = curation.id
         metadata["rest"] = analytic.rest
         new_analysis_metadatas << metadata
       # end
     end
     Database.save_all({:analysis_metadatas => new_analysis_metadatas})
+  end
+  
+  def self.update_time
+    si = AnalyticalInstance.find({:instance_id => $w.instance_id})
+    si.updated_at = Time.ntp
+    si.save
   end
 
   #deprecated:
@@ -362,9 +319,71 @@ module AnalysisFlow
   #   Database.save_all({:analysis_metadatas => new_analysis_metadatas})
   # end
   
-  def self.update_time
-    si = AnalyticalInstance.find({:instance_id => $w.instance_id})
-    si.updated_at = Time.ntp
-    si.save
-  end
+  
+        # set analyzed datasets to analyzed
+        # datasets = Dataset.find_all({:scrape_finished => true, :analyzed => false})
+        # for dataset in datasets
+        #   # if the num of finished metadatas == total metadatas and total != 0
+        #   unfinished = AnalysisMetadata.count({:dataset_id => dataset.id, :finished => false})
+        #   if unfinished == 0
+        #     total = AnalysisMetadata.count({:dataset_id => dataset.id})
+        #     if total > 0
+        #       dataset.analyzed = true
+        #       dataset.save
+        #     else
+        #       # spawn analysis jobs
+        #       self.spawn_analysis_metadatas(dataset)
+        #     end
+        #   end
+        # end
+
+      #deprecated:
+      # def self.finish_scrapes
+      #   scrapes = Scrape.find_all({:finished => false, :scrape_finished => true})
+      #   for scrape in scrapes
+      #     if scrape.class != NilClass && (!scrape.flagged || scrape.instance_id == $w.instance_id)
+      #       scrape.flagged = true
+      #       scrape.instance_id = $w.instance_id
+      #       scrape.save
+      #       sleep(SLEEP_CONSTANT)
+      #       scrape = Scrape.find({:instance_id => $w.instance_id, :id => scrape.id})
+      #       if scrape.class != NilClass && scrape.instance_id == $w.instance_id
+      #         datasets = Collection.find_all({:scrape_id => scrape.id, :single_dataset => true}).compact
+      #         collection = scrape.collection
+      #         datasets.each do |d|
+      #           d.tweets_count = Tweet.count({:metadata_id => d.metadata.id, :metadata_type => d.metadata.class.underscore.chop}) if !d.metadata.nil?
+      #           d.users_count = User.count({:metadata_id => d.metadata.id, :metadata_type => d.metadata.class.underscore.chop}) if !d.metadata.nil?
+      #           d.finished = true
+      #         end
+      #         datasets.each {|d| AnalysisFlow.create_singular_analysis_metadatas(d) if d.tweets_count != 0}
+      #         collection.tweets_count = datasets.collect{|d| d.tweets_count}.sum if !collection.nil?
+      #         collection.users_count = datasets.collect{|d| d.users_count}.sum if !collection.nil?
+      #         if collection.nil? || collection.tweets_count == 0
+      #           self.generate_scrape_failed_email(collection) if !collection.nil?
+      #           metadatas = datasets.collect{|d| d.metadata}.compact
+      #           metadatas.collect{|m| m.destroy}
+      #           datasets.collect{|d| d.destroy}
+      #           collection.destroy if !collection.nil?
+      #           scrape = scrape.destroy
+      #         else
+      #           AnalysisFlow.create_singular_analysis_metadatas(collection) 
+      #           collection.finished = true
+      #           Collection.update_all(datasets.collect{|d| d.attributes}<<collection.attributes)
+      #           scrape.finished = true
+      #           scrape.save
+      #           puts "-+"*20
+      #           puts "SCRAPE #{scrape.id} IS TOTALLY FINISHED!"
+      #           puts "-+"*20
+      #           self.generate_scrape_done_email(collection)
+      #         end
+      #       end
+      #       if scrape.class != NilClass
+      #         scrape.flagged = false
+      #         scrape.instance_id = ""
+      #         scrape.save
+      #       end
+      #     end
+      #   end
+      # end
+  
 end

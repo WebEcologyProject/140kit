@@ -24,22 +24,29 @@
 </head>
 <body>
 <div id="wrapper" class="shadow">
+  <% if false %>
 	<a id="announce" href="http://hackfest.140kit.com">
 		<div class="announcement" style="text-decoration:none">Join us for our 140kit Hackfest in Boston on August 14th &raquo;</div>
 	</a>
+	<% end %>
   <%= render :partial => '/layouts/main_menu' %>
 	<p style="color: green"><%= flash[:notice] %></p>
 	<div id ="content">
 	  <%= yield %>
 	  <div class="clearFloat"></div>
-	  <div class="message">
-    <p>HEY: we're just getting started with this site. If you see anything wrong or dumb or messed up, we would LOVE it if you ticketed it here: <a href="/tickets">TICKETS</a></p>
-    </div>
-	</div>
-  <div id="footer">
-    <%= render :partial => '/layouts/footer' %>
+	  
   </div>
+  <div class="message center">
+  <p>Hey, we're just getting started. If you see anything wrong or dumb or messed up, we would love it if you ticketed it <a href="/tickets">here</a>.</p>
+  </div>
+
 </div>
+
+<div id="footer">
+  <%= render :partial => '/layouts/footer' %>
+</div>
+
 <br /><br />
+
 </body>
 </html>

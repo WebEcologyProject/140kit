@@ -12,7 +12,8 @@ class AccountController < ApplicationController
         self.current_researcher.remember_me
         cookies[:auth_token] = { :value => self.current_researcher.remember_token , :expires => self.current_researcher.remember_token_expires_at }
       end
-      redirect_to researcher_page_url(current_researcher.user_name)
+      
+      redirect_to welcome_url
       flash[:notice] = "Logged in successfully"
     end
   end

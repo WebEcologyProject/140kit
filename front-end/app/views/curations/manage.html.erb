@@ -1,0 +1,40 @@
+<% 
+scraped_collections = @collections.collect{|sm| sm if sm.scraped_collection && sm.analyzed && !sm.single_dataset }.compact.paginate
+scraped_collection_count = scraped_collections.length
+curated_collections = @collections.collect{|sm| sm if !sm.scraped_collection && sm.finished && sm.analyzed && !sm.single_dataset }.compact.paginate
+curated_collection_count = curated_collections.length
+curating_collections = @collections.collect{|sm| sm if !sm.finished && !sm.single_dataset }.compact.paginate
+curating_collection_count = curating_collections.length
+in_process_collections = @collections.collect{|sm| sm if sm.finished && !sm.analyzed && !sm.single_dataset }.compact.paginate
+in_process_collection_count = in_process_collections.length
+datasets = @collections.collect{|sm| sm if sm.finished && !sm.analyzed && !sm.single_dataset }.compact.paginate
+dataset_count = datasets.length
+-%>
+<h2>Collections/h2>
+<% if !scraped_collections.empty? -%>
+<h3><%= scraped_collection_count %> Scraped Collection<%= "s" if scraped_collection_count != 1 %></h3>
+<%= render :partial => "/collections/collections_index", :locals => {:collections => scraped_collections, :show_researchers => false} %>
+<% end %>
+
+<% if !curated_collections.empty? %>
+<h3><%= curated_collection_count %> Finished Curated Collection<%= "s" if curated_collection_count != 1 %></h3>
+<%= render :partial => "/collections/collections_index", :locals => {:collections => curated_collections, :show_researchers => false} %>
+<% end %>
+
+<% if !curating_collections.empty? %>
+<h3><%= curating_collection_count %> Unfrozen Collection<%= "s" if curating_collection_count != 1 %></h3>
+<%= render :partial => "/collections/collections_index", :locals => {:collections => curating_collections, :show_researchers => false} %>
+<% end %>
+
+<% if !in_process_collections.empty? %>
+<h3><%= curated_collection_count %> In-Process Collection<%= "s" if curated_collection_count != 1 %></h3>
+<%= render :partial => "/collections/collections_index", :locals => {:collections => in_process_collections, :show_researchers => false} %>
+<% end %>
+
+<% if !datasets.empty? %>
+<h3><%= dataset_count %> Total Dataset<%= "s" if dataset_count != 1 %></h3>
+<%= render :partial => "/collections/collections_index", :locals => {:collections => datasets, :show_researchers => false} %>
+<% end %>
+
+<%= link_to("Add a new collection", collection_add_path) %> | 
+<%= link_to("Go to my profile", root_url) %>

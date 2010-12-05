@@ -1,5 +1,5 @@
 class Curation < SiteData
-  attr_accessor :id, :researcher_id, :created_at, :name, :updated_at, :datasets, :researcher
+  attr_accessor :id, :researcher_id, :created_at, :name, :updated_at, :datasets, :researcher, :single_dataset, :analyzed, :analysis_metadatas
   
   def researcher
     if @researcher.nil?
@@ -25,6 +25,19 @@ class Curation < SiteData
     temp_datasets.collect{|tm| tm.delete("#{class_name.underscore.chop}_id")}
     datasets = temp_datasets.collect{|tm| class_name.new(tm)}
     return datasets
+  end
+  
+  def analysis_metadatas
+    if @analysis_metadatas.nil?
+      @analysis_metadatas = AnalysisMetadata.find_all({:curation_id => @id})
+    else
+      return @analysis_metadatas
+    end
+  end
+  
+  
+  def folder_name
+    "dataset_#{@id}"
   end
   
 end

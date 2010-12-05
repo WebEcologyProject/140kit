@@ -1,0 +1,90 @@
+<% @term = "" if @term.nil? %>
+
+<style>
+.large {
+  font-size:20px;
+  margin:2px;
+}
+</style>
+
+<h1>Track a term</h1>
+
+<div class="newsItem col">
+  <script src="http://widgets.twimg.com/j/2/widget.js"></script>
+  <script>
+  new TWTR.Widget({
+    version: 2,
+    type: 'search',
+    search: '<%= @term %>',
+    interval: 3000,
+    title: '',
+    subject: '',
+    width: 'auto',
+    height: 300,
+    theme: {
+      shell: {
+        background: '#ffffff',
+        color: '#ffffff'
+      },
+      tweets: {
+        background: '#ffffff',
+        color: '#444444',
+        links: '#1985b5'
+      }
+    },
+    features: {
+      scrollbar: false,
+      loop: true,
+      live: true,
+      hashtags: true,
+      timestamp: true,
+      avatars: true,
+      toptweets: true,
+      behavior: 'default'
+    }
+  }).render().start();
+  </script>
+</div>
+
+<div id="searchScrape" class="newsItem col-2 center">
+  <% form_for(:track_form, :url => create_dataset_path) do |f| -%>
+  <%= f.error_messages %>
+    <p>
+      <%= f.label :term, "Start tracking", :class => "large" %>
+    </p>
+    <p>
+      <%= f.text_field :term, :value => @term, :class => "large center" %><br />
+      <p style="font-size:12px">
+        (see <a href=\"http://dev.twitter.com/pages/streaming_api_methods#track\">Twitter's rules for search terms</a>)
+      </p>
+    </p>
+    
+    <br />
+    
+    <p class="large">
+      for
+    </p>
+    <p class="large">
+        <%= f.select :days, (0..6), {:selected => 0}, :class => "large" %> days, <%= f.select :hours, (0..23), {:selected => 0}, :class => "large" %> hours, <%= f.select :minutes, (1..11).to_a.map{|n|n*5}, {:selected => 5}, :class => "large" %> minutes
+    </p>
+    
+    <%= f.hidden_field :researcher_id, :value => current_researcher.id %>
+    
+    <br />
+    
+    <p>
+      <%= f.submit 'Go!', :class => "large" %>
+    </p>
+    
+  <% end -%>
+    
+    <br />
+    
+    
+    <p class="f14">
+      <h2>or</h2>
+      <%= link_to 'See other ways you can collect Twitter data.', new_dataset_path %>
+    </p>
+    
+</div>
+

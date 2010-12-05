@@ -175,8 +175,13 @@ class Analysis
     return SQLParser.type_attributes(hash, result).to_a.flatten[1].class.to_s.downcase
   end
   
-  def self.conditional(dataset)
-    " where dataset_id = #{dataset.id}"
+  def self.conditional(curation)
+    sql = " where ("
+    for dataset in curation.datasets
+      sql += " dataset_id = #{dataset.id} or "
+    end
+    sql = sql.chop.chop.chop.chop + ")"
+    return sql
   end
   
   #deprecated

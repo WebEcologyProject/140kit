@@ -1,0 +1,24 @@
+<h1>Let's get some data</h1>
+
+<h2>You can...</h2>
+
+<table>
+  <tr>
+    <th><%= link_to 'Track a term', new_track_path(nil) %></th>
+    <td>
+      <p>Give us a term and we'll grab all tweets that match that term as they're published. This only gets tweets in realtime-- it doesn't do any historical scraping, sorry.</p>
+    </td>
+  </tr>
+  <tr>
+    <th><%= link_to 'Scrape specific users', new_track_path(nil) %></th>
+    <td>
+      <p>Give us a list of users and we'll grab the info and tweets of all those users.</p>
+    </td>
+  </tr>
+  <tr>
+    <th><%= link_to 'Combine existing datasets', new_track_path(nil) %></th>
+    <td>
+      <p>Interested in datasets that are already in 140kit? Create and analyze new datasets by combining existing ones.</p>
+    </td>
+  </tr>
+</table>
