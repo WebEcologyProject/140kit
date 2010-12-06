@@ -45,7 +45,8 @@ class String
   end
   
   def sanitize_for_streaming
-    return self.split("").reject {|c| c.match(/[\w\'\-]/).nil?}.to_s
+    # return self.split("").reject {|c| c.match(/[\w\'\-]/).nil?}.to_s
+    return self.gsub(/[\'\"#]/, '').gsub(' ', '%20')
   end
   
   def classify

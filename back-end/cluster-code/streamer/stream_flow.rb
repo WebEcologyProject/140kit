@@ -84,7 +84,8 @@ module StreamFlow
   end
 
   def self.store(line)
-    tweet = JSON.parse(line)
+    tweet = JSON.parse(line) rescue nil
+    return if tweet.nil?
     stored = false
     case @stream.type
     when "track"
