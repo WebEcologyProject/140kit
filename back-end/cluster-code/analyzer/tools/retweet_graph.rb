@@ -1,6 +1,6 @@
-def retweet_graph(collection_id, save_path)
-  collection = Collection.find({:id => collection_id})
-  retweet_graph = generate_graph({:style => "retweet", :title => "Network Map", :collection_id => collection_id})
+def retweet_graph(curation_id, save_path)
+  curation = Curation.find({:id => curation_id})
+  retweet_graph = generate_graph({:style => "retweet", :title => "Network Map", :curation_id => curation_id})
   # # #save into separate var in the unlikely case that there are not any retweets of any sort
   # last_id_results = Database.result("select twitter_id from tweets"+Analysis.conditional(collection)+" and in_reply_to_screen_name != '' order by twitter_id desc limit 1")
   # if !last_id_results.empty?
@@ -45,7 +45,7 @@ def retweet_graph(collection_id, save_path)
   # end
   # retweet_graph.written = true
   # retweet_graph.save
-  generate_graphml_files(collection, save_path, retweet_graph)
+  generate_graphml_files(curation, save_path, retweet_graph)
   FilePathing.push_tmp_folder(save_path)
 end
 
@@ -57,7 +57,7 @@ def generate_graph(attribute_hash)
   return graph
 end
 
-def generate_graphml_files(collection, save_path, graph)
+def generate_graphml_files(curation, save_path, graph)
   granularity = "hour"
   time_queries = resolve_time_query(granularity)
   time_queries.each_pair do |granularity, time_query|
@@ -65,7 +65,7 @@ def generate_graphml_files(collection, save_path, graph)
     edge_timeline.each do |time_set|
       time, hour, date, month, year = resolve_time(granularity, time_set["time"])
       sub_folder = [year, month, date, hour].join("/")
-      tmp_folder = FilePathing.tmp_folder(collection, sub_folder)
+      tmp_folder = FilePathing.tmp_folder(curation, sub_folder)
       query = "select * from edges where "+Analysis.time_conditional("time", time_set["time"], granularity)+" and graph_id = #{graph.id}"
       Graphml.generate_file(query, "full", tmp_folder)
     end

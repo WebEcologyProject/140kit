@@ -7,6 +7,9 @@
   <td><%= curation.users_count %></td>
   <td><%=h distance_of_time_in_words(curation.created_at, Time.now) %> ago</td>
   <td><%= curation.status %></td>
+  <% if logged_in? && curation.researcher_id == current_researcher.id -%>
+    <td><%= link_to('X', destroy_curation_path(curation.id), :confirm => "Are you sure you want to delete your '#{curation.name}' dataset?", :method => :delete) %></td>
+  <% end -%>
 </tr>
 
 <% if false %>

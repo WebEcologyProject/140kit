@@ -14,6 +14,15 @@ class ResearchersController < ApplicationController
     @researcher = current_researcher
     @page_title = "Welcome to 140kit"
     @curations = Curation.paginate :page => params[:page], :conditions => {:researcher_id => @researcher.id}, :per_page => 10
+    respond_to do |format|
+      format.html
+      format.xml  { render :xml => inst_var }
+      format.js {
+        render :update do |page|
+          page.replace_html element_id, :partial => "curations_index"
+        end
+      }
+    end
   end
   
   def edit

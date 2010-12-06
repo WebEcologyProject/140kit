@@ -38,6 +38,7 @@ ActionController::Routing::Routes.draw do |map|
   map.dataset '/datasets/:id', :controller => 'curations', :action => 'show'
   map.curation '/datasets/:id', :controller => 'curations', :action => 'show'
   map.add_curation '/datasets/:id', :controller => 'curations', :action => 'show'
+  map.destroy_curation '/datasets/:id/destroy', :controller => 'curations', :action => 'destroy'
   
   #ANALYSIS ROUTES
   
