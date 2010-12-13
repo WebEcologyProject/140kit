@@ -65,7 +65,7 @@
       for
     </p>
     <p class="large">
-        <%= f.select :days, (0..6), {:selected => 0}, :class => "large" %> days, <%= f.select :hours, (0..23), {:selected => 0}, :class => "large" %> hours, <%= f.select :minutes, (1..11).to_a.map{|n|n*5}, {:selected => 5}, :class => "large" %> minutes
+        <%= f.select :days, (0..6), {:selected => 0}, :class => "large" %> days, <%= f.select :hours, (0..23), {:selected => 0}, :class => "large" %> hours, <%= f.select :minutes, current_researcher.admin? ? ((1..11).to_a.map{|n|n*5}|[1, 2, 3, 4]).sort : (1..11).to_a.map{|n|n*5}, {:selected => 5}, :class => "large" %> minutes
     </p>
     
     <%= f.hidden_field :researcher_id, :value => current_researcher.id %>
