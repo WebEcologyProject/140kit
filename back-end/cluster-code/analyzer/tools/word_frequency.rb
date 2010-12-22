@@ -2,9 +2,9 @@ def word_frequency(collection_id, save_path)
   collection = Collection.find({:id => collection_id})
   query = "select text from tweets "+Analysis.conditional(collection)
   frequency_listing = get_frequency_listing(query)
-  generate_graph_points([{"title" => "hashtags", "style" => "word_frequency", "collection" => collection},
-    {"title" => "mentions", "style" => "word_frequency", "collection" => collection},
-    {"title" => "significant_words", "style" => "word_frequency", "collection" => collection},
+  generate_graph_points([ #{"title" => "hashtags", "style" => "word_frequency", "collection" => collection},
+   # {"title" => "mentions", "style" => "word_frequency", "collection" => collection},
+   # {"title" => "significant_words", "style" => "word_frequency", "collection" => collection},
     {"title" => "urls", "style" => "word_frequency", "collection" => collection}]) do |fs, graph, tmp_folder|
       generate_word_frequency(fs, tmp_folder, frequency_listing, collection, graph)
   end

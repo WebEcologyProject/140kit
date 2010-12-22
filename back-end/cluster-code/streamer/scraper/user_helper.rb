@@ -11,7 +11,7 @@ class UserHelper
   end
   
   def self.hash_user(raw_user)
-    disallowed_keys = ["profile_use_background_image", "follow_request_sent", "show_all_inline_media"]
+    disallowed_keys = ["profile_use_background_image", "follow_request_sent", "show_all_inline_media", "id_str"]
     user = {}
       user["screen_name"] = raw_user["screen_name"]
       raw_user.delete_if {|k, v| k == "following" || k == "status"}
@@ -31,26 +31,4 @@ class UserHelper
       # puts "Hashed user: #{raw_user["screen_name"]}"
       return user
   end
-
-def pickup_lost_users(metadata_id, metadata_type)
-  metadata = metadata_type.classify.constantize.find(:id => metadata_id)
-  user_names = Tweet.find_all(:metadata_id => metadata_id, :metadata_type => metadata_type).collect{|x| x.screen_name }.compact.uniq
-  users = []
-  user_names.each do |user_name|
-    url = "http://api.twitter.com/1/statuses/user_timeline.json?screen_name=#{user_name}"
-    data = U.return_data(url)
-    if !data.nil?
-      if !data.empty?
-        data = JSON.parse(data)
-        user = UserHelper.hash_user(data.first["user"])
-        user["metadata_id"] = metadata_id
-        user["metadata_type"] = metadata_type
-        user["scrape_id"] = metadata.scrape.id
-        users << user
-      end
-    end
-  end
-  Database.save_all(:users => users)
-end
-
 end

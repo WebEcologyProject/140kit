@@ -1,5 +1,9 @@
 def time_based_summary(collection_id, save_path)
+<<<<<<< HEAD:back-end/cluster-code/analyzer/tools/time_based_summary.rb
+  granularity = "year"
+=======
   granularity = "date"
+>>>>>>> 9afbda7ec65c2bcceeabc95c8b121146353bb298:back-end/cluster-code/analyzer/tools/time_based_summary.rb
   time_queries = resolve_time_query(granularity)
   time_queries.each_pair do |time_granularity,time_query|
     collection = Collection.find({:id => collection_id})
