@@ -3,6 +3,7 @@ class Stream
   require "#{ROOT_FOLDER}cluster-code/streamer/stream_flow"
   require "#{ROOT_FOLDER}cluster-code/streamer/scraper/tweet_helper"
   require "#{ROOT_FOLDER}cluster-code/streamer/scraper/user_helper"
+  require "#{ROOT_FOLDER}cluster-code/streamer/scraper/general_helpers"
   require "#{ROOT_FOLDER}cluster-code/streamer/scraper/environmental"
   
   attr_accessor :username, :password, :length, :geo_only, :counter, :length, :end_data, :type, :params, :metadatas, :previous_data_count, :current_data_count
