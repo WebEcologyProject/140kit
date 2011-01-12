@@ -31,7 +31,7 @@ SITE_URL = "140kit.com"
 #Worker Instances
 BRANCH_CHECK_INTERVAL = 10
 COUNT_CHECK_INTERVAL = 5#000
-SLEEP_CONSTANT = (rand 5.0)+5
+SLEEP_CONSTANT = 1#(rand 5.0)+5
 ENVIRONMENT = "production"
 #Analytical Flow
 # Very low likeness_threshold corresponds to high branching degrees

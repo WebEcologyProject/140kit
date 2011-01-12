@@ -16,6 +16,27 @@ class Worker
     @tmp_data = {}
   end
   
+  def lock_all(objects)
+    # returns array of successfully locked objects
+    return objects.collect {|o| o if lock(o) }.compact
+  end
+  
+  def lock(obj)
+    lock = Lock.new({:classname => obj.class.to_s, :with_id => obj.id, :instance_id => @instance_id})
+    lock.save
+    lock = Lock.find({:classname => obj.class.to_s, :with_id => obj.id, :instance_id => @instance_id})
+    return lock.nil? ? false : true
+  end
+  
+  def unlock_all(objects)
+    objects.each {|o| unlock(o) }
+  end
+  
+  def unlock(obj)
+    lock = Lock.find({:classname => obj.class.to_s, :with_id => obj.id, :instance_id => @instance_id})
+    lock.destroy if !lock.nil?
+  end
+  
   def poll
     check_in("analysis")
     while true

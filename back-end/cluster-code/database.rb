@@ -5,6 +5,26 @@ class Database
   
 ###DATA REQUEST METHODS###
 
+  def self.unlocked(where=[], classname=self)
+    where = [where] if where.class.to_s == "String"
+    table = self.to_s.underscore
+    where << "id NOT IN (SELECT with_id FROM locks WHERE classname = '#{classname.to_s}')"
+    where = " WHERE "+where.join(" AND ")
+    result = self.result("SELECT * FROM #{table} #{where}")
+    objs = result.collect {|o| classname.new(o) }
+    return objs
+  end
+  
+  def self.locked(where=[], classname=self)
+    where = [where] if where.class.to_s == "String"
+    table = self.to_s.underscore
+    where << "id IN (SELECT with_id FROM locks WHERE classname = '#{classname.to_s}')"
+    where = " WHERE "+where.join(" AND ")
+    result = self.result("SELECT * FROM #{table} #{where}")
+    objs = result.collect {|o| classname.new(o) }
+    return objs
+  end
+
   def self.find(parameters)
     Database.get(parameters, true)
   end
