@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110108155527) do
+ActiveRecord::Schema.define(:version => 20110219214251) do
 
   create_table "analysis_metadatas", :force => true do |t|
     t.boolean "finished",      :default => false, :null => false
@@ -103,6 +103,11 @@ ActiveRecord::Schema.define(:version => 20110108155527) do
     t.string   "title",         :null => false
   end
 
+  create_table "curation_datasets", :id => false, :force => true do |t|
+    t.integer "curation_id"
+    t.integer "dataset_id"
+  end
+
   create_table "curations", :force => true do |t|
     t.string   "name"
     t.datetime "created_at"
@@ -110,11 +115,6 @@ ActiveRecord::Schema.define(:version => 20110108155527) do
     t.integer  "researcher_id"
     t.boolean  "single_dataset", :default => false
     t.boolean  "analyzed",       :default => false
-  end
-
-  create_table "curations_datasets", :id => false, :force => true do |t|
-    t.integer "curation_id"
-    t.integer "dataset_id"
   end
 
   create_table "datasets", :force => true do |t|
@@ -129,6 +129,7 @@ ActiveRecord::Schema.define(:version => 20110108155527) do
     t.boolean  "analyzed",                      :default => false
     t.integer  "tweets_count"
     t.integer  "users_count"
+    t.string   "params"
   end
 
   create_table "edges", :force => true do |t|
@@ -352,75 +353,58 @@ ActiveRecord::Schema.define(:version => 20110108155527) do
     t.text     "source"
     t.string   "language"
     t.integer  "user_id",                 :limit => 8, :default => 0
-    t.integer  "scrape_id",                            :default => 0
     t.string   "screen_name"
-    t.string   "location"                                           
+    t.string   "location"
     t.integer  "in_reply_to_status_id",   :limit => 8, :default => 0
     t.integer  "in_reply_to_user_id",     :limit => 8, :default => 0
-    t.string   "favorited"
     t.string   "truncated"
     t.string   "in_reply_to_screen_name"
-    t.datetime "created_at"             
+    t.datetime "created_at"
     t.string   "lat"
     t.string   "lon"
-    t.integer  "metadata_id",                          :default => 0
-    t.string   "metadata_type",                        :default => "stream_metadatas"
-    t.string   "instance_id"
     t.boolean  "flagged",                              :default => false
     t.integer  "dataset_id"
+    t.integer  "retweet_count"
   end
 
-  add_index "tweets", ["metadata_id", "metadata_type"], :name => "metadata_id_type"
-  add_index "tweets", ["metadata_id", "scrape_id"], :name => "tweet_metadata_id_scrape_id"
-  add_index "tweets", ["metadata_id"], :name => "tweet_metadata_id"
-  add_index "tweets", ["scrape_id"], :name => "scrape_id"
   add_index "tweets", ["screen_name"], :name => "screen_name"
-  add_index "tweets", ["twitter_id", "scrape_id", "metadata_id", "metadata_type"], :name => "tweets_twitter_id_scrape_id_metadata_id_metadata_type", :unique => true
-  add_index "tweets", ["twitter_id", "scrape_id", "metadata_id"], :name => "tweets_twitter_id_scrape_id_metadata_id", :unique => true
+  add_index "tweets", ["twitter_id", "dataset_id"], :name => "index_tweets_on_twitter_id_and_dataset_id", :unique => true
 
-  create_table "users", :force => true do |t|                   
-    t.integer  "twitter_id",                   :default => 0 
-    t.string   "name"             
-    t.string   "screen_name"      
-    t.string   "location"         
-    t.string   "description"      
+  create_table "users", :force => true do |t|
+    t.integer  "twitter_id",                   :default => 0
+    t.string   "name"
+    t.string   "screen_name"
+    t.string   "location"
+    t.string   "description"
     t.string   "profile_image_url"
-    t.string   "url"              
+    t.string   "url"
     t.boolean  "protected",                    :default => false
     t.integer  "followers_count",              :default => 0
-    t.string   "profile_background_color"                   
-    t.string   "profile_text_color"                         
-    t.string   "profile_link_color"                         
-    t.string   "profile_sidebar_fill_color"                 
-    t.string   "profile_sidebar_border_color"               
+    t.string   "profile_background_color"
+    t.string   "profile_text_color"
+    t.string   "profile_link_color"
+    t.string   "profile_sidebar_fill_color"
+    t.string   "profile_sidebar_border_color"
     t.integer  "friends_count",                :default => 0
-    t.datetime "created_at"                                 
+    t.datetime "created_at"
     t.integer  "favourites_count",             :default => 0
     t.integer  "utc_offset",                   :default => 0
-    t.string   "time_zone"                                  
-    t.string   "profile_background_image_url"               
+    t.string   "time_zone"
+    t.string   "profile_background_image_url"
     t.boolean  "profile_background_tile",      :default => false
     t.boolean  "notifications",                :default => false
     t.boolean  "geo_enabled",                  :default => false
     t.boolean  "verified",                     :default => false
     t.boolean  "following",                    :default => false
-    t.integer  "statuses_count",               :default => 0   
-    t.integer  "scrape_id",                    :default => 0
+    t.integer  "statuses_count",               :default => 0
     t.boolean  "contributors_enabled",         :default => false
-    t.string   "lang",                                          
-    t.integer  "metadata_id",                  :default => 0 
-    t.string   "metadata_type",                :default => "stream_metadatas"
-    t.string   "instance_id",                                                
-    t.boolean  "flagged",                      :default => false             
-    t.integer  "listed_count"                                                
-    t.integer  "dataset_id"                                                  
+    t.string   "lang"
+    t.boolean  "flagged",                      :default => false
+    t.integer  "listed_count"
+    t.integer  "dataset_id"
   end
 
-  add_index "users", ["metadata_id", "metadata_type"], :name => "metadata_id_type"
-  add_index "users", ["metadata_id", "scrape_id"], :name => "user_metadata_id_scrape_id"
-  add_index "users", ["metadata_id"], :name => "user_metadata_id"
-  add_index "users", ["metadata_type", "scrape_id", "metadata_id", "screen_name"], :name => "users_screen_name_scrape_id_metadata_id", :unique => true
-  add_index "users", ["scrape_id"], :name => "scrape_id"
+  add_index "users", ["twitter_id"], :name => "index_users_on_twitter_id", :unique => true
 
   create_table "whitelistings", :primary_key => "hostname", :force => true do |t|
     t.string  "ip",          :null => false

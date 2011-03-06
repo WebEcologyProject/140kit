@@ -21,9 +21,10 @@ class DatasetsController < ApplicationController
     
     c.datasets << d = Dataset.new
     d.term = form["term"]
+    d.params = form["term"]
     length = (form["days"].to_i*24*60 + form["hours"].to_i*60 + form["minutes"].to_i)*60
     d.length = length
-    d.scrape_type = "Search"
+    d.scrape_type = "track"
     
     respond_to do |format|
       if c.save

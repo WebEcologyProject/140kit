@@ -1,6 +1,6 @@
 class Curation < ActiveRecord::Base
   belongs_to :researcher
-  has_and_belongs_to_many :datasets
+  has_and_belongs_to_many :datasets, :join_table => 'curation_datasets'
   has_many :analysis_metadatas
   has_many :graphs
   
@@ -33,7 +33,7 @@ class Curation < ActiveRecord::Base
   end
   
   def end_time
-    return nil if !self.datasets.select {|d| d.start_time.nil? || d.scrape_type != "Search" || d.length.nil? }.empty?
+    return nil if !self.datasets.select {|d| d.start_time.nil? || !["track", "follow", "location"].include?(d.scrape_type) || d.length.nil? }.empty?
     return self.datasets.collect {|d| d.start_time + d.length }.sort.last
   end
   

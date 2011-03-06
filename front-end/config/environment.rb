@@ -1,6 +1,6 @@
 # Be sure to restart your server when you modify this file
 
-require 'ar-extensions'
+# require 'ar-extensions'
 
 ENV['RAILS_ENV'] ||= 'production'
 # Specifies gem version of Rails to use when vendor/rails is not present
